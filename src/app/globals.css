@@ -68,6 +68,28 @@ body {
   animation: bounce-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* ── Island scene animations ── */
+@keyframes leaf-fall {
+  0%   { transform: translateY(0) rotate(0deg);    opacity: 0.9; }
+  25%  { transform: translateY(60px) rotate(20deg);  opacity: 0.8; }
+  50%  { transform: translateY(130px) rotate(-15deg); opacity: 0.7; }
+  75%  { transform: translateY(200px) rotate(25deg);  opacity: 0.5; }
+  100% { transform: translateY(280px) rotate(-10deg); opacity: 0;   }
+}
+
+@keyframes wave-shimmer {
+  0%, 100% { opacity: 0.15; transform: scaleX(1);    }
+  50%       { opacity: 0.4;  transform: scaleX(1.02); }
+}
+
+.animate-leaf-fall {
+  animation: leaf-fall linear infinite;
+}
+
+.animate-wave-shimmer {
+  animation: wave-shimmer 3s ease-in-out infinite;
+}
+
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;

@@ -1,21 +1,102 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useProfileStore } from "@/stores/useProfileStore";
-import { ISLAND_ZONES } from "@/lib/constants";
+import { ISLAND_ZONES, CAT_DEFINITIONS } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
 import LevelBar from "./LevelBar";
+import Cat from "@/components/cats/Cat";
 
-const ZONE_ICONS: Record<string, string> = {
-  harbor: "⚓",
-  market: "🏪",
-  hill: "🌄",
+// ── Day/night ───────────────────────────────────────────────
+type TimePeriod = "day" | "dusk" | "evening" | "night";
+
+function getTimePeriod(h: number): TimePeriod {
+  if (h >= 6 && h < 17) return "day";
+  if (h >= 17 && h < 19) return "dusk";
+  if (h >= 19 && h < 22) return "evening";
+  return "night";
+}
+
+const TIME_CFG: Record<TimePeriod, {
+  skyCls: string;
+  oceanCls: string;
+  sunColor: string;
+  sunGlow: string;
+  showMoon: boolean;
+  showStars: boolean;
+  cloudOpacity: number;
+}> = {
+  day: {
+    skyCls: "from-sky-400 to-sky-200",
+    oceanCls: "from-blue-300 to-blue-500",
+    sunColor: "#FDE047",
+    sunGlow: "rgba(253,224,71,0.45)",
+    showMoon: false,
+    showStars: false,
+    cloudOpacity: 0.88,
+  },
+  dusk: {
+    skyCls: "from-orange-400 to-amber-200",
+    oceanCls: "from-orange-300 to-blue-400",
+    sunColor: "#FB923C",
+    sunGlow: "rgba(251,146,60,0.5)",
+    showMoon: false,
+    showStars: false,
+    cloudOpacity: 0.75,
+  },
+  evening: {
+    skyCls: "from-indigo-800 to-indigo-500",
+    oceanCls: "from-indigo-700 to-blue-900",
+    sunColor: "#C7D2FE",
+    sunGlow: "rgba(199,210,254,0.35)",
+    showMoon: true,
+    showStars: true,
+    cloudOpacity: 0.3,
+  },
+  night: {
+    skyCls: "from-slate-900 to-indigo-950",
+    oceanCls: "from-slate-800 to-slate-900",
+    sunColor: "#E2E8F0",
+    sunGlow: "rgba(226,232,240,0.25)",
+    showMoon: true,
+    showStars: true,
+    cloudOpacity: 0.15,
+  },
 };
 
+// ── Cat wandering positions (% of scene w/h) ────────────────
+const WANDER_SPOTS = [
+  { x: 22, y: 62 },
+  { x: 38, y: 68 },
+  { x: 50, y: 60 },
+  { x: 63, y: 65 },
+  { x: 75, y: 62 },
+  { x: 30, y: 72 },
+  { x: 58, y: 72 },
+];
+
+function pickSpot(currentX: number) {
+  const others = WANDER_SPOTS.filter((s) => Math.abs(s.x - currentX) > 10);
+  return others[Math.floor(Math.random() * others.length)] ?? WANDER_SPOTS[0];
+}
+
+// ── Leaves (CSS-only particle) ───────────────────────────────
+const LEAVES = Array.from({ length: 6 }, (_, i) => ({
+  id: i,
+  left: `${10 + i * 15}%`,
+  delay: `${i * 1.8}s`,
+  duration: `${6 + i * 1.2}s`,
+  emoji: i % 3 === 0 ? "🍃" : i % 3 === 1 ? "🌿" : "🍂",
+}));
+
+const ZONE_ICONS: Record<string, string> = {
+  harbor: "⚓", market: "🏪", hill: "🌄",
+};
 const ZONE_COLORS: Record<string, { bg: string; border: string }> = {
   harbor: { bg: "bg-blue-100", border: "border-blue-300" },
   market: { bg: "bg-yellow-100", border: "border-yellow-300" },
-  hill: { bg: "bg-green-100", border: "border-green-300" },
+  hill:   { bg: "bg-green-100", border: "border-green-300" },
 };
 
 export default function IslandPage() {
@@ -23,67 +104,196 @@ export default function IslandPage() {
   const { profile } = useProfileStore();
   const level = profile?.level ?? 1;
 
+  // ── Time of day ──
+  const [period, setPeriod] = useState<TimePeriod>(() =>
+    getTimePeriod(new Date().getHours())
+  );
+  useEffect(() => {
+    const update = () => setPeriod(getTimePeriod(new Date().getHours()));
+    const id = setInterval(update, 60_000);
+    return () => clearInterval(id);
+  }, []);
+  const cfg = TIME_CFG[period];
+
+  // ── Parallax ──
+  const [parallax, setParallax] = useState(0); // -1 to 1
+  useEffect(() => {
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma == null) return;
+      setParallax(Math.max(-1, Math.min(1, e.gamma / 30)));
+    };
+    const handleMouse = (e: MouseEvent) => {
+      setParallax((e.clientX / window.innerWidth - 0.5) * 2);
+    };
+    window.addEventListener("deviceorientation", handleOrientation);
+    window.addEventListener("mousemove", handleMouse);
+    return () => {
+      window.removeEventListener("deviceorientation", handleOrientation);
+      window.removeEventListener("mousemove", handleMouse);
+    };
+  }, []);
+
+  // ── Cat wander ──
+  const catKey = CAT_DEFINITIONS[0].key; // captain, always unlocked at Lv1
+  const [catPos, setCatPos] = useState(WANDER_SPOTS[0]);
+  const [catState, setCatState] = useState<"idle" | "walk">("idle");
+  const [catFlip, setCatFlip] = useState(false);
+  const catPosRef = useRef(WANDER_SPOTS[0]);
+
+  useEffect(() => {
+    const move = () => {
+      const next = pickSpot(catPosRef.current.x);
+      setCatFlip(next.x < catPosRef.current.x);
+      catPosRef.current = next;
+      setCatState("walk");
+      setCatPos(next);
+      // arrive after transition (distance-based ~2s)
+      setTimeout(() => setCatState("idle"), 2200);
+    };
+    const id = setInterval(move, 5000 + Math.random() * 3000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-full">
       {/* Header */}
-      <div className="px-4 pt-5 pb-3 bg-gradient-to-b from-sky-300 to-sky-100">
-        <h1 className="text-2xl font-bold text-gray-800">{t("title")}</h1>
+      <div className={`px-4 pt-5 pb-3 bg-gradient-to-b ${cfg.skyCls} transition-all duration-[3000ms]`}>
+        <h1 className="text-2xl font-bold text-white drop-shadow">{t("title")}</h1>
         <div className="mt-2">
           <LevelBar level={level} exp={profile?.exp ?? 0} />
         </div>
       </div>
 
-      {/* Island scene */}
-      <div className="relative bg-gradient-to-b from-sky-200 to-sky-100 overflow-hidden" style={{ height: 240 }}>
-        {/* Clouds */}
-        <div className="absolute top-4 left-6 w-16 h-6 bg-white rounded-full opacity-80" />
-        <div className="absolute top-3 left-10 w-24 h-8 bg-white rounded-full opacity-90" />
-        <div className="absolute top-6 right-8 w-20 h-6 bg-white rounded-full opacity-75" />
-        <div className="absolute top-4 right-12 w-12 h-5 bg-white rounded-full opacity-85" />
+      {/* ── Scene ── */}
+      <div
+        className={`relative overflow-hidden bg-gradient-to-b ${cfg.skyCls} transition-all duration-[3000ms]`}
+        style={{ height: 260 }}
+      >
 
-        {/* Sun */}
-        <div className="absolute top-5 right-6 w-10 h-10 bg-yellow-300 rounded-full shadow-[0_0_20px_8px_rgba(253,224,71,0.4)]" />
+        {/* Layer 1: Stars (night/evening) */}
+        {cfg.showStars && (
+          <div className="absolute inset-0 z-10 pointer-events-none">
+            {[12, 28, 45, 60, 75, 88, 20, 65].map((x, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full bg-white animate-pulse"
+                style={{
+                  left: `${x}%`,
+                  top: `${8 + (i * 7) % 25}%`,
+                  width: i % 3 === 0 ? 3 : 2,
+                  height: i % 3 === 0 ? 3 : 2,
+                  opacity: 0.6 + (i % 3) * 0.15,
+                  animationDelay: `${i * 0.4}s`,
+                  transform: `translateX(${parallax * 2}px)`,
+                  transition: "transform 0.5s ease-out",
+                }}
+              />
+            ))}
+          </div>
+        )}
 
-        {/* Ocean */}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-blue-300 to-blue-500 opacity-80" />
-        {/* Ocean waves */}
-        <div className="absolute bottom-16 inset-x-0 h-4 opacity-30">
-          <svg viewBox="0 0 400 16" preserveAspectRatio="none" className="w-full h-full">
+        {/* Layer 2: Sun / Moon */}
+        <div
+          className="absolute z-20 rounded-full transition-all duration-[3000ms]"
+          style={{
+            top: 16,
+            right: 28,
+            width: 36,
+            height: 36,
+            background: cfg.sunColor,
+            boxShadow: `0 0 22px 10px ${cfg.sunGlow}`,
+            transform: `translateX(${parallax * 5}px)`,
+            transition: "transform 0.5s ease-out, background 3s ease, box-shadow 3s ease",
+          }}
+        />
+
+        {/* Layer 3: Clouds */}
+        <div
+          className="absolute inset-0 z-30 pointer-events-none"
+          style={{
+            transform: `translateX(${parallax * 10}px)`,
+            transition: "transform 0.5s ease-out",
+            opacity: cfg.cloudOpacity,
+          }}
+        >
+          <div className="absolute top-4 left-6 w-16 h-6 bg-white rounded-full" />
+          <div className="absolute top-3 left-10 w-24 h-8 bg-white rounded-full" />
+          <div className="absolute top-6 right-8 w-20 h-6 bg-white rounded-full" />
+          <div className="absolute top-4 right-12 w-12 h-5 bg-white rounded-full" />
+        </div>
+
+        {/* Layer 4: Falling leaves */}
+        <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
+          {LEAVES.map((leaf) => (
+            <div
+              key={leaf.id}
+              className="absolute text-sm animate-leaf-fall"
+              style={{
+                left: leaf.left,
+                top: "-20px",
+                animationDelay: leaf.delay,
+                animationDuration: leaf.duration,
+              }}
+            >
+              {leaf.emoji}
+            </div>
+          ))}
+        </div>
+
+        {/* Layer 5: Ocean */}
+        <div
+          className={`absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b ${cfg.oceanCls} opacity-80 z-40 transition-all duration-[3000ms]`}
+          style={{
+            transform: `translateX(${parallax * 15}px)`,
+            transition: "transform 0.5s ease-out",
+          }}
+        />
+        {/* Wave shimmer */}
+        <div className="absolute bottom-16 inset-x-0 h-4 opacity-30 z-50">
+          <svg viewBox="0 0 400 16" preserveAspectRatio="none" className="w-full h-full animate-wave-shimmer">
             <path d="M0,8 Q50,0 100,8 Q150,16 200,8 Q250,0 300,8 Q350,16 400,8 L400,16 L0,16 Z" fill="#60a5fa" />
           </svg>
         </div>
 
-        {/* Island ground */}
+        {/* Layer 6: Island ground */}
         <div
-          className="absolute bg-gradient-to-b from-green-400 to-green-600 rounded-[50%]"
-          style={{ left: "8%", right: "8%", bottom: 12, height: 120 }}
+          className="absolute bg-gradient-to-b from-green-400 to-green-600 rounded-[50%] z-50"
+          style={{
+            left: "8%", right: "8%", bottom: 12, height: 120,
+            transform: `translateX(${parallax * 0}px)`,
+          }}
         />
-        {/* Sandy beach ring */}
+        {/* Sandy beach */}
         <div
-          className="absolute bg-amber-200 rounded-[50%] opacity-60"
+          className="absolute bg-amber-200 rounded-[50%] opacity-60 z-50"
           style={{ left: "10%", right: "10%", bottom: 10, height: 30 }}
         />
 
         {/* Decorative trees */}
-        <div className="absolute text-2xl" style={{ left: "12%", bottom: 70 }}>🌴</div>
-        <div className="absolute text-xl" style={{ right: "14%", bottom: 65 }}>🌴</div>
-        <div className="absolute text-lg" style={{ left: "30%", bottom: 82 }}>🌿</div>
-        <div className="absolute text-lg" style={{ right: "28%", bottom: 78 }}>🌿</div>
+        <div className="absolute text-2xl z-50" style={{ left: "12%", bottom: 70 }}>🌴</div>
+        <div className="absolute text-xl z-50"  style={{ right: "14%", bottom: 65 }}>🌴</div>
+        <div className="absolute text-lg z-50"  style={{ left: "30%",  bottom: 82 }}>🌿</div>
+        <div className="absolute text-lg z-50"  style={{ right: "28%", bottom: 78 }}>🌿</div>
 
-        {/* Zone icons on island */}
+        {/* Layer 7: Zone icons */}
         {ISLAND_ZONES.map((zone) => {
           const unlocked = level >= zone.unlockLevel;
           const colors = ZONE_COLORS[zone.key] ?? { bg: "bg-white", border: "border-gray-200" };
           return (
             <div
               key={zone.key}
-              className="absolute"
-              style={{ left: `${zone.position.x}%`, top: `${zone.position.y}%`, transform: "translate(-50%, -50%)" }}
+              className="absolute z-60"
+              style={{
+                left: `${zone.position.x}%`,
+                top: `${zone.position.y}%`,
+                transform: `translate(-50%, -50%) translateX(${parallax * 3}px)`,
+                transition: "transform 0.5s ease-out",
+              }}
             >
-              <div className={`relative w-14 h-14 rounded-2xl flex items-center justify-center shadow-md border-2 transition-all animate-bounce-in ${
+              <div className={`relative w-12 h-12 rounded-2xl flex items-center justify-center shadow-md border-2 transition-all ${
                 unlocked ? `${colors.bg} ${colors.border}` : "bg-gray-100 border-gray-300 opacity-50"
               }`}>
-                <span className="text-2xl">{ZONE_ICONS[zone.key]}</span>
+                <span className="text-xl">{ZONE_ICONS[zone.key]}</span>
                 {!unlocked && (
                   <div className="absolute -top-1.5 -right-1.5 bg-gray-700 rounded-full px-1.5 py-0.5 shadow">
                     <span className="text-[9px] text-white font-bold">Lv{zone.unlockLevel}</span>
@@ -96,6 +306,19 @@ export default function IslandPage() {
             </div>
           );
         })}
+
+        {/* Layer 8: Cat wandering */}
+        <div
+          className="absolute z-[65]"
+          style={{
+            left: `${catPos.x}%`,
+            bottom: `${100 - catPos.y}%`,
+            transform: "translateX(-50%)",
+            transition: "left 2.2s ease-in-out, bottom 2.2s ease-in-out",
+          }}
+        >
+          <Cat catId={catKey} state={catState} size={40} flip={catFlip} />
+        </div>
       </div>
 
       {/* Zone list */}
