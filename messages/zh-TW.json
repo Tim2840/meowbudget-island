@@ -1,0 +1,180 @@
+{
+  "nav": {
+    "record": "記帳",
+    "reports": "報表",
+    "island": "島嶼",
+    "cats": "貓貓",
+    "settings": "設定"
+  },
+  "category": {
+    "food": "餐飲",
+    "transport": "交通",
+    "shopping": "生活購物",
+    "entertainment": "娛樂",
+    "home": "居家",
+    "clothing": "服飾",
+    "health": "醫療健康",
+    "education": "教育",
+    "work": "工作",
+    "travel": "旅遊",
+    "income": "收入",
+    "other": "其他"
+  },
+  "record": {
+    "title": "記帳",
+    "add": "新增記帳",
+    "amount": "金額",
+    "category": "類別",
+    "date": "日期",
+    "note": "備註（選填）",
+    "type_expense": "支出",
+    "type_income": "收入",
+    "save": "儲存",
+    "cancel": "取消",
+    "reward_title": "獲得獎勵！",
+    "streak_bonus": "連續記帳加成！"
+  },
+  "resource": {
+    "coins": "金幣",
+    "wood": "木材",
+    "fabric": "布料",
+    "fish": "小魚乾",
+    "wallet": "資源錢包"
+  },
+  "zone": {
+    "harbor": "港口廣場",
+    "harbor_desc": "貓咪最喜歡的港口，可以在這裡建造碼頭設施",
+    "market": "市集街",
+    "market_desc": "熱鬧的市集，可以開設各種商店",
+    "hill": "山丘公園",
+    "hill_desc": "寧靜的山丘，適合打造休憩空間"
+  },
+  "island": {
+    "title": "喵帳島",
+    "level": "Lv.{level}",
+    "unlock_zone": "解鎖區域",
+    "unlock_zone_cost": "需要 Lv.{level}",
+    "build": "建造",
+    "upgrade": "升級",
+    "upgrade_cost": "升級費用",
+    "max_level": "已達最高等級",
+    "empty_slot": "空地"
+  },
+  "achievement": {
+    "first_record": "初心者",
+    "first_record_desc": "完成第一筆記帳",
+    "records_10": "記帳達人",
+    "records_10_desc": "累積完成 10 筆記帳",
+    "records_50": "記帳高手",
+    "records_50_desc": "累積完成 50 筆記帳",
+    "records_100": "記帳大師",
+    "records_100_desc": "累積完成 100 筆記帳",
+    "streak_3": "初級堅持",
+    "streak_3_desc": "連續記帳 3 天",
+    "streak_7": "一週達人",
+    "streak_7_desc": "連續記帳 7 天",
+    "streak_30": "月度英雄",
+    "streak_30_desc": "連續記帳 30 天",
+    "streak_100": "傳說貓奴",
+    "streak_100_desc": "連續記帳 100 天",
+    "first_zone": "探索者",
+    "first_zone_desc": "解鎖第一個島嶼區域",
+    "all_zones": "島主",
+    "all_zones_desc": "解鎖所有島嶼區域",
+    "first_building": "建造師",
+    "first_building_desc": "完成第一棟建築",
+    "first_cat": "貓咪朋友",
+    "first_cat_desc": "迎來第一隻貓咪",
+    "cats_3": "貓咪收藏家",
+    "cats_3_desc": "擁有 3 隻貓咪",
+    "first_budget": "預算規劃師",
+    "first_budget_desc": "設定第一個預算",
+    "budget_kept": "節約達人",
+    "budget_kept_desc": "完成一個月預算達成",
+    "analyst": "理財分析師",
+    "analyst_desc": "查看第一份報表",
+    "night_owl": "夜貓子",
+    "night_owl_desc": "在深夜完成記帳（隱藏成就）"
+  },
+  "quest": {
+    "daily_record_3": "今日記帳 3 筆",
+    "daily_record_3_desc": "今天記錄至少 3 筆帳",
+    "daily_record_5": "今日記帳 5 筆",
+    "daily_record_5_desc": "今天記錄至少 5 筆帳",
+    "weekly_view_report": "查看週報表",
+    "weekly_view_report_desc": "本週至少查看一次報表",
+    "weekly_record_20": "本週記帳 20 筆",
+    "weekly_record_20_desc": "本週累積完成 20 筆記帳",
+    "weekly_budget_kept": "守住預算",
+    "weekly_budget_kept_desc": "本週至少一個類別維持在預算內"
+  },
+  "cat": {
+    "captain": "船長喵",
+    "captain_desc": "勇敢的港口船長，隨時準備出航",
+    "merchant": "市場喵",
+    "merchant_desc": "精明的市集老闆，非常懂得做生意",
+    "scholar": "學者喵",
+    "scholar_desc": "愛看報表的學者貓，每天研究花費趨勢",
+    "explorer": "冒險喵",
+    "explorer_desc": "把整座島探索完的冒險家",
+    "streak_master": "毅力喵",
+    "streak_master_desc": "連續記帳 30 天才能獲得的稀有貓咪"
+  },
+  "tutorial": {
+    "welcome": {
+      "title": "歡迎來到喵帳島！🐱",
+      "content": "這裡是你的貓貓島，每次記帳都能讓小島成長。讓我帶你認識這個地方！"
+    },
+    "record_button": {
+      "title": "開始記帳 💰",
+      "content": "點擊這個按鈕新增收入或支出記帳。每筆記帳都會獲得金幣和資源，用來建設你的島嶼！"
+    },
+    "resources": {
+      "title": "資源說明 🪙",
+      "content": "記帳後你會獲得不同資源：\n• 💰 金幣 — 萬用貨幣，購買任何東西\n• 🪵 木材 — 建造設施用\n• 🧵 布料 — 製作裝飾與服裝\n• 🐟 小魚乾 — 貓咪最愛，可吸引新貓咪\n\n不同類別的帳會給不同資源喔！"
+    },
+    "island": {
+      "title": "你的島嶼 🏝️",
+      "content": "用獲得的資源解鎖新的島嶼區域，建造設施，讓更多貓咪搬來！島嶼等級越高，能建設的範圍越大。"
+    },
+    "game_loop": {
+      "title": "遊戲循環 🔄",
+      "content": "喵帳島的完整循環：\n1. 📝 每天記帳 → 獲得資源與 EXP\n2. ⬆️ EXP 累積 → 提升等級 → 解鎖新區域\n3. 🏗️ 用資源建設島嶼 → 解鎖新建築\n4. 🐱 完成任務與成就 → 迎來新貓咪\n5. 📊 查看報表 → 了解花費習慣\n\n連續記帳可獲得額外加成，加油！"
+    },
+    "skip": "跳過教學",
+    "prev": "上一步",
+    "next": "下一步",
+    "finish": "開始吧！",
+    "replay": "重看教學",
+    "step": "{current} / {total}"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "語言",
+    "language_zh": "繁體中文",
+    "language_en": "English",
+    "sound": "音效",
+    "animations": "動畫效果",
+    "notifications": "通知提醒",
+    "replay_tutorial": "重看新手教學",
+    "account": "帳號",
+    "login_google": "使用 Google 繼續",
+    "login_email": "電子郵件登入",
+    "logout": "登出",
+    "logout_confirm": "確定要登出嗎？"
+  },
+  "reports": {
+    "title": "報表",
+    "daily": "日報",
+    "weekly": "週報",
+    "monthly": "月報",
+    "income": "收入",
+    "expense": "支出",
+    "balance": "結餘",
+    "top_categories": "支出分類",
+    "daily_trend": "每日趨勢",
+    "budget_progress": "預算進度",
+    "streak_status": "連續記帳",
+    "no_data": "這段時間還沒有記帳資料"
+  }
+}
