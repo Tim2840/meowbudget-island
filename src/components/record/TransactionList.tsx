@@ -1,0 +1,62 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import type { Transaction } from "@/types";
+import { cn } from "@/lib/utils";
+import { useCategoryName } from "./CategoryName";
+
+interface TransactionListProps {
+  transactions: Transaction[];
+  date: string;
+}
+
+export default function TransactionList({ transactions, date }: TransactionListProps) {
+  const t = useTranslations("reports");
+  const getCategoryName = useCategoryName();
+
+  if (transactions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+        <span className="text-4xl mb-3">📝</span>
+        <p className="text-base">{t("no_data")}</p>
+      </div>
+    );
+  }
+
+  const total = transactions.reduce(
+    (acc, t) => ({ income: acc.income + (t.type === "income" ? t.amount : 0), expense: acc.expense + (t.type === "expense" ? t.amount : 0) }),
+    { income: 0, expense: 0 }
+  );
+
+  return (
+    <div className="space-y-3">
+      {/* Day summary */}
+      <div className="flex items-center justify-between text-sm text-gray-500 mb-1">
+        <span>{date}</span>
+        <div className="flex gap-3">
+          <span className="text-green-600 font-medium">+{total.income.toLocaleString()}</span>
+          <span className="text-red-500 font-medium">-{total.expense.toLocaleString()}</span>
+        </div>
+      </div>
+
+      {/* Transactions */}
+      {transactions.map((tx) => (
+        <div key={tx.id} className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-sm">
+          <span className="text-2xl">{tx.categorySnapshot.emoji}</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-700 truncate">
+              {getCategoryName(tx.categorySnapshot.nameKey, tx.categorySnapshot.isCustom)}
+            </p>
+            {tx.note && <p className="text-xs text-gray-400 truncate">{tx.note}</p>}
+          </div>
+          <span className={cn(
+            "text-base font-bold",
+            tx.type === "income" ? "text-green-600" : "text-red-500"
+          )}>
+            {tx.type === "income" ? "+" : "-"}{tx.amount.toLocaleString()}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}

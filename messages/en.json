@@ -1,0 +1,180 @@
+{
+  "nav": {
+    "record": "Record",
+    "reports": "Reports",
+    "island": "Island",
+    "cats": "Cats",
+    "settings": "Settings"
+  },
+  "category": {
+    "food": "Food & Drinks",
+    "transport": "Transport",
+    "shopping": "Shopping",
+    "entertainment": "Entertainment",
+    "home": "Home",
+    "clothing": "Clothing",
+    "health": "Healthcare",
+    "education": "Education",
+    "work": "Work",
+    "travel": "Travel",
+    "income": "Income",
+    "other": "Other"
+  },
+  "record": {
+    "title": "Record",
+    "add": "Add Record",
+    "amount": "Amount",
+    "category": "Category",
+    "date": "Date",
+    "note": "Note (optional)",
+    "type_expense": "Expense",
+    "type_income": "Income",
+    "save": "Save",
+    "cancel": "Cancel",
+    "reward_title": "Reward Earned!",
+    "streak_bonus": "Streak Bonus!"
+  },
+  "resource": {
+    "coins": "Coins",
+    "wood": "Wood",
+    "fabric": "Fabric",
+    "fish": "Fish",
+    "wallet": "Resource Wallet"
+  },
+  "zone": {
+    "harbor": "Harbor Plaza",
+    "harbor_desc": "Cats' favorite harbor, build dock facilities here",
+    "market": "Market Street",
+    "market_desc": "Bustling market, open various shops",
+    "hill": "Hill Park",
+    "hill_desc": "Quiet hills, perfect for rest spots"
+  },
+  "island": {
+    "title": "MeowBudget Island",
+    "level": "Lv.{level}",
+    "unlock_zone": "Unlock Zone",
+    "unlock_zone_cost": "Requires Lv.{level}",
+    "build": "Build",
+    "upgrade": "Upgrade",
+    "upgrade_cost": "Upgrade Cost",
+    "max_level": "Max Level Reached",
+    "empty_slot": "Empty Plot"
+  },
+  "achievement": {
+    "first_record": "Beginner",
+    "first_record_desc": "Complete your first record",
+    "records_10": "Recorder",
+    "records_10_desc": "Complete 10 records total",
+    "records_50": "Expert Recorder",
+    "records_50_desc": "Complete 50 records total",
+    "records_100": "Master Recorder",
+    "records_100_desc": "Complete 100 records total",
+    "streak_3": "Keep Going",
+    "streak_3_desc": "Record for 3 consecutive days",
+    "streak_7": "Week Warrior",
+    "streak_7_desc": "Record for 7 consecutive days",
+    "streak_30": "Monthly Hero",
+    "streak_30_desc": "Record for 30 consecutive days",
+    "streak_100": "Legendary",
+    "streak_100_desc": "Record for 100 consecutive days",
+    "first_zone": "Explorer",
+    "first_zone_desc": "Unlock your first island zone",
+    "all_zones": "Island Master",
+    "all_zones_desc": "Unlock all island zones",
+    "first_building": "Builder",
+    "first_building_desc": "Complete your first building",
+    "first_cat": "Cat Friend",
+    "first_cat_desc": "Welcome your first cat",
+    "cats_3": "Cat Collector",
+    "cats_3_desc": "Own 3 cats",
+    "first_budget": "Budget Planner",
+    "first_budget_desc": "Set your first budget",
+    "budget_kept": "Frugal Master",
+    "budget_kept_desc": "Stay within budget for a month",
+    "analyst": "Finance Analyst",
+    "analyst_desc": "View your first report",
+    "night_owl": "Night Owl",
+    "night_owl_desc": "Record after midnight (hidden achievement)"
+  },
+  "quest": {
+    "daily_record_3": "Record 3 Today",
+    "daily_record_3_desc": "Add at least 3 records today",
+    "daily_record_5": "Record 5 Today",
+    "daily_record_5_desc": "Add at least 5 records today",
+    "weekly_view_report": "View Weekly Report",
+    "weekly_view_report_desc": "Check a report at least once this week",
+    "weekly_record_20": "Record 20 This Week",
+    "weekly_record_20_desc": "Add 20 records this week",
+    "weekly_budget_kept": "Keep the Budget",
+    "weekly_budget_kept_desc": "Stay within budget in at least one category this week"
+  },
+  "cat": {
+    "captain": "Captain Meow",
+    "captain_desc": "Brave harbor captain, always ready to sail",
+    "merchant": "Market Meow",
+    "merchant_desc": "Sharp market owner who knows how to do business",
+    "scholar": "Scholar Meow",
+    "scholar_desc": "A bookish cat who studies spending trends every day",
+    "explorer": "Explorer Meow",
+    "explorer_desc": "The adventurer who has explored every inch of the island",
+    "streak_master": "Perseverance Meow",
+    "streak_master_desc": "A rare cat only earned after 30 days of consecutive recording"
+  },
+  "tutorial": {
+    "welcome": {
+      "title": "Welcome to MeowBudget Island! 🐱",
+      "content": "This is your cat island — every record you make helps the island grow. Let me show you around!"
+    },
+    "record_button": {
+      "title": "Start Recording 💰",
+      "content": "Tap this button to add income or expense records. Every record earns you coins and resources to build your island!"
+    },
+    "resources": {
+      "title": "Resources 🪙",
+      "content": "After recording, you'll earn different resources:\n• 💰 Coins — universal currency for everything\n• 🪵 Wood — for building structures\n• 🧵 Fabric — for decorations and outfits\n• 🐟 Fish — cats love these, attract new cats!\n\nDifferent categories give different resources!"
+    },
+    "island": {
+      "title": "Your Island 🏝️",
+      "content": "Use your resources to unlock new island zones, build facilities, and attract more cats! Higher level = more areas to develop."
+    },
+    "game_loop": {
+      "title": "The Game Loop 🔄",
+      "content": "Here's how MeowBudget Island works:\n1. 📝 Record daily → earn resources & EXP\n2. ⬆️ EXP → level up → unlock new zones\n3. 🏗️ Use resources → build on island\n4. 🐱 Complete quests & achievements → get new cats\n5. 📊 Check reports → understand spending habits\n\nConsecutive recording gives bonus rewards!"
+    },
+    "skip": "Skip Tutorial",
+    "prev": "Previous",
+    "next": "Next",
+    "finish": "Let's Go!",
+    "replay": "Replay Tutorial",
+    "step": "{current} / {total}"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "language_zh": "繁體中文",
+    "language_en": "English",
+    "sound": "Sound Effects",
+    "animations": "Animations",
+    "notifications": "Notifications",
+    "replay_tutorial": "Replay Tutorial",
+    "account": "Account",
+    "login_google": "Continue with Google",
+    "login_email": "Sign in with Email",
+    "logout": "Sign Out",
+    "logout_confirm": "Are you sure you want to sign out?"
+  },
+  "reports": {
+    "title": "Reports",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "income": "Income",
+    "expense": "Expense",
+    "balance": "Balance",
+    "top_categories": "Top Categories",
+    "daily_trend": "Daily Trend",
+    "budget_progress": "Budget Progress",
+    "streak_status": "Streak",
+    "no_data": "No records for this period"
+  }
+}
