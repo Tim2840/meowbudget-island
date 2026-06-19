@@ -29,6 +29,13 @@ body {
   50% { transform: translateY(-4px); }
 }
 
+/* Sprite-sheet walk: step through 8 frames of /cats/{id}.png.
+   --cat-sheet-w is the full sheet width (8 × frame), set per-instance. */
+@keyframes cat-sprite-walk {
+  from { background-position-x: 0; }
+  to { background-position-x: calc(-1 * var(--cat-sheet-w)); }
+}
+
 @keyframes cat-lick {
   0%, 70%, 100% { transform: rotate(0deg); }
   30% { transform: rotate(-8deg); }
@@ -47,6 +54,10 @@ body {
 
 .animate-cat-idle {
   animation: cat-idle-float 2s ease-in-out infinite;
+}
+
+.animate-cat-sprite-walk {
+  animation: cat-sprite-walk 0.9s steps(8) infinite;
 }
 
 .animate-cat-lick {
