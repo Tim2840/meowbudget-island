@@ -10,9 +10,9 @@
 |--------|------|------|
 | Sprint 0 | ✅ 完成 | 基礎架構、Auth、i18n、Layout、所有 Store |
 | Sprint 1 | ✅ 完成 | 類別名稱修正、新手教學自動觸發、島嶼視覺升級、貓貓頁修正 |
-| Sprint 2 | ⏳ 待開始 | 報表真實資料（圖表）、預算設定 |
-| Sprint 3 | 🔜 未開始 | 視覺升級：場景 + 貓咪元件抽象化 + 島上漫步 |
-| Sprint 4 | 🔜 未開始 | Sprite sheet 資產導入 + 貓咪服裝 + 任務 + Badge |
+| Sprint 2 | ✅ 完成 | 報表真實資料（已接 store）、預算設定（store + UI + 月報達成率）、報表分類名稱翻譯修正 |
+| Sprint 3 | ⏳ 部分 | `<Cat>` sprite 元件 + 5 隻貓 sprite sheet 已做；場景/島上漫步未做 |
+| Sprint 4 | 🔜 未開始 | 貓咪服裝 + 任務 + Badge（sprite sheet 已提前在 Sprint 3 做掉） |
 | Sprint 5 | 🔜 未開始 | 教學完善 + 設定頁串 Store |
 | Sprint 6 | 🔜 未開始 | Polish + PWA |
 
@@ -139,18 +139,32 @@ IslandPage 場景分為 5 個獨立 CSS 層（由後到前）：
 - `src/components/reports/ReportsPage.tsx` — 報表頁（Tab 切換）
 - `src/components/reports/DailyReport.tsx` — 日報（PieChart + 明細列表）
 - `src/components/reports/WeeklyReport.tsx` — 週報（BarChart 7 天）
-- `src/components/reports/MonthlyReport.tsx` — 月報（Donut PieChart）
-- `src/components/cats/CatsPage.tsx` — ✅ Sprint 1 修正：貓貓收藏，鎖定條件顯示正確
+- `src/components/reports/MonthlyReport.tsx` — ✅ Sprint 2：月報（Donut + 排行）+ 預算進度條 + 設定預算入口
+- `src/components/reports/BudgetSheet.tsx` — ✅ Sprint 2 新增：預算設定底部 sheet（總預算 + 各分類）
+- `src/stores/useBudgetStore.ts` — ✅ Sprint 2 新增：預算 store（persist + Supabase，key = yearMonth__categoryId）
+- `src/components/cats/Cat.tsx` — ✅ Sprint 3：sprite sheet 貓咪元件（CSS steps(8)）
+- `public/cats/*.png` + `scripts/gen-cat-sprites.mjs` — ✅ Sprint 3：5 隻貓 sprite sheet + 生成腳本
+- `src/components/cats/CatsPage.tsx` — ✅ Sprint 1 修正 + Sprint 3 改用 `<Cat>`
 - `src/components/settings/SettingsPage.tsx` — 設定頁（語言/音效/登出/重看教學）
 - `src/components/onboarding/TutorialOverlay.tsx` — Spotlight 教學 overlay（SVG mask）
 - `src/components/onboarding/TutorialController.tsx` — ✅ Sprint 1 新增：首次進入自動觸發教學
 
 ---
 
-## Sprint 2 待辦（下個 session 應從這裡開始）
+## Sprint 2 — 已完成 ✅
 
-### 優先項目
-1. **報表接真實資料** — `ReportsPage`/`DailyReport`/`WeeklyReport`/`MonthlyReport` 目前顯示空資料或 mock。
+### 已完成項目
+1. ~~**報表接真實資料**~~ ✅ — `ReportsPage` 已用 `getByDateRange()` 把真實交易傳進三個報表（日/週/月），全部走真實資料。
+2. ~~**報表分類名稱翻譯**~~ ✅ — DailyReport/MonthlyReport 改用 `useCategoryName()`，不再顯示原始 key。
+3. ~~**預算設定**~~ ✅ — 新增 `useBudgetStore`（總預算 + 各分類，persist + Supabase）+ `BudgetSheet` 設定 UI + MonthlyReport 預算進度條（綠/琥珀/紅三色狀態 + 剩餘/超支）。
+
+### Sprint 2 剩餘（次要，可延後）
+- **點擊報表圖表跳轉** — 點某分類 → 回記帳頁並篩選該分類（尚未做）
+- **Supabase schema migration** — `budgets` / `transactions` / `resource_wallets` 等 table 的 `001_initial.sql`（尚未做，目前純本地）
+- **設定頁 sound/animation/notifications toggle 接 store**（仍只是 UI）
+
+### （原始 Sprint 2 規劃，供參考）
+1. **報表接真實資料** — `ReportsPage`/`DailyReport`/`WeeklyReport`/`MonthlyReport`
    - 從 `useTransactionStore.getByDateRange()` 拿交易資料
    - DailyReport：今天的交易 → PieChart 分類占比 + 明細列表
    - WeeklyReport：本週（週一到今天）→ BarChart 每日金額

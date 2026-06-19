@@ -175,6 +175,17 @@
     "daily_trend": "每日趨勢",
     "budget_progress": "預算進度",
     "streak_status": "連續記帳",
-    "no_data": "這段時間還沒有記帳資料"
+    "no_data": "這段時間還沒有記帳資料",
+    "set_budget": "設定預算",
+    "edit_budget": "編輯預算",
+    "monthly_total": "每月總預算",
+    "category_budgets": "分類預算",
+    "no_budget_hint": "尚未設定預算，點擊設定來追蹤每月花費",
+    "budget_remaining": "剩餘",
+    "budget_over": "超支",
+    "budget_used": "已用",
+    "save": "儲存",
+    "cancel": "取消",
+    "amount_placeholder": "未設定"
   }
 }

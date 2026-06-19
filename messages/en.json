@@ -175,6 +175,17 @@
     "daily_trend": "Daily Trend",
     "budget_progress": "Budget Progress",
     "streak_status": "Streak",
-    "no_data": "No records for this period"
+    "no_data": "No records for this period",
+    "set_budget": "Set Budget",
+    "edit_budget": "Edit Budget",
+    "monthly_total": "Monthly Total",
+    "category_budgets": "Category Budgets",
+    "no_budget_hint": "No budget set. Tap to track your monthly spending.",
+    "budget_remaining": "left",
+    "budget_over": "over",
+    "budget_used": "used",
+    "save": "Save",
+    "cancel": "Cancel",
+    "amount_placeholder": "Not set"
   }
 }
