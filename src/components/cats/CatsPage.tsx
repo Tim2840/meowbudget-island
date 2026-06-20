@@ -25,7 +25,7 @@ export default function CatsPage() {
 
   return (
     <div className="flex flex-col min-h-full px-4 pt-5 pb-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">貓貓收藏</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-4">{t("collection_title")}</h1>
       <div className="grid grid-cols-2 gap-3">
         {CAT_DEFINITIONS.map((cat) => {
           const unlocked =

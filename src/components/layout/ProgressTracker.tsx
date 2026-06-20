@@ -65,7 +65,7 @@ export default function ProgressTracker() {
             🏆
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold text-amber-500">成就解鎖！</p>
+            <p className="text-[11px] font-semibold text-amber-500">{t("toast_title")}</p>
             <p className="font-bold text-gray-800 truncate">
               {t(a.nameKey.replace("achievement.", "") as Parameters<typeof t>[0])}
             </p>

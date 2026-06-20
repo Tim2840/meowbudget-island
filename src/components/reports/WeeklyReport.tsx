@@ -42,10 +42,10 @@ export default function WeeklyReport({ transactions, weekStart }: WeeklyReportPr
         <Flame size={28} className="text-orange-500" />
         <div>
           <p className="text-sm text-orange-400 font-medium">{t("streak_status")}</p>
-          <p className="text-2xl font-bold text-orange-600">{profile?.currentStreak ?? 0} 天</p>
+          <p className="text-2xl font-bold text-orange-600">{profile?.currentStreak ?? 0} {t("day_unit")}</p>
         </div>
         <div className="ml-auto text-right">
-          <p className="text-xs text-gray-400">最長</p>
+          <p className="text-xs text-gray-400">{t("longest")}</p>
           <p className="text-lg font-bold text-gray-500">{profile?.longestStreak ?? 0}</p>
         </div>
       </div>

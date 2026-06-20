@@ -58,7 +58,10 @@
     "upgrade": "Upgrade",
     "upgrade_cost": "Upgrade Cost",
     "max_level": "Max Level Reached",
-    "empty_slot": "Empty Plot"
+    "empty_slot": "Empty Plot",
+    "zones_label": "Island Zones",
+    "btn_quests": "Quests",
+    "btn_achievements": "Awards"
   },
   "achievement": {
     "first_record": "Beginner",
@@ -94,7 +97,16 @@
     "analyst": "Finance Analyst",
     "analyst_desc": "View your first report",
     "night_owl": "Night Owl",
-    "night_owl_desc": "Record after midnight (hidden achievement)"
+    "night_owl_desc": "Record after midnight (hidden achievement)",
+    "page_title": "Awards",
+    "unlocked_count": "Unlocked {count} / {total}",
+    "toast_title": "Achievement Unlocked!",
+    "cat_recording": "Recording",
+    "cat_streak": "Streak",
+    "cat_island": "Island",
+    "cat_cats": "Cats",
+    "cat_finance": "Finance",
+    "cat_social": "Social"
   },
   "quest": {
     "daily_record_3": "Record 3 Today",
@@ -106,9 +118,16 @@
     "weekly_record_20": "Record 20 This Week",
     "weekly_record_20_desc": "Add 20 records this week",
     "weekly_budget_kept": "Keep the Budget",
-    "weekly_budget_kept_desc": "Stay within budget in at least one category this week"
+    "weekly_budget_kept_desc": "Stay within budget in at least one category this week",
+    "page_title": "Quests",
+    "page_subtitle": "Complete quests to earn coins and EXP",
+    "group_daily": "Daily Quests",
+    "group_weekly": "Weekly Quests",
+    "claim": "Claim",
+    "claimed": "Claimed"
   },
   "cat": {
+    "collection_title": "Cat Collection",
     "captain": "Captain Meow",
     "captain_desc": "Brave harbor captain, always ready to sail",
     "merchant": "Market Meow",
@@ -161,7 +180,11 @@
     "login_google": "Continue with Google",
     "login_email": "Sign in with Email",
     "logout": "Sign Out",
-    "logout_confirm": "Are you sure you want to sign out?"
+    "logout_confirm": "Are you sure you want to sign out?",
+    "anonymous_account": "Anonymous account",
+    "preferences": "Preferences",
+    "help": "Help",
+    "cancel": "Cancel"
   },
   "reports": {
     "title": "Reports",
@@ -175,6 +198,8 @@
     "daily_trend": "Daily Trend",
     "budget_progress": "Budget Progress",
     "streak_status": "Streak",
+    "day_unit": "days",
+    "longest": "Best",
     "no_data": "No records for this period",
     "set_budget": "Set Budget",
     "edit_budget": "Edit Budget",

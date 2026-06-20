@@ -58,7 +58,10 @@
     "upgrade": "升級",
     "upgrade_cost": "升級費用",
     "max_level": "已達最高等級",
-    "empty_slot": "空地"
+    "empty_slot": "空地",
+    "zones_label": "島嶼區域",
+    "btn_quests": "任務",
+    "btn_achievements": "成就"
   },
   "achievement": {
     "first_record": "初心者",
@@ -94,7 +97,16 @@
     "analyst": "理財分析師",
     "analyst_desc": "查看第一份報表",
     "night_owl": "夜貓子",
-    "night_owl_desc": "在深夜完成記帳（隱藏成就）"
+    "night_owl_desc": "在深夜完成記帳（隱藏成就）",
+    "page_title": "成就",
+    "unlocked_count": "已解鎖 {count} / {total}",
+    "toast_title": "成就解鎖！",
+    "cat_recording": "記帳",
+    "cat_streak": "連續",
+    "cat_island": "島嶼",
+    "cat_cats": "貓咪",
+    "cat_finance": "理財",
+    "cat_social": "社群"
   },
   "quest": {
     "daily_record_3": "今日記帳 3 筆",
@@ -106,9 +118,16 @@
     "weekly_record_20": "本週記帳 20 筆",
     "weekly_record_20_desc": "本週累積完成 20 筆記帳",
     "weekly_budget_kept": "守住預算",
-    "weekly_budget_kept_desc": "本週至少一個類別維持在預算內"
+    "weekly_budget_kept_desc": "本週至少一個類別維持在預算內",
+    "page_title": "任務",
+    "page_subtitle": "完成任務領取金幣與經驗",
+    "group_daily": "每日任務",
+    "group_weekly": "每週任務",
+    "claim": "領取",
+    "claimed": "已領取"
   },
   "cat": {
+    "collection_title": "貓貓收藏",
     "captain": "船長喵",
     "captain_desc": "勇敢的港口船長，隨時準備出航",
     "merchant": "市場喵",
@@ -161,7 +180,11 @@
     "login_google": "使用 Google 繼續",
     "login_email": "電子郵件登入",
     "logout": "登出",
-    "logout_confirm": "確定要登出嗎？"
+    "logout_confirm": "確定要登出嗎？",
+    "anonymous_account": "匿名帳號",
+    "preferences": "偏好設定",
+    "help": "說明",
+    "cancel": "取消"
   },
   "reports": {
     "title": "報表",
@@ -175,6 +198,8 @@
     "daily_trend": "每日趨勢",
     "budget_progress": "預算進度",
     "streak_status": "連續記帳",
+    "day_unit": "天",
+    "longest": "最長",
     "no_data": "這段時間還沒有記帳資料",
     "set_budget": "設定預算",
     "edit_budget": "編輯預算",

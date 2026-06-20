@@ -13,7 +13,7 @@
 | Sprint 2 | ✅ 完成 | 報表真實資料（已接 store）、預算設定（store + UI + 月報達成率）、報表分類名稱翻譯修正 |
 | Sprint 3 | ✅ 完成 | `<Cat>` sprite 元件 + 5 隻貓 sprite sheet；島嶼場景日夜/視差/粒子/貓漫步 |
 | Sprint 4 | ⏳ 部分 | 任務系統 ✅ + 成就 Badge ✅（引擎+store+頁面+自動解鎖 toast）；貓咪服裝未做 |
-| Sprint 5 | 🔜 未開始 | 教學完善 + 設定頁串 Store |
+| Sprint 5 | ✅ 完成 | 設定頁串 `useSettingsStore`（音效/動畫/通知 toggle 持久化）、動畫開關全域生效、全頁面 i18n 補完 |
 | Sprint 6 | 🔜 未開始 | Polish + PWA |
 
 ---

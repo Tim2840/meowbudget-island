@@ -6,6 +6,7 @@ import { useProfileStore } from "@/stores/useProfileStore";
 import { useWalletStore } from "@/stores/useWalletStore";
 import { useTransactionStore } from "@/stores/useTransactionStore";
 import { useBudgetStore } from "@/stores/useBudgetStore";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 
 export default function AppInitializer() {
   const { initialize, user } = useAuthStore();
@@ -13,6 +14,7 @@ export default function AppInitializer() {
   const { loadWallet } = useWalletStore();
   const { loadTransactions } = useTransactionStore();
   const { loadBudgets } = useBudgetStore();
+  const { loadSettings, animationsEnabled } = useSettingsStore();
 
   useEffect(() => {
     initialize();
@@ -24,8 +26,14 @@ export default function AppInitializer() {
       loadWallet(user.id);
       loadTransactions(user.id);
       loadBudgets(user.id);
+      loadSettings(user.id);
     }
-  }, [user, loadProfile, loadWallet, loadTransactions, loadBudgets]);
+  }, [user, loadProfile, loadWallet, loadTransactions, loadBudgets, loadSettings]);
+
+  // Reflect the animations preference globally.
+  useEffect(() => {
+    document.documentElement.classList.toggle("no-animations", !animationsEnabled);
+  }, [animationsEnabled]);
 
   return null;
 }

@@ -38,9 +38,9 @@ export default function QuestsPage() {
     setClaiming(null);
   };
 
-  const groups: { type: Quest["type"]; label: string }[] = [
-    { type: "daily", label: "每日任務" },
-    { type: "weekly", label: "每週任務" },
+  const groups: { type: Quest["type"]; labelKey: "group_daily" | "group_weekly" }[] = [
+    { type: "daily", labelKey: "group_daily" },
+    { type: "weekly", labelKey: "group_weekly" },
   ];
 
   return (
@@ -49,19 +49,19 @@ export default function QuestsPage() {
       <div className="px-4 pt-5 pb-4 bg-gradient-to-b from-emerald-400 to-emerald-300">
         <div className="flex items-center gap-2">
           <Target className="text-white" size={24} />
-          <h1 className="text-2xl font-bold text-white drop-shadow">任務</h1>
+          <h1 className="text-2xl font-bold text-white drop-shadow">{t("page_title")}</h1>
         </div>
-        <p className="text-sm text-emerald-50 mt-1">完成任務領取金幣與經驗</p>
+        <p className="text-sm text-emerald-50 mt-1">{t("page_subtitle")}</p>
       </div>
 
       <div className="flex-1 px-4 py-4 space-y-5">
-        {groups.map(({ type, label }) => {
+        {groups.map(({ type, labelKey }) => {
           const items = QUESTS.filter((q) => q.type === type);
           if (items.length === 0) return null;
           return (
             <div key={type}>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                {label}
+                {t(labelKey)}
               </p>
               <div className="space-y-2">
                 {items.map((q) => {
@@ -97,7 +97,7 @@ export default function QuestsPage() {
                         </span>
                         {claimed ? (
                           <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full shrink-0">
-                            <Check size={13} /> 已領取
+                            <Check size={13} /> {t("claimed")}
                           </span>
                         ) : (
                           <button
@@ -105,7 +105,7 @@ export default function QuestsPage() {
                             onClick={() => handleClaim(q)}
                             className="text-xs font-bold px-4 py-1.5 rounded-full shrink-0 transition-colors disabled:bg-gray-100 disabled:text-gray-300 bg-amber-500 text-white"
                           >
-                            {claiming === q.key ? "..." : "領取"}
+                            {claiming === q.key ? "..." : t("claim")}
                           </button>
                         )}
                       </div>

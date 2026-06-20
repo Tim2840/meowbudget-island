@@ -167,13 +167,13 @@ export default function IslandPage() {
               href="/quests"
               className="flex items-center gap-1 bg-white/25 backdrop-blur text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-white/35 transition-colors"
             >
-              <Target size={14} /> 任務
+              <Target size={14} /> {t("btn_quests")}
             </Link>
             <Link
               href="/achievements"
               className="flex items-center gap-1 bg-white/25 backdrop-blur text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-white/35 transition-colors"
             >
-              <Trophy size={14} /> 成就
+              <Trophy size={14} /> {t("btn_achievements")}
             </Link>
           </div>
         </div>
@@ -341,7 +341,7 @@ export default function IslandPage() {
 
       {/* Zone list */}
       <div className="px-4 pt-4 pb-4 space-y-3 bg-amber-50 flex-1">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">島嶼區域</p>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t("zones_label")}</p>
         {ISLAND_ZONES.map((zone) => (
           <IslandZoneCard key={zone.key} zone={zone} currentLevel={level} />
         ))}

@@ -12,11 +12,6 @@ const CATEGORY_ORDER: Achievement["category"][] = [
   "recording", "streak", "island", "cats", "finance", "social",
 ];
 
-const CATEGORY_LABEL: Record<Achievement["category"], string> = {
-  recording: "記帳", streak: "連續", island: "島嶼",
-  cats: "貓咪", finance: "理財", social: "社群",
-};
-
 export default function AchievementsPage() {
   const t = useTranslations("achievement");
   const stats = useProgressStats();
@@ -37,10 +32,10 @@ export default function AchievementsPage() {
       <div className="px-4 pt-5 pb-4 bg-gradient-to-b from-amber-400 to-amber-300">
         <div className="flex items-center gap-2">
           <Trophy className="text-white" size={24} />
-          <h1 className="text-2xl font-bold text-white drop-shadow">成就</h1>
+          <h1 className="text-2xl font-bold text-white drop-shadow">{t("page_title")}</h1>
         </div>
         <p className="text-sm text-amber-50 mt-1">
-          已解鎖 {earnedCount} / {ACHIEVEMENTS.length}
+          {t("unlocked_count", { count: earnedCount, total: ACHIEVEMENTS.length })}
         </p>
       </div>
 
@@ -48,7 +43,7 @@ export default function AchievementsPage() {
         {byCategory.map(({ cat, items }) => (
           <div key={cat}>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-              {CATEGORY_LABEL[cat]}
+              {t(`cat_${cat}` as Parameters<typeof t>[0])}
             </p>
             <div className="space-y-2">
               {items.map((a) => {
