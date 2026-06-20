@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { BookOpen, BarChart2, MapPin, Cat, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,16 +15,13 @@ const navItems = [
 
 export default function BottomNav() {
   const t = useTranslations("nav");
-  const pathname = usePathname();
-
-  // Extract locale prefix from pathname (e.g. /zh-TW/island → /island)
-  const pathWithoutLocale = pathname.replace(/^\/(zh-TW|en)/, "") || "/";
+  const pathname = usePathname(); // next-intl: already without locale prefix
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-amber-100 safe-area-bottom">
       <div className="max-w-md mx-auto flex">
         {navItems.map(({ key, icon: Icon, href }) => {
-          const isActive = href === "/" ? pathWithoutLocale === "/" : pathWithoutLocale.startsWith(href);
+          const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
           return (
             <Link
               key={key}

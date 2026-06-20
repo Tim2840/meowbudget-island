@@ -105,11 +105,11 @@ export const ACHIEVEMENTS: Achievement[] = [
 // Daily / Weekly Quests
 // ──────────────────────────────────────────
 export const QUESTS: Quest[] = [
-  { key: "daily_record_3", type: "daily", titleKey: "quest.daily_record_3", descriptionKey: "quest.daily_record_3.desc", conditionType: "record_count", conditionValue: 3, rewardCoins: 30, rewardExp: 15 },
-  { key: "daily_record_5", type: "daily", titleKey: "quest.daily_record_5", descriptionKey: "quest.daily_record_5.desc", conditionType: "record_count", conditionValue: 5, rewardCoins: 60, rewardExp: 25 },
-  { key: "weekly_view_report", type: "weekly", titleKey: "quest.weekly_view_report", descriptionKey: "quest.weekly_view_report.desc", conditionType: "view_report", conditionValue: 1, rewardCoins: 100, rewardExp: 40 },
-  { key: "weekly_record_20", type: "weekly", titleKey: "quest.weekly_record_20", descriptionKey: "quest.weekly_record_20.desc", conditionType: "record_count", conditionValue: 20, rewardCoins: 200, rewardExp: 80 },
-  { key: "weekly_budget_kept", type: "weekly", titleKey: "quest.weekly_budget_kept", descriptionKey: "quest.weekly_budget_kept.desc", conditionType: "category_budget_kept", conditionValue: 1, rewardCoins: 150, rewardExp: 60 },
+  { key: "daily_record_3", type: "daily", titleKey: "quest.daily_record_3", descriptionKey: "quest.daily_record_3_desc", conditionType: "record_count", conditionValue: 3, rewardCoins: 30, rewardExp: 15 },
+  { key: "daily_record_5", type: "daily", titleKey: "quest.daily_record_5", descriptionKey: "quest.daily_record_5_desc", conditionType: "record_count", conditionValue: 5, rewardCoins: 60, rewardExp: 25 },
+  { key: "weekly_view_report", type: "weekly", titleKey: "quest.weekly_view_report", descriptionKey: "quest.weekly_view_report_desc", conditionType: "view_report", conditionValue: 1, rewardCoins: 100, rewardExp: 40 },
+  { key: "weekly_record_20", type: "weekly", titleKey: "quest.weekly_record_20", descriptionKey: "quest.weekly_record_20_desc", conditionType: "record_count", conditionValue: 20, rewardCoins: 200, rewardExp: 80 },
+  { key: "weekly_budget_kept", type: "weekly", titleKey: "quest.weekly_budget_kept", descriptionKey: "quest.weekly_budget_kept_desc", conditionType: "category_budget_kept", conditionValue: 1, rewardCoins: 150, rewardExp: 60 },
 ];
 
 // ──────────────────────────────────────────
