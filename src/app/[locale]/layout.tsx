@@ -4,6 +4,7 @@ import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import BottomNav from "@/components/layout/BottomNav";
 import AppInitializer from "@/components/layout/AppInitializer";
+import ProgressTracker from "@/components/layout/ProgressTracker";
 import TutorialController from "@/components/onboarding/TutorialController";
 
 export function generateStaticParams() {
@@ -28,6 +29,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <AppInitializer />
+      <ProgressTracker />
       <TutorialController />
       <main className="flex-1 pb-20 max-w-md mx-auto w-full">
         {children}

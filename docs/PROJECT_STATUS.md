@@ -11,8 +11,8 @@
 | Sprint 0 | ✅ 完成 | 基礎架構、Auth、i18n、Layout、所有 Store |
 | Sprint 1 | ✅ 完成 | 類別名稱修正、新手教學自動觸發、島嶼視覺升級、貓貓頁修正 |
 | Sprint 2 | ✅ 完成 | 報表真實資料（已接 store）、預算設定（store + UI + 月報達成率）、報表分類名稱翻譯修正 |
-| Sprint 3 | ⏳ 部分 | `<Cat>` sprite 元件 + 5 隻貓 sprite sheet 已做；場景/島上漫步未做 |
-| Sprint 4 | 🔜 未開始 | 貓咪服裝 + 任務 + Badge（sprite sheet 已提前在 Sprint 3 做掉） |
+| Sprint 3 | ✅ 完成 | `<Cat>` sprite 元件 + 5 隻貓 sprite sheet；島嶼場景日夜/視差/粒子/貓漫步 |
+| Sprint 4 | ⏳ 部分 | 任務系統 ✅ + 成就 Badge ✅（引擎+store+頁面+自動解鎖 toast）；貓咪服裝未做 |
 | Sprint 5 | 🔜 未開始 | 教學完善 + 設定頁串 Store |
 | Sprint 6 | 🔜 未開始 | Polish + PWA |
 

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useTransactionStore } from "@/stores/useTransactionStore";
+import { useQuestStore } from "@/stores/useQuestStore";
 import { getWeekRange, getMonthRange, todayString, formatYearMonth } from "@/lib/streakUtils";
 import DailyReport from "./DailyReport";
 import WeeklyReport from "./WeeklyReport";
@@ -15,12 +16,19 @@ export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState<ReportTab>("daily");
   const { getByDateRange } = useTransactionStore();
 
+  const markReportViewed = useQuestStore((s) => s.markReportViewed);
+
   const today = todayString();
   const weekRange = getWeekRange();
   const now = new Date();
   const monthRange = getMonthRange(now.getFullYear(), now.getMonth() + 1);
 
   const toDateStr = (d: Date) => d.toISOString().split("T")[0];
+
+  // Track report views for the analyst achievement & weekly view-report quest.
+  useEffect(() => {
+    markReportViewed(today, toDateStr(weekRange.start));
+  }, [markReportViewed, today]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const dailyTxs = getByDateRange(today, today);
   const weeklyTxs = getByDateRange(toDateStr(weekRange.start), toDateStr(weekRange.end));

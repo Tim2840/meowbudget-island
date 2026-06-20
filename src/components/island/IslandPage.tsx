@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { Target, Trophy } from "lucide-react";
 import { useProfileStore } from "@/stores/useProfileStore";
 import { ISLAND_ZONES, CAT_DEFINITIONS } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
@@ -158,7 +160,23 @@ export default function IslandPage() {
     <div className="flex flex-col min-h-full">
       {/* Header */}
       <div className={`px-4 pt-5 pb-3 bg-gradient-to-b ${cfg.skyCls} transition-all duration-[3000ms]`}>
-        <h1 className="text-2xl font-bold text-white drop-shadow">{t("title")}</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-white drop-shadow">{t("title")}</h1>
+          <div className="flex gap-2">
+            <Link
+              href="/quests"
+              className="flex items-center gap-1 bg-white/25 backdrop-blur text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-white/35 transition-colors"
+            >
+              <Target size={14} /> 任務
+            </Link>
+            <Link
+              href="/achievements"
+              className="flex items-center gap-1 bg-white/25 backdrop-blur text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-white/35 transition-colors"
+            >
+              <Trophy size={14} /> 成就
+            </Link>
+          </div>
+        </div>
         <div className="mt-2">
           <LevelBar level={level} exp={profile?.exp ?? 0} />
         </div>
