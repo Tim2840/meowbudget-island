@@ -1,4 +1,4 @@
-import type { Category, ResourceType, IslandZone, Achievement, Quest, CatDefinition, TutorialStep } from "@/types";
+import type { Category, ResourceType, IslandZone, Building, Achievement, Quest, CatDefinition, TutorialStep } from "@/types";
 
 // ──────────────────────────────────────────
 // Default Categories (system-defined, userId = null)
@@ -68,6 +68,115 @@ export const ISLAND_ZONES: IslandZone[] = [
       { slotId: "hill-1", position: { x: 30, y: 15 }, buildingKey: null },
       { slotId: "hill-2", position: { x: 50, y: 10 }, buildingKey: null },
       { slotId: "hill-3", position: { x: 45, y: 25 }, buildingKey: null },
+    ],
+  },
+];
+
+// ──────────────────────────────────────────
+// Buildings (9 buildings across 3 zones, each with 3 levels)
+// ──────────────────────────────────────────
+export const BUILDINGS: Building[] = [
+  // ── Harbor ──
+  {
+    key: "lighthouse", slotId: "harbor-1", zoneKey: "harbor",
+    nameKey: "building.lighthouse", descriptionKey: "building.lighthouse_desc",
+    maxLevel: 3, imageKey: "🏮",
+    levelCosts: [
+      { level: 1, coins: 150, wood: 30,  fabric: 0,  fish: 0,  requiredUserLevel: 1 },
+      { level: 2, coins: 400, wood: 80,  fabric: 0,  fish: 0,  requiredUserLevel: 3 },
+      { level: 3, coins: 900, wood: 180, fabric: 40, fish: 0,  requiredUserLevel: 6 },
+    ],
+  },
+  {
+    key: "fishing_dock", slotId: "harbor-2", zoneKey: "harbor",
+    nameKey: "building.fishing_dock", descriptionKey: "building.fishing_dock_desc",
+    maxLevel: 3, imageKey: "⚓",
+    levelCosts: [
+      { level: 1, coins: 120, wood: 0,   fabric: 0,  fish: 20, requiredUserLevel: 1 },
+      { level: 2, coins: 350, wood: 0,   fabric: 0,  fish: 50, requiredUserLevel: 3 },
+      { level: 3, coins: 800, wood: 60,  fabric: 0,  fish: 100,requiredUserLevel: 6 },
+    ],
+  },
+  {
+    key: "warehouse", slotId: "harbor-3", zoneKey: "harbor",
+    nameKey: "building.warehouse", descriptionKey: "building.warehouse_desc",
+    maxLevel: 3, imageKey: "📦",
+    levelCosts: [
+      { level: 1, coins: 200, wood: 50,  fabric: 0,  fish: 0,  requiredUserLevel: 2 },
+      { level: 2, coins: 500, wood: 120, fabric: 0,  fish: 0,  requiredUserLevel: 4 },
+      { level: 3, coins: 1100,wood: 250, fabric: 60, fish: 0,  requiredUserLevel: 7 },
+    ],
+  },
+  // ── Market ──
+  {
+    key: "market_stall", slotId: "market-1", zoneKey: "market",
+    nameKey: "building.market_stall", descriptionKey: "building.market_stall_desc",
+    maxLevel: 3, imageKey: "🛒",
+    levelCosts: [
+      { level: 1, coins: 300, wood: 0,   fabric: 40, fish: 0,  requiredUserLevel: 5 },
+      { level: 2, coins: 700, wood: 0,   fabric: 100,fish: 0,  requiredUserLevel: 7 },
+      { level: 3, coins: 1500,wood: 80,  fabric: 200,fish: 0,  requiredUserLevel: 10 },
+    ],
+  },
+  {
+    key: "bakery", slotId: "market-2", zoneKey: "market",
+    nameKey: "building.bakery", descriptionKey: "building.bakery_desc",
+    maxLevel: 3, imageKey: "🥐",
+    levelCosts: [
+      { level: 1, coins: 280, wood: 40,  fabric: 0,  fish: 30, requiredUserLevel: 5 },
+      { level: 2, coins: 650, wood: 80,  fabric: 0,  fish: 70, requiredUserLevel: 7 },
+      { level: 3, coins: 1400,wood: 160, fabric: 60, fish: 140,requiredUserLevel: 10 },
+    ],
+  },
+  {
+    key: "textile_shop", slotId: "market-3", zoneKey: "market",
+    nameKey: "building.textile_shop", descriptionKey: "building.textile_shop_desc",
+    maxLevel: 3, imageKey: "🧵",
+    levelCosts: [
+      { level: 1, coins: 320, wood: 0,   fabric: 60, fish: 0,  requiredUserLevel: 6 },
+      { level: 2, coins: 750, wood: 0,   fabric: 140,fish: 0,  requiredUserLevel: 8 },
+      { level: 3, coins: 1600,wood: 100, fabric: 280,fish: 0,  requiredUserLevel: 11 },
+    ],
+  },
+  {
+    key: "trading_post", slotId: "market-4", zoneKey: "market",
+    nameKey: "building.trading_post", descriptionKey: "building.trading_post_desc",
+    maxLevel: 3, imageKey: "💱",
+    levelCosts: [
+      { level: 1, coins: 500, wood: 0,   fabric: 0,  fish: 0,  requiredUserLevel: 6 },
+      { level: 2, coins: 1200,wood: 0,   fabric: 0,  fish: 0,  requiredUserLevel: 9 },
+      { level: 3, coins: 2500,wood: 0,   fabric: 0,  fish: 0,  requiredUserLevel: 12 },
+    ],
+  },
+  // ── Hill ──
+  {
+    key: "garden", slotId: "hill-1", zoneKey: "hill",
+    nameKey: "building.garden", descriptionKey: "building.garden_desc",
+    maxLevel: 3, imageKey: "🌸",
+    levelCosts: [
+      { level: 1, coins: 400, wood: 80,  fabric: 0,  fish: 0,  requiredUserLevel: 10 },
+      { level: 2, coins: 900, wood: 180, fabric: 60, fish: 0,  requiredUserLevel: 12 },
+      { level: 3, coins: 2000,wood: 360, fabric: 120,fish: 0,  requiredUserLevel: 15 },
+    ],
+  },
+  {
+    key: "observatory", slotId: "hill-2", zoneKey: "hill",
+    nameKey: "building.observatory", descriptionKey: "building.observatory_desc",
+    maxLevel: 3, imageKey: "🔭",
+    levelCosts: [
+      { level: 1, coins: 600, wood: 100, fabric: 80, fish: 0,  requiredUserLevel: 10 },
+      { level: 2, coins: 1400,wood: 220, fabric: 180,fish: 0,  requiredUserLevel: 13 },
+      { level: 3, coins: 3000,wood: 440, fabric: 360,fish: 0,  requiredUserLevel: 16 },
+    ],
+  },
+  {
+    key: "rest_pavilion", slotId: "hill-3", zoneKey: "hill",
+    nameKey: "building.rest_pavilion", descriptionKey: "building.rest_pavilion_desc",
+    maxLevel: 3, imageKey: "⛩️",
+    levelCosts: [
+      { level: 1, coins: 450, wood: 120, fabric: 40, fish: 0,  requiredUserLevel: 10 },
+      { level: 2, coins: 1000,wood: 260, fabric: 80, fish: 0,  requiredUserLevel: 13 },
+      { level: 3, coins: 2200,wood: 520, fabric: 160,fish: 0,  requiredUserLevel: 16 },
     ],
   },
 ];

@@ -89,6 +89,7 @@ export interface BuildingSlot {
 
 export interface Building {
   key: string;
+  slotId: string;
   zoneKey: ZoneKey;
   nameKey: string;
   descriptionKey: string;

@@ -15,6 +15,7 @@ export interface ProgressStats {
   catsOwned: number;
   budgetsSet: number;
   budgetsKept: number;
+  buildingsBuilt: number;
   reportsViewedEver: boolean;
   reportViewedThisWeek: boolean;
 }
@@ -46,7 +47,7 @@ function statForAchievement(conditionType: string, stats: ProgressStats): number
     case "total_records": return stats.totalRecords;
     case "streak_days": return stats.longestStreak;
     case "zones_unlocked": return stats.zonesUnlocked;
-    case "buildings_built": return 0; // building system not implemented yet
+    case "buildings_built": return stats.buildingsBuilt;
     case "cats_owned": return stats.catsOwned;
     case "budgets_set": return stats.budgetsSet;
     case "budgets_kept": return stats.budgetsKept;
