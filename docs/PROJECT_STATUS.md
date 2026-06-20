@@ -14,7 +14,7 @@
 | Sprint 3 | ✅ 完成 | `<Cat>` sprite 元件 + 5 隻貓 sprite sheet；島嶼場景日夜/視差/粒子/貓漫步 |
 | Sprint 4 | ⏳ 部分 | 任務系統 ✅ + 成就 Badge ✅（引擎+store+頁面+自動解鎖 toast）；貓咪服裝未做 |
 | Sprint 5 | ✅ 完成 | 設定頁串 `useSettingsStore`（音效/動畫/通知 toggle 持久化）、動畫開關全域生效、全頁面 i18n 補完 |
-| Sprint 6 | 🔜 未開始 | Polish + PWA |
+| Sprint 6 | ✅ 完成 | `proxy.ts`（取代 deprecated `middleware.ts`）、PWA manifest + icons + service worker、Supabase migration SQL |
 
 ---
 

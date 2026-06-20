@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import ServiceWorkerRegistration from "@/components/layout/ServiceWorkerRegistration";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
@@ -15,13 +16,16 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#4F86C6",
+  themeColor: "#F59E0B",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-TW" className={geist.variable}>
-      <body className="min-h-dvh bg-amber-50 antialiased">{children}</body>
+      <body className="min-h-dvh bg-amber-50 antialiased">
+        <ServiceWorkerRegistration />
+        {children}
+      </body>
     </html>
   );
 }

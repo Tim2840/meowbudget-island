@@ -1,0 +1,27 @@
+{
+  "name": "喵帳島 MeowBudget Island",
+  "short_name": "喵帳島",
+  "description": "記帳養成 App，讓每筆記帳都成為島嶼的成長",
+  "start_url": "/zh-TW/island",
+  "display": "standalone",
+  "background_color": "#fffbf0",
+  "theme_color": "#F59E0B",
+  "orientation": "portrait",
+  "lang": "zh-TW",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["finance", "lifestyle"]
+}
