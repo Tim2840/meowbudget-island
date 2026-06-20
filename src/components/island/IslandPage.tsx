@@ -4,9 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Target, Trophy } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import confetti from "canvas-confetti";
 import { useProfileStore } from "@/stores/useProfileStore";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useBuildingStore } from "@/stores/useBuildingStore";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 import { ISLAND_ZONES, CAT_DEFINITIONS, BUILDINGS } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
 import BuildingModal from "./BuildingModal";
@@ -110,10 +113,12 @@ export default function IslandPage() {
   const { profile } = useProfileStore();
   const { user } = useAuthStore();
   const { buildings, buildOrUpgrade } = useBuildingStore();
+  const { animationsEnabled } = useSettingsStore();
   const level = profile?.level ?? 1;
 
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [selectedZoneKey, setSelectedZoneKey] = useState<string | null>(null);
+  const [lastBuiltSlotId, setLastBuiltSlotId] = useState<string | null>(null);
 
   const selectedBuildingDef = selectedSlotId
     ? BUILDINGS.find((b) => b.slotId === selectedSlotId) ?? null
@@ -128,7 +133,18 @@ export default function IslandPage() {
   const handleBuild = async () => {
     if (!selectedBuildingDef || !user) return;
     const ok = await buildOrUpgrade(user.id, selectedBuildingDef.key);
-    if (ok) setSelectedSlotId(null);
+    if (ok) {
+      if (animationsEnabled) {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          colors: ["#F59E0B", "#FCD34D", "#FEF08A"],
+          origin: { y: 0.6 },
+        });
+      }
+      setLastBuiltSlotId(selectedBuildingDef.slotId);
+      setSelectedSlotId(null);
+    }
   };
 
   // ── Time of day ──
@@ -174,12 +190,15 @@ export default function IslandPage() {
       catPosRef.current = next;
       setCatState("walk");
       setCatPos(next);
-      // arrive after transition (distance-based ~2s)
       setTimeout(() => setCatState("idle"), 2200);
     };
     const id = setInterval(move, 5000 + Math.random() * 3000);
     return () => clearInterval(id);
   }, []);
+
+  const slotSpring = animationsEnabled
+    ? { type: "spring" as const, damping: 12, stiffness: 400 }
+    : { duration: 0 };
 
   return (
     <div className="flex flex-col min-h-full">
@@ -359,7 +378,7 @@ export default function IslandPage() {
               ? buildings.find((ub) => ub.buildingKey === buildingDef.key) ?? null
               : null;
             return (
-              <button
+              <motion.button
                 key={slot.slotId}
                 className={`absolute z-[62] touch-manipulation ${!zoneUnlocked ? "pointer-events-none" : ""}`}
                 style={{
@@ -368,12 +387,19 @@ export default function IslandPage() {
                   transform: `translate(-50%, -50%) translateX(${parallax * 3}px)`,
                   transition: "transform 0.5s ease-out",
                 }}
+                whileTap={zoneUnlocked ? { scale: 0.9 } : undefined}
                 onClick={() => { if (zoneUnlocked) setSelectedSlotId(slot.slotId); }}
               >
                 {userBuilding ? (
-                  <div className="w-10 h-10 rounded-xl bg-white/90 shadow-md flex items-center justify-center text-xl border-2 border-amber-300">
+                  <motion.div
+                    key={`${buildingDef?.key}-lv${userBuilding.level}`}
+                    initial={{ scale: slot.slotId === lastBuiltSlotId ? 0 : 1 }}
+                    animate={{ scale: 1 }}
+                    transition={slotSpring}
+                    className="w-10 h-10 rounded-xl bg-white/90 shadow-md flex items-center justify-center text-xl border-2 border-amber-300"
+                  >
                     {buildingDef!.imageKey}
-                  </div>
+                  </motion.div>
                 ) : (
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 border-dashed ${
                     zoneUnlocked
@@ -385,7 +411,7 @@ export default function IslandPage() {
                     )}
                   </div>
                 )}
-              </button>
+              </motion.button>
             );
           });
         })}
@@ -425,26 +451,32 @@ export default function IslandPage() {
       </div>
 
       {/* Zone buildings sheet */}
-      {selectedZone && (
-        <ZoneBuildingsSheet
-          zone={selectedZone}
-          onClose={() => setSelectedZoneKey(null)}
-          onSelectBuilding={(b) => {
-            setSelectedZoneKey(null);
-            setSelectedSlotId(b.slotId);
-          }}
-        />
-      )}
+      <AnimatePresence>
+        {selectedZone && (
+          <ZoneBuildingsSheet
+            key="zone-sheet"
+            zone={selectedZone}
+            onClose={() => setSelectedZoneKey(null)}
+            onSelectBuilding={(b) => {
+              setSelectedZoneKey(null);
+              setSelectedSlotId(b.slotId);
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Building modal */}
-      {selectedSlotId && selectedBuildingDef && (
-        <BuildingModal
-          building={selectedBuildingDef}
-          userBuilding={selectedUserBuilding}
-          onClose={() => setSelectedSlotId(null)}
-          onBuild={handleBuild}
-        />
-      )}
+      <AnimatePresence>
+        {selectedSlotId && selectedBuildingDef && (
+          <BuildingModal
+            key="building-modal"
+            building={selectedBuildingDef}
+            userBuilding={selectedUserBuilding}
+            onClose={() => setSelectedSlotId(null)}
+            onBuild={handleBuild}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

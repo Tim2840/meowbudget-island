@@ -2,8 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { Lock, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 import type { IslandZone } from "@/types";
 import { cn } from "@/lib/utils";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 
 interface IslandZoneCardProps {
   zone: IslandZone;
@@ -21,16 +23,18 @@ const ZONE_EMOJI: Record<string, string> = {
 export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, onClick }: IslandZoneCardProps) {
   const t = useTranslations("zone");
   const tIsland = useTranslations("island");
+  const { animationsEnabled } = useSettingsStore();
   const unlocked = currentLevel >= zone.unlockLevel;
+  const interactive = unlocked && !!onClick;
 
-  return (
+  const cardContent = (
     <div
       className={cn(
         "bg-white rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3 transition-colors",
         !unlocked && "opacity-60",
-        unlocked && onClick && "cursor-pointer active:bg-amber-50"
+        interactive && "cursor-pointer active:bg-amber-50"
       )}
-      onClick={unlocked ? onClick : undefined}
+      onClick={interactive ? onClick : undefined}
     >
       <div className={cn(
         "w-12 h-12 rounded-xl flex items-center justify-center text-2xl",
@@ -48,5 +52,17 @@ export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, onC
       </div>
       {unlocked && <ChevronRight size={18} className="text-gray-300" />}
     </div>
+  );
+
+  if (!interactive || !animationsEnabled) return cardContent;
+
+  return (
+    <motion.div
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    >
+      {cardContent}
+    </motion.div>
   );
 }

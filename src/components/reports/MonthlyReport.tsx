@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Wallet } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import type { Transaction } from "@/types";
 import { useBudgetStore } from "@/stores/useBudgetStore";
 import { useCategoryName } from "@/components/record/CategoryName";
@@ -162,7 +163,11 @@ export default function MonthlyReport({ transactions, yearMonth }: MonthlyReport
         </div>
       )}
 
-      {showBudget && <BudgetSheet yearMonth={yearMonth} onClose={() => setShowBudget(false)} />}
+      <AnimatePresence>
+        {showBudget && (
+          <BudgetSheet key="budget-sheet" yearMonth={yearMonth} onClose={() => setShowBudget(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
