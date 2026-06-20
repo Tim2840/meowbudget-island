@@ -109,6 +109,19 @@ create trigger user_settings_updated_at
   before update on user_settings
   for each row execute function update_updated_at();
 
+-- ── user_buildings ────────────────────────────────────────
+create table if not exists user_buildings (
+  user_id     uuid not null references auth.users(id) on delete cascade,
+  building_key text not null,
+  level       integer not null default 1,
+  built_at    timestamptz not null default now(),
+  primary key (user_id, building_key)
+);
+
+alter table user_buildings enable row level security;
+create policy "Users can manage their own buildings"
+  on user_buildings for all using (auth.uid() = user_id);
+
 -- ── Auto-provision profile + wallet on signup ──────────────
 create or replace function handle_new_user()
 returns trigger language plpgsql security definer as $$

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 interface IslandZoneCardProps {
   zone: IslandZone;
   currentLevel: number;
+  builtCount?: number;
 }
 
 const ZONE_EMOJI: Record<string, string> = {
@@ -16,7 +17,7 @@ const ZONE_EMOJI: Record<string, string> = {
   hill: "🌄",
 };
 
-export default function IslandZoneCard({ zone, currentLevel }: IslandZoneCardProps) {
+export default function IslandZoneCard({ zone, currentLevel, builtCount = 0 }: IslandZoneCardProps) {
   const t = useTranslations("zone");
   const tIsland = useTranslations("island");
   const unlocked = currentLevel >= zone.unlockLevel;
@@ -36,7 +37,7 @@ export default function IslandZoneCard({ zone, currentLevel }: IslandZoneCardPro
         <p className="font-semibold text-gray-800">{t(zone.key)}</p>
         <p className="text-xs text-gray-400 truncate">
           {unlocked
-            ? `${zone.slots.length} ${tIsland("empty_slot")}`
+            ? tIsland("slots_progress", { built: builtCount, total: zone.slots.length })
             : tIsland("unlock_zone_cost", { level: zone.unlockLevel })}
         </p>
       </div>

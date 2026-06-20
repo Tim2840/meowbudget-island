@@ -2,11 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Target, Trophy } from "lucide-react";
 import { useProfileStore } from "@/stores/useProfileStore";
-import { ISLAND_ZONES, CAT_DEFINITIONS } from "@/lib/constants";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useBuildingStore } from "@/stores/useBuildingStore";
+import { ISLAND_ZONES, CAT_DEFINITIONS, BUILDINGS } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
+import BuildingModal from "./BuildingModal";
 import LevelBar from "./LevelBar";
 import Cat from "@/components/cats/Cat";
 
@@ -104,7 +107,24 @@ const ZONE_COLORS: Record<string, { bg: string; border: string }> = {
 export default function IslandPage() {
   const t = useTranslations("island");
   const { profile } = useProfileStore();
+  const { user } = useAuthStore();
+  const { buildings, buildOrUpgrade } = useBuildingStore();
   const level = profile?.level ?? 1;
+
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
+
+  const selectedBuildingDef = selectedSlotId
+    ? BUILDINGS.find((b) => b.slotId === selectedSlotId) ?? null
+    : null;
+  const selectedUserBuilding = selectedBuildingDef
+    ? buildings.find((ub) => ub.buildingKey === selectedBuildingDef.key) ?? null
+    : null;
+
+  const handleBuild = async () => {
+    if (!selectedBuildingDef || !user) return;
+    const ok = await buildOrUpgrade(user.id, selectedBuildingDef.key);
+    if (ok) setSelectedSlotId(null);
+  };
 
   // ── Time of day ──
   const [period, setPeriod] = useState<TimePeriod>(() =>
@@ -325,6 +345,46 @@ export default function IslandPage() {
           );
         })}
 
+        {/* Layer 7b: Building slots */}
+        {ISLAND_ZONES.map((zone) => {
+          const zoneUnlocked = level >= zone.unlockLevel;
+          return zone.slots.map((slot) => {
+            const buildingDef = BUILDINGS.find((b) => b.slotId === slot.slotId);
+            const userBuilding = buildingDef
+              ? buildings.find((ub) => ub.buildingKey === buildingDef.key) ?? null
+              : null;
+            return (
+              <button
+                key={slot.slotId}
+                className={`absolute z-[62] touch-manipulation ${!zoneUnlocked ? "pointer-events-none" : ""}`}
+                style={{
+                  left: `${slot.position.x}%`,
+                  top: `${slot.position.y}%`,
+                  transform: `translate(-50%, -50%) translateX(${parallax * 3}px)`,
+                  transition: "transform 0.5s ease-out",
+                }}
+                onClick={() => { if (zoneUnlocked) setSelectedSlotId(slot.slotId); }}
+              >
+                {userBuilding ? (
+                  <div className="w-10 h-10 rounded-xl bg-white/90 shadow-md flex items-center justify-center text-xl border-2 border-amber-300">
+                    {buildingDef!.imageKey}
+                  </div>
+                ) : (
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 border-dashed ${
+                    zoneUnlocked
+                      ? "bg-white/60 border-amber-300"
+                      : "bg-white/20 border-gray-300 opacity-30"
+                  }`}>
+                    {zoneUnlocked && (
+                      <span className="text-amber-400 text-xs font-bold leading-none">+</span>
+                    )}
+                  </div>
+                )}
+              </button>
+            );
+          });
+        })}
+
         {/* Layer 8: Cat wandering */}
         <div
           className="absolute z-[65]"
@@ -342,10 +402,31 @@ export default function IslandPage() {
       {/* Zone list */}
       <div className="px-4 pt-4 pb-4 space-y-3 bg-amber-50 flex-1">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t("zones_label")}</p>
-        {ISLAND_ZONES.map((zone) => (
-          <IslandZoneCard key={zone.key} zone={zone} currentLevel={level} />
-        ))}
+        {ISLAND_ZONES.map((zone) => {
+          const zoneBuildings = BUILDINGS.filter((b) => b.zoneKey === zone.key);
+          const builtCount = zoneBuildings.filter((b) =>
+            buildings.some((ub) => ub.buildingKey === b.key)
+          ).length;
+          return (
+            <IslandZoneCard
+              key={zone.key}
+              zone={zone}
+              currentLevel={level}
+              builtCount={builtCount}
+            />
+          );
+        })}
       </div>
+
+      {/* Building modal */}
+      {selectedSlotId && selectedBuildingDef && (
+        <BuildingModal
+          building={selectedBuildingDef}
+          userBuilding={selectedUserBuilding}
+          onClose={() => setSelectedSlotId(null)}
+          onBuild={handleBuild}
+        />
+      )}
     </div>
   );
 }

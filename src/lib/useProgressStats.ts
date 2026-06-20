@@ -8,6 +8,7 @@ import { useQuestStore } from "@/stores/useQuestStore";
 import { useAchievementStore } from "@/stores/useAchievementStore";
 import { getWeekRange, getMonthRange, todayString, formatYearMonth } from "@/lib/streakUtils";
 import { countCatsOwned, countZonesUnlocked, type ProgressStats } from "@/lib/progressEngine";
+import { useBuildingStore } from "@/stores/useBuildingStore";
 
 const toDateStr = (d: Date) => d.toISOString().split("T")[0];
 
@@ -18,6 +19,7 @@ export function useProgressStats(): ProgressStats {
   const { budgets } = useBudgetStore();
   const { reportViewedDay, reportViewedWeek } = useQuestStore();
   const earned = useAchievementStore((s) => s.earned);
+  const { buildings } = useBuildingStore();
 
   return useMemo(() => {
     const level = profile?.level ?? 1;
@@ -64,8 +66,9 @@ export function useProgressStats(): ProgressStats {
       catsOwned: countCatsOwned(level, earnedSet),
       budgetsSet: monthBudgets.length,
       budgetsKept,
+      buildingsBuilt: buildings.length,
       reportsViewedEver: reportViewedDay !== null,
       reportViewedThisWeek: reportViewedWeek === weekStartStr,
     };
-  }, [transactions, profile, budgets, reportViewedDay, reportViewedWeek, earned]);
+  }, [transactions, profile, budgets, reportViewedDay, reportViewedWeek, earned, buildings]);
 }
