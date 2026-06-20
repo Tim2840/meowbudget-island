@@ -10,6 +10,7 @@ import { useBuildingStore } from "@/stores/useBuildingStore";
 import { ISLAND_ZONES, CAT_DEFINITIONS, BUILDINGS } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
 import BuildingModal from "./BuildingModal";
+import ZoneBuildingsSheet from "./ZoneBuildingsSheet";
 import LevelBar from "./LevelBar";
 import Cat from "@/components/cats/Cat";
 
@@ -112,12 +113,16 @@ export default function IslandPage() {
   const level = profile?.level ?? 1;
 
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
+  const [selectedZoneKey, setSelectedZoneKey] = useState<string | null>(null);
 
   const selectedBuildingDef = selectedSlotId
     ? BUILDINGS.find((b) => b.slotId === selectedSlotId) ?? null
     : null;
   const selectedUserBuilding = selectedBuildingDef
     ? buildings.find((ub) => ub.buildingKey === selectedBuildingDef.key) ?? null
+    : null;
+  const selectedZone = selectedZoneKey
+    ? ISLAND_ZONES.find((z) => z.key === selectedZoneKey) ?? null
     : null;
 
   const handleBuild = async () => {
@@ -413,10 +418,23 @@ export default function IslandPage() {
               zone={zone}
               currentLevel={level}
               builtCount={builtCount}
+              onClick={() => setSelectedZoneKey(zone.key)}
             />
           );
         })}
       </div>
+
+      {/* Zone buildings sheet */}
+      {selectedZone && (
+        <ZoneBuildingsSheet
+          zone={selectedZone}
+          onClose={() => setSelectedZoneKey(null)}
+          onSelectBuilding={(b) => {
+            setSelectedZoneKey(null);
+            setSelectedSlotId(b.slotId);
+          }}
+        />
+      )}
 
       {/* Building modal */}
       {selectedSlotId && selectedBuildingDef && (

@@ -60,6 +60,7 @@
     "max_level": "Max Level Reached",
     "empty_slot": "Empty Plot",
     "slots_progress": "{built}/{total} buildings",
+    "buildings_in_zone": "Tap to select a building",
     "zones_label": "Island Zones",
     "btn_quests": "Quests",
     "btn_achievements": "Awards"

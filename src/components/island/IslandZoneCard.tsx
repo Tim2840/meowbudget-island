@@ -9,6 +9,7 @@ interface IslandZoneCardProps {
   zone: IslandZone;
   currentLevel: number;
   builtCount?: number;
+  onClick?: () => void;
 }
 
 const ZONE_EMOJI: Record<string, string> = {
@@ -17,16 +18,20 @@ const ZONE_EMOJI: Record<string, string> = {
   hill: "🌄",
 };
 
-export default function IslandZoneCard({ zone, currentLevel, builtCount = 0 }: IslandZoneCardProps) {
+export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, onClick }: IslandZoneCardProps) {
   const t = useTranslations("zone");
   const tIsland = useTranslations("island");
   const unlocked = currentLevel >= zone.unlockLevel;
 
   return (
-    <div className={cn(
-      "bg-white rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3",
-      !unlocked && "opacity-60"
-    )}>
+    <div
+      className={cn(
+        "bg-white rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3 transition-colors",
+        !unlocked && "opacity-60",
+        unlocked && onClick && "cursor-pointer active:bg-amber-50"
+      )}
+      onClick={unlocked ? onClick : undefined}
+    >
       <div className={cn(
         "w-12 h-12 rounded-xl flex items-center justify-center text-2xl",
         unlocked ? "bg-amber-50" : "bg-gray-100"

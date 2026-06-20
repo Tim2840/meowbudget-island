@@ -60,6 +60,7 @@
     "max_level": "已達最高等級",
     "empty_slot": "空地",
     "slots_progress": "{built}/{total} 棟建築",
+    "buildings_in_zone": "點擊選擇建築",
     "zones_label": "島嶼區域",
     "btn_quests": "任務",
     "btn_achievements": "成就"
