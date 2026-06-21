@@ -38,7 +38,7 @@ export default function IslandPage() {
       </div>
 
       {/* Island scene */}
-      <div className="relative overflow-hidden" style={{ height: 240 }}>
+      <div className="relative overflow-hidden" style={{ height: 288 }}>
         {/* Background art */}
         <Image
           src="/assets/island_bg.png"
@@ -46,7 +46,7 @@ export default function IslandPage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-center"
         />
 
         {/* Zone markers on island */}
@@ -64,8 +64,8 @@ export default function IslandPage() {
                   <Image
                     src={`/assets/buildings/${buildingImg}.png`}
                     alt={zone.key}
-                    width={64}
-                    height={64}
+                    width={48}
+                    height={48}
                     className="drop-shadow-[0_4px_6px_rgba(0,0,0,0.25)]"
                   />
                   <div className="-mt-1 bg-amber-500 rounded-full w-2 h-2 shadow" />
