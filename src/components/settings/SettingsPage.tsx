@@ -5,14 +5,14 @@ import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { Globe, Volume2, Zap, Bell, BookOpen, LogOut, LogIn } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
-import TutorialOverlay from "@/components/onboarding/TutorialOverlay";
+import { useTutorialStore } from "@/stores/useTutorialStore";
 
 export default function SettingsPage() {
   const t = useTranslations("settings");
   const router = useRouter();
   const pathname = usePathname();
   const { user, isAnonymous, signInWithGoogle, signOut } = useAuthStore();
-  const [showTutorial, setShowTutorial] = useState(false);
+  const openTutorial = useTutorialStore((s) => s.open);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const currentLocale = pathname.startsWith("/en") ? "en" : "zh-TW";
@@ -79,7 +79,7 @@ export default function SettingsPage() {
           <SettingRow
             icon={<BookOpen size={18} />}
             label={t("replay_tutorial")}
-            onClick={() => setShowTutorial(true)}
+            onClick={openTutorial}
           />
         </div>
       </section>
@@ -96,9 +96,6 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
-
-      {/* Tutorial overlay */}
-      {showTutorial && <TutorialOverlay onComplete={() => setShowTutorial(false)} />}
     </div>
   );
 }
