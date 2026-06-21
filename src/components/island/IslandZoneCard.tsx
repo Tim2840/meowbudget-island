@@ -13,10 +13,11 @@ interface IslandZoneCardProps {
   zone: IslandZone;
   currentLevel: number;
   builtCount?: number;
+  isActive?: boolean;
   onClick?: () => void;
 }
 
-export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, onClick }: IslandZoneCardProps) {
+export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, isActive = false, onClick }: IslandZoneCardProps) {
   const t = useTranslations("zone");
   const tIsland = useTranslations("island");
   const { animationsEnabled } = useSettingsStore();
@@ -26,9 +27,10 @@ export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, onC
   const cardContent = (
     <div
       className={cn(
-        "bg-white rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3 transition-colors",
+        "bg-white rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3 transition-all",
         !unlocked && "opacity-60",
-        interactive && "cursor-pointer active:bg-amber-50"
+        interactive && "cursor-pointer active:bg-amber-50",
+        isActive && "ring-2 ring-amber-400 bg-amber-50"
       )}
       onClick={interactive ? onClick : undefined}
     >

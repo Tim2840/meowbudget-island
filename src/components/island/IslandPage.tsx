@@ -17,7 +17,7 @@ import ZoneBuildingsSheet from "./ZoneBuildingsSheet";
 import LevelBar from "./LevelBar";
 import Cat from "@/components/cats/Cat";
 import GameIcon from "@/components/ui/GameIcon";
-import { ZONE_ICON_MAP, BUILDING_ICON_MAP } from "@/lib/iconMap";
+import { BUILDING_ICON_MAP } from "@/lib/iconMap";
 
 // ── Day/night ───────────────────────────────────────────────
 type TimePeriod = "day" | "dusk" | "evening" | "night";
@@ -101,10 +101,14 @@ const LEAVES = Array.from({ length: 6 }, (_, i) => ({
   emoji: i % 3 === 0 ? "🍃" : i % 3 === 1 ? "🌿" : "🍂",
 }));
 
-const ZONE_COLORS: Record<string, { bg: string; border: string }> = {
-  harbor: { bg: "bg-blue-100", border: "border-blue-300" },
-  market: { bg: "bg-yellow-100", border: "border-yellow-300" },
-  hill:   { bg: "bg-green-100", border: "border-green-300" },
+// Zone highlight overlay config — bounding box (%) that wraps all slots in each zone
+const ZONE_HIGHLIGHT: Record<string, {
+  cls: string;
+  left: string; top: string; width: string; height: string;
+}> = {
+  harbor: { cls: "border-blue-400 bg-blue-200/25",   left: "5%",  top: "55%", width: "65%", height: "26%" },
+  market: { cls: "border-amber-400 bg-amber-200/25", left: "14%", top: "30%", width: "76%", height: "30%" },
+  hill:   { cls: "border-green-400 bg-green-200/25", left: "17%", top: "4%",  width: "59%", height: "26%" },
 };
 
 export default function IslandPage() {
@@ -117,6 +121,7 @@ export default function IslandPage() {
 
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [selectedZoneKey, setSelectedZoneKey] = useState<string | null>(null);
+  const [activeZoneKey, setActiveZoneKey] = useState<string | null>(null);
   const [lastBuiltSlotId, setLastBuiltSlotId] = useState<string | null>(null);
 
   const selectedBuildingDef = selectedSlotId
@@ -228,7 +233,7 @@ export default function IslandPage() {
       {/* ── Scene ── */}
       <div
         className={`relative overflow-hidden bg-gradient-to-b ${cfg.skyCls} transition-all duration-[3000ms]`}
-        style={{ height: 260 }}
+        style={{ height: 300 }}
       >
 
         {/* Layer 1: Stars (night/evening) */}
@@ -336,46 +341,34 @@ export default function IslandPage() {
         <div className="absolute text-lg z-50"  style={{ left: "30%",  bottom: 82 }}>🌿</div>
         <div className="absolute text-lg z-50"  style={{ right: "28%", bottom: 78 }}>🌿</div>
 
-        {/* Layer 7: Zone icons */}
-        {ISLAND_ZONES.map((zone) => {
-          const unlocked = level >= zone.unlockLevel;
-          const colors = ZONE_COLORS[zone.key] ?? { bg: "bg-white", border: "border-gray-200" };
-          return (
-            <div
-              key={zone.key}
-              className="absolute z-60"
-              style={{
-                left: `${zone.position.x}%`,
-                top: `${zone.position.y}%`,
-                transform: `translate(-50%, -50%) translateX(${parallax * 3}px)`,
-                transition: "transform 0.5s ease-out",
-              }}
-            >
-              <div className={`relative w-12 h-12 rounded-2xl flex items-center justify-center shadow-md border-2 transition-all ${
-                unlocked ? `${colors.bg} ${colors.border}` : "bg-gray-100 border-gray-300 opacity-50"
-              }`}>
-                <GameIcon icon={ZONE_ICON_MAP[zone.key]} size={24} />
-                {!unlocked && (
-                  <div className="absolute -top-1.5 -right-1.5 bg-gray-700 rounded-full px-1.5 py-0.5 shadow">
-                    <span className="text-[9px] text-white font-bold">Lv{zone.unlockLevel}</span>
-                  </div>
-                )}
-                {unlocked && (
-                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-amber-500 rounded-full w-2 h-2 shadow" />
-                )}
-              </div>
-            </div>
-          );
-        })}
+        {/* Layer 7: Active zone highlight overlay */}
+        <AnimatePresence>
+          {activeZoneKey && ZONE_HIGHLIGHT[activeZoneKey] && (() => {
+            const h = ZONE_HIGHLIGHT[activeZoneKey];
+            return (
+              <motion.div
+                key={activeZoneKey}
+                className={`absolute z-[58] rounded-2xl border-2 pointer-events-none ${h.cls}`}
+                style={{ left: h.left, top: h.top, width: h.width, height: h.height }}
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={animationsEnabled ? { duration: 0.2 } : { duration: 0 }}
+              />
+            );
+          })()}</AnimatePresence>
 
         {/* Layer 7b: Building slots */}
         {ISLAND_ZONES.map((zone) => {
           const zoneUnlocked = level >= zone.unlockLevel;
+          const zoneActive = activeZoneKey === zone.key;
           return zone.slots.map((slot) => {
             const buildingDef = BUILDINGS.find((b) => b.slotId === slot.slotId);
             const userBuilding = buildingDef
               ? buildings.find((ub) => ub.buildingKey === buildingDef.key) ?? null
               : null;
+            // Empty slots only visible when their zone is active
+            if (!userBuilding && !zoneActive) return null;
             return (
               <motion.button
                 key={slot.slotId}
@@ -395,20 +388,20 @@ export default function IslandPage() {
                     initial={{ scale: slot.slotId === lastBuiltSlotId ? 0 : 1 }}
                     animate={{ scale: 1 }}
                     transition={slotSpring}
-                    className="w-10 h-10 rounded-xl bg-white/90 shadow-md flex items-center justify-center border-2 border-amber-300"
+                    className="w-12 h-12 rounded-xl bg-white/90 shadow-md flex items-center justify-center border-2 border-amber-300"
                   >
-                    <GameIcon icon={BUILDING_ICON_MAP[buildingDef!.key]} size={22} color="#92400e" />
+                    <GameIcon icon={BUILDING_ICON_MAP[buildingDef!.key]} size={26} color="#92400e" />
                   </motion.div>
                 ) : (
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 border-dashed ${
-                    zoneUnlocked
-                      ? "bg-white/60 border-amber-300"
-                      : "bg-white/20 border-gray-300 opacity-30"
-                  }`}>
-                    {zoneUnlocked && (
-                      <span className="text-amber-400 text-xs font-bold leading-none">+</span>
-                    )}
-                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={animationsEnabled ? { type: "spring", damping: 18, stiffness: 380 } : { duration: 0 }}
+                    className="w-9 h-9 rounded-full flex items-center justify-center border-2 border-dashed bg-white/70 border-amber-400 shadow-sm"
+                  >
+                    <span className="text-amber-500 text-sm font-bold leading-none">+</span>
+                  </motion.div>
                 )}
               </motion.button>
             );
@@ -443,7 +436,11 @@ export default function IslandPage() {
               zone={zone}
               currentLevel={level}
               builtCount={builtCount}
-              onClick={() => setSelectedZoneKey(zone.key)}
+              isActive={activeZoneKey === zone.key}
+              onClick={() => {
+                setActiveZoneKey(zone.key);
+                setSelectedZoneKey(zone.key);
+              }}
             />
           );
         })}
@@ -455,9 +452,13 @@ export default function IslandPage() {
           <ZoneBuildingsSheet
             key="zone-sheet"
             zone={selectedZone}
-            onClose={() => setSelectedZoneKey(null)}
+            onClose={() => {
+              setSelectedZoneKey(null);
+              setActiveZoneKey(null);
+            }}
             onSelectBuilding={(b) => {
               setSelectedZoneKey(null);
+              setActiveZoneKey(null);
               setSelectedSlotId(b.slotId);
             }}
           />
