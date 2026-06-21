@@ -16,6 +16,8 @@ import BuildingModal from "./BuildingModal";
 import ZoneBuildingsSheet from "./ZoneBuildingsSheet";
 import LevelBar from "./LevelBar";
 import Cat from "@/components/cats/Cat";
+import GameIcon from "@/components/ui/GameIcon";
+import { ZONE_ICON_MAP, BUILDING_ICON_MAP } from "@/lib/iconMap";
 
 // ── Day/night ───────────────────────────────────────────────
 type TimePeriod = "day" | "dusk" | "evening" | "night";
@@ -99,9 +101,6 @@ const LEAVES = Array.from({ length: 6 }, (_, i) => ({
   emoji: i % 3 === 0 ? "🍃" : i % 3 === 1 ? "🌿" : "🍂",
 }));
 
-const ZONE_ICONS: Record<string, string> = {
-  harbor: "⚓", market: "🏪", hill: "🌄",
-};
 const ZONE_COLORS: Record<string, { bg: string; border: string }> = {
   harbor: { bg: "bg-blue-100", border: "border-blue-300" },
   market: { bg: "bg-yellow-100", border: "border-yellow-300" },
@@ -355,7 +354,7 @@ export default function IslandPage() {
               <div className={`relative w-12 h-12 rounded-2xl flex items-center justify-center shadow-md border-2 transition-all ${
                 unlocked ? `${colors.bg} ${colors.border}` : "bg-gray-100 border-gray-300 opacity-50"
               }`}>
-                <span className="text-xl">{ZONE_ICONS[zone.key]}</span>
+                <GameIcon icon={ZONE_ICON_MAP[zone.key]} size={24} />
                 {!unlocked && (
                   <div className="absolute -top-1.5 -right-1.5 bg-gray-700 rounded-full px-1.5 py-0.5 shadow">
                     <span className="text-[9px] text-white font-bold">Lv{zone.unlockLevel}</span>
@@ -396,9 +395,9 @@ export default function IslandPage() {
                     initial={{ scale: slot.slotId === lastBuiltSlotId ? 0 : 1 }}
                     animate={{ scale: 1 }}
                     transition={slotSpring}
-                    className="w-10 h-10 rounded-xl bg-white/90 shadow-md flex items-center justify-center text-xl border-2 border-amber-300"
+                    className="w-10 h-10 rounded-xl bg-white/90 shadow-md flex items-center justify-center border-2 border-amber-300"
                   >
-                    {buildingDef!.imageKey}
+                    <GameIcon icon={BUILDING_ICON_MAP[buildingDef!.key]} size={22} color="#92400e" />
                   </motion.div>
                 ) : (
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 border-dashed ${

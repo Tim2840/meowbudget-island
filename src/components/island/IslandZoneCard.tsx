@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import type { IslandZone } from "@/types";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import GameIcon from "@/components/ui/GameIcon";
+import { ZONE_ICON_MAP } from "@/lib/iconMap";
 
 interface IslandZoneCardProps {
   zone: IslandZone;
@@ -13,12 +15,6 @@ interface IslandZoneCardProps {
   builtCount?: number;
   onClick?: () => void;
 }
-
-const ZONE_EMOJI: Record<string, string> = {
-  harbor: "⚓",
-  market: "🏪",
-  hill: "🌄",
-};
 
 export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, onClick }: IslandZoneCardProps) {
   const t = useTranslations("zone");
@@ -37,10 +33,13 @@ export default function IslandZoneCard({ zone, currentLevel, builtCount = 0, onC
       onClick={interactive ? onClick : undefined}
     >
       <div className={cn(
-        "w-12 h-12 rounded-xl flex items-center justify-center text-2xl",
+        "w-12 h-12 rounded-xl flex items-center justify-center",
         unlocked ? "bg-amber-50" : "bg-gray-100"
       )}>
-        {unlocked ? ZONE_EMOJI[zone.key] : <Lock size={20} className="text-gray-400" />}
+        {unlocked
+          ? <GameIcon icon={ZONE_ICON_MAP[zone.key]} size={30} />
+          : <Lock size={20} className="text-gray-400" />
+        }
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-gray-800">{t(zone.key)}</p>

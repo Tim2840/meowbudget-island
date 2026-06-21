@@ -7,18 +7,14 @@ import { BUILDINGS } from "@/lib/constants";
 import { useBuildingStore } from "@/stores/useBuildingStore";
 import { useProfileStore } from "@/stores/useProfileStore";
 import MotionSheet from "@/components/ui/MotionSheet";
+import GameIcon from "@/components/ui/GameIcon";
+import { ZONE_ICON_MAP, BUILDING_ICON_MAP } from "@/lib/iconMap";
 
 interface ZoneBuildingsSheetProps {
   zone: IslandZone;
   onClose: () => void;
   onSelectBuilding: (building: Building) => void;
 }
-
-const ZONE_EMOJI: Record<string, string> = {
-  harbor: "⚓",
-  market: "🏪",
-  hill: "🌄",
-};
 
 export default function ZoneBuildingsSheet({
   zone,
@@ -46,7 +42,7 @@ export default function ZoneBuildingsSheet({
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
         <div className="flex items-center gap-2">
-          <span className="text-xl">{ZONE_EMOJI[zone.key]}</span>
+          <GameIcon icon={ZONE_ICON_MAP[zone.key]} size={24} />
           <div>
             <h2 className="text-base font-bold text-gray-900">
               {tZone(zone.key)}
@@ -111,8 +107,8 @@ export default function ZoneBuildingsSheet({
             >
               {/* Building icon + level bar */}
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-2xl">
-                  {building.imageKey}
+                <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center">
+                  <GameIcon icon={BUILDING_ICON_MAP[building.key]} size={28} color="#92400e" />
                 </div>
                 {currentLevel > 0 && (
                   <div className="absolute -bottom-1 left-0 right-0 flex gap-0.5 px-1">

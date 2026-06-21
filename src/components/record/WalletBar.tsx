@@ -2,18 +2,15 @@
 
 import { useTranslations } from "next-intl";
 import { Flame } from "lucide-react";
+import GameIcon from "@/components/ui/GameIcon";
+import { RESOURCE_ICON_MAP } from "@/lib/iconMap";
 
 interface WalletBarProps {
   wallet: { coins: number; wood: number; fabric: number; fish: number };
   streak: number;
 }
 
-const resources = [
-  { key: "coins", emoji: "💰" },
-  { key: "wood", emoji: "🪵" },
-  { key: "fabric", emoji: "🧵" },
-  { key: "fish", emoji: "🐟" },
-] as const;
+const resources = ["coins", "wood", "fabric", "fish"] as const;
 
 export default function WalletBar({ wallet, streak }: WalletBarProps) {
   const t = useTranslations("resource");
@@ -23,9 +20,9 @@ export default function WalletBar({ wallet, streak }: WalletBarProps) {
       data-tutorial="wallet-bar"
       className="bg-white border-b border-amber-100 px-4 py-2.5 flex items-center gap-3 overflow-x-auto scrollbar-none"
     >
-      {resources.map(({ key, emoji }) => (
-        <div key={key} className="flex items-center gap-1 shrink-0">
-          <span className="text-base">{emoji}</span>
+      {resources.map((key) => (
+        <div key={key} className="flex items-center gap-1.5 shrink-0">
+          <GameIcon icon={RESOURCE_ICON_MAP[key]} size={20} />
           <span className="text-sm font-semibold text-gray-700">{wallet[key].toLocaleString()}</span>
         </div>
       ))}

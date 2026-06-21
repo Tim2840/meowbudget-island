@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Flame, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import LottiePlayer from "@/components/ui/LottiePlayer";
 import type { RewardResult } from "@/types";
 
 const RESOURCE_EMOJI: Record<string, string> = {
@@ -68,7 +69,7 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
         }
         className="pointer-events-auto bg-white rounded-3xl shadow-2xl p-6 mx-4 flex flex-col items-center gap-3"
       >
-        <p className="text-2xl">✨</p>
+        <LottiePlayer src="/animations/burst.json" style={{ width: 100, height: 100 }} />
         <h3 className="text-xl font-bold text-amber-700">{t("reward_title")}</h3>
 
         <div className="flex items-center gap-4">

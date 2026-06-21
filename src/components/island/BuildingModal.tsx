@@ -6,6 +6,8 @@ import { X } from "lucide-react";
 import type { Building, UserBuilding } from "@/types";
 import { useWalletStore } from "@/stores/useWalletStore";
 import MotionSheet from "@/components/ui/MotionSheet";
+import GameIcon from "@/components/ui/GameIcon";
+import { BUILDING_ICON_MAP } from "@/lib/iconMap";
 
 interface BuildingModalProps {
   building: Building;
@@ -66,7 +68,9 @@ export default function BuildingModal({
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <span className="text-4xl">{building.imageKey}</span>
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center">
+              <GameIcon icon={BUILDING_ICON_MAP[building.key]} size={40} color="#92400e" />
+            </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">
               {tBld(nameSubKey)}
