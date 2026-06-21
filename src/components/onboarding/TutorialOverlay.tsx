@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { TUTORIAL_STEPS } from "@/lib/constants";
 
@@ -11,6 +12,9 @@ interface TutorialOverlayProps {
 
 export default function TutorialOverlay({ onComplete }: TutorialOverlayProps) {
   const t = useTranslations("tutorial");
+  const router = useRouter();
+  const pathname = usePathname();
+  const locale = useLocale();
   const [step, setStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -18,20 +22,48 @@ export default function TutorialOverlay({ onComplete }: TutorialOverlayProps) {
   const currentStep = TUTORIAL_STEPS[step];
   const isLast = step === TUTORIAL_STEPS.length - 1;
 
+  // Full path (with locale prefix) the current step should be shown on.
+  const stepPath = `/${locale}${currentStep.route === "/" ? "" : currentStep.route}`;
+
+  // For each step: navigate to its page (if needed), then poll until the target
+  // element is mounted on that page before spotlighting it. Re-runs when the
+  // pathname changes so measurement happens after navigation finishes.
   useEffect(() => {
-    if (currentStep.targetSelector) {
-      const el = document.querySelector(currentStep.targetSelector);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        setTargetRect(rect);
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-      } else {
-        setTargetRect(null);
-      }
-    } else {
-      setTargetRect(null);
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    // Clear the previous spotlight while we (possibly) switch pages.
+    setTargetRect(null);
+
+    if (pathname !== stepPath) {
+      router.push(stepPath);
+      return () => { cancelled = true; };
     }
-  }, [step, currentStep.targetSelector]);
+
+    if (!currentStep.targetSelector) return;
+
+    let attempts = 0;
+    const tryFind = () => {
+      if (cancelled) return;
+      const el = document.querySelector(currentStep.targetSelector!);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        // Let the smooth scroll settle before measuring.
+        timer = setTimeout(() => {
+          if (!cancelled) setTargetRect(el.getBoundingClientRect());
+        }, 350);
+        return;
+      }
+      // Element not mounted yet (page still rendering) — retry up to ~3s.
+      if (attempts++ < 50) timer = setTimeout(tryFind, 60);
+    };
+    tryFind();
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [step, pathname, stepPath, currentStep.targetSelector, router]);
 
   const next = () => {
     if (isLast) { onComplete(); return; }

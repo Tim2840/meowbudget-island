@@ -34,7 +34,7 @@ export default function IslandPage() {
       </div>
 
       {/* Island scene */}
-      <div className="relative overflow-hidden" style={{ height: 288 }}>
+      <div data-tutorial="island-scene" className="relative overflow-hidden" style={{ height: 288 }}>
         {/* Background art */}
         <Image
           src="/assets/island_bg.png"

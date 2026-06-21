@@ -31,7 +31,7 @@ export default function ReportsPage() {
   return (
     <div className="flex flex-col min-h-full">
       {/* Tab bar */}
-      <div className="bg-white border-b border-gray-100 px-4 pt-4 pb-0">
+      <div data-tutorial="reports-tabs" className="bg-white border-b border-gray-100 px-4 pt-4 pb-0">
         <h1 className="text-2xl font-bold text-gray-800 mb-3">{t("title")}</h1>
         <div className="flex gap-0">
           {tabs.map((tab) => (

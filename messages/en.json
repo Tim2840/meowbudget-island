@@ -155,9 +155,17 @@
       "title": "Resources 🪙",
       "content": "After recording, you'll earn different resources:\n• 💰 Coins — universal currency for everything\n• 🪵 Wood — for building structures\n• 🧵 Fabric — for decorations and outfits\n• 🐟 Fish — cats love these, attract new cats!\n\nDifferent categories give different resources!"
     },
+    "reports": {
+      "title": "Check Reports 📊",
+      "content": "This is the reports page. Switch between daily / weekly / monthly to analyze your income and spending and understand your habits. Come back often!"
+    },
     "island": {
       "title": "Your Island 🏝️",
-      "content": "Use your resources to unlock new island zones, build facilities, and attract more cats! Higher level = more areas to develop."
+      "content": "This is your island. Use your resources to unlock new zones, build facilities, and attract more cats! Higher level = more areas to develop."
+    },
+    "cats": {
+      "title": "Cat Collection 🐱",
+      "content": "This is your cat collection. Level up and unlock achievements to invite more cats to your island. Each cat has its own story — start collecting!"
     },
     "game_loop": {
       "title": "The Game Loop 🔄",
