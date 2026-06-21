@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -10,6 +10,9 @@ interface TutorialOverlayProps {
   onComplete: () => void;
 }
 
+const MARGIN = 16; // min gap from any screen edge
+const NAV_CLEARANCE = 88; // keep the card clear of the bottom navigation bar
+
 export default function TutorialOverlay({ onComplete }: TutorialOverlayProps) {
   const t = useTranslations("tutorial");
   const router = useRouter();
@@ -17,7 +20,8 @@ export default function TutorialOverlay({ onComplete }: TutorialOverlayProps) {
   const locale = useLocale();
   const [step, setStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const [cardTop, setCardTop] = useState<number | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const currentStep = TUTORIAL_STEPS[step];
   const isLast = step === TUTORIAL_STEPS.length - 1;
@@ -65,6 +69,42 @@ export default function TutorialOverlay({ onComplete }: TutorialOverlayProps) {
     };
   }, [step, pathname, stepPath, currentStep.targetSelector, router]);
 
+  // Position the info card so it is ALWAYS fully on screen. We measure the
+  // card's real height and clamp it into the viewport, preferring the side of
+  // the spotlight that has room. This is what prevents the card from spilling
+  // off the top/bottom when the highlighted element is large (cats grid, island
+  // scene, reports tabs…), which was the root cause of the overflow.
+  const positionCard = useCallback(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    const vh = window.innerHeight;
+    const ch = card.offsetHeight;
+    const maxTop = Math.max(MARGIN, vh - ch - MARGIN);
+
+    let top: number;
+    if (!targetRect) {
+      top = (vh - ch) / 2; // text-only card → center
+    } else {
+      const below = targetRect.bottom + MARGIN;
+      const above = targetRect.top - MARGIN - ch;
+      if (below + ch <= vh - NAV_CLEARANCE) {
+        top = below; // fits under the spotlight
+      } else if (above >= MARGIN) {
+        top = above; // fits above the spotlight
+      } else {
+        top = vh - NAV_CLEARANCE - ch; // target fills the screen → pin above nav
+      }
+    }
+    setCardTop(Math.min(Math.max(MARGIN, top), maxTop));
+  }, [targetRect]);
+
+  // Re-measure whenever the step/spotlight changes or the viewport resizes.
+  useEffect(() => {
+    positionCard();
+    window.addEventListener("resize", positionCard);
+    return () => window.removeEventListener("resize", positionCard);
+  }, [positionCard, step]);
+
   const next = () => {
     if (isLast) { onComplete(); return; }
     setStep((s) => s + 1);
@@ -75,7 +115,7 @@ export default function TutorialOverlay({ onComplete }: TutorialOverlayProps) {
   const PADDING = 8;
 
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-[100]">
+    <div className="fixed inset-0 z-[100]">
       {/* Dark overlay with spotlight hole */}
       {targetRect ? (
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
@@ -109,16 +149,11 @@ export default function TutorialOverlay({ onComplete }: TutorialOverlayProps) {
         <div className="absolute inset-0 bg-black/65" />
       )}
 
-      {/* Tooltip / info card */}
+      {/* Tooltip / info card — clamped within the viewport, capped height + scroll */}
       <div
-        className="absolute left-4 right-4 bg-white rounded-3xl shadow-2xl p-5 mx-auto max-w-xs"
-        style={
-          targetRect
-            ? targetRect.bottom + 16 + 180 < window.innerHeight
-              ? { top: targetRect.bottom + 16 }
-              : { bottom: window.innerHeight - targetRect.top + 16 }
-            : { top: "50%", transform: "translateY(-50%)" }
-        }
+        ref={cardRef}
+        className="absolute left-4 right-4 bg-white rounded-3xl shadow-2xl p-5 mx-auto max-w-xs max-h-[80vh] overflow-y-auto transition-opacity"
+        style={{ top: cardTop ?? 0, opacity: cardTop === null ? 0 : 1 }}
       >
         {/* Step indicator */}
         <div className="flex items-center justify-between mb-3">
