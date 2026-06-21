@@ -38,7 +38,7 @@ export const ISLAND_ZONES: IslandZone[] = [
     nameKey: "zone.harbor",
     descriptionKey: "zone.harbor_desc",
     unlockLevel: 1,
-    position: { x: 30, y: 72 },
+    position: { x: 40, y: 66 },
     slots: [
       { slotId: "harbor-1", position: { x: 10, y: 70 }, buildingKey: null },
       { slotId: "harbor-2", position: { x: 35, y: 55 }, buildingKey: null },

@@ -57,26 +57,29 @@ export default function IslandPage() {
             >
               {unlocked ? (
                 <div className="relative flex flex-col items-center animate-bounce-in">
+                  {/* Soft glow to lift the building off the busy background */}
+                  <span className="absolute top-7 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/45 blur-md" />
                   <Image
                     src={`/assets/buildings/${buildingImg}.png`}
                     alt={zone.key}
-                    width={48}
-                    height={48}
-                    className="drop-shadow-[0_4px_6px_rgba(0,0,0,0.25)]"
+                    width={72}
+                    height={72}
+                    className="relative drop-shadow-[0_5px_8px_rgba(0,0,0,0.5)]"
                   />
-                  <div className="-mt-1 bg-amber-500 rounded-full w-2 h-2 shadow" />
+                  <div className="-mt-1 bg-amber-500 rounded-full w-2.5 h-2.5 shadow ring-2 ring-white/70" />
                 </div>
               ) : (
                 <div className="relative flex flex-col items-center animate-bounce-in">
                   {/* Locked zones reuse the cut-out building art, greyed out */}
+                  <span className="absolute top-7 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/40 blur-md" />
                   <Image
                     src={`/assets/buildings/${buildingImg}.png`}
                     alt={zone.key}
-                    width={48}
-                    height={48}
-                    className="grayscale opacity-50 drop-shadow-[0_3px_4px_rgba(0,0,0,0.2)]"
+                    width={72}
+                    height={72}
+                    className="relative grayscale opacity-65 drop-shadow-[0_4px_6px_rgba(0,0,0,0.45)]"
                   />
-                  <div className="absolute -top-1.5 -right-1.5 flex items-center gap-0.5 bg-gray-700/90 rounded-full px-1.5 py-0.5 shadow">
+                  <div className="absolute -top-1 -right-2 flex items-center gap-0.5 bg-gray-800/90 rounded-full px-1.5 py-0.5 shadow ring-1 ring-white/40">
                     <span className="text-[9px] text-white font-bold leading-none">🔒Lv{zone.unlockLevel}</span>
                   </div>
                 </div>
