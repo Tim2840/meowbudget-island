@@ -34,9 +34,9 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end">
+    <div className="fixed inset-0 z-[60] flex items-end">
       <div className="absolute inset-0 bg-black/40" onClick={onCancel} />
-      <div className="relative w-full max-w-md mx-auto bg-white rounded-t-3xl shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-md mx-auto bg-white rounded-t-3xl shadow-2xl p-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] space-y-5 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-800">{t("add")}</h2>
