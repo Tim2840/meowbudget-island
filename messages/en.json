@@ -49,6 +49,28 @@
     "hill": "Hill Park",
     "hill_desc": "Quiet hills, perfect for rest spots"
   },
+  "building": {
+    "harbor_dock": "Cat Dock",
+    "harbor_dock_desc": "A busy dock where cats haul in the day's catch",
+    "harbor_lighthouse": "Lighthouse",
+    "harbor_lighthouse_desc": "Guides night-sailing cat crews safely home",
+    "harbor_warehouse": "Warehouse",
+    "harbor_warehouse_desc": "Storage space for wood and fish",
+    "market_stall": "Market Stall",
+    "market_stall_desc": "A little stall selling all kinds of fresh goods",
+    "market_bakery": "Cat Bakery",
+    "market_bakery_desc": "A bakery filled with the scent of fishy cookies",
+    "market_tailor": "Tailor Shop",
+    "market_tailor_desc": "Tailors adorable outfits made just for cats",
+    "market_blacksmith": "Blacksmith",
+    "market_blacksmith_desc": "A workshop forging tools and gear",
+    "hill_windmill": "Windmill",
+    "hill_windmill_desc": "A gently turning windmill on the hill",
+    "hill_observatory": "Observatory",
+    "hill_observatory_desc": "A domed observatory for stargazing at night",
+    "hill_temple": "Cat Shrine",
+    "hill_temple_desc": "A peaceful shrine guarded by a red torii gate"
+  },
   "island": {
     "title": "MeowBudget Island",
     "level": "Lv.{level}",

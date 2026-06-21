@@ -1,4 +1,4 @@
-import type { Category, ResourceType, IslandZone, Achievement, Quest, CatDefinition, TutorialStep } from "@/types";
+import type { Category, ResourceType, IslandZone, Building, Achievement, Quest, CatDefinition, TutorialStep } from "@/types";
 
 // ──────────────────────────────────────────
 // Default Categories (system-defined, userId = null)
@@ -38,7 +38,7 @@ export const ISLAND_ZONES: IslandZone[] = [
     nameKey: "zone.harbor",
     descriptionKey: "zone.harbor_desc",
     unlockLevel: 1,
-    position: { x: 20, y: 60 },
+    position: { x: 40, y: 66 },
     slots: [
       { slotId: "harbor-1", position: { x: 10, y: 70 }, buildingKey: null },
       { slotId: "harbor-2", position: { x: 35, y: 55 }, buildingKey: null },
@@ -50,7 +50,7 @@ export const ISLAND_ZONES: IslandZone[] = [
     nameKey: "zone.market",
     descriptionKey: "zone.market_desc",
     unlockLevel: 5,
-    position: { x: 55, y: 40 },
+    position: { x: 60, y: 52 },
     slots: [
       { slotId: "market-1", position: { x: 50, y: 35 }, buildingKey: null },
       { slotId: "market-2", position: { x: 70, y: 45 }, buildingKey: null },
@@ -63,11 +63,151 @@ export const ISLAND_ZONES: IslandZone[] = [
     nameKey: "zone.hill",
     descriptionKey: "zone.hill_desc",
     unlockLevel: 10,
-    position: { x: 40, y: 15 },
+    position: { x: 45, y: 40 },
     slots: [
       { slotId: "hill-1", position: { x: 30, y: 15 }, buildingKey: null },
       { slotId: "hill-2", position: { x: 50, y: 10 }, buildingKey: null },
       { slotId: "hill-3", position: { x: 45, y: 25 }, buildingKey: null },
+    ],
+  },
+];
+
+// ──────────────────────────────────────────
+// Buildings (10: 3 harbor, 4 market, 3 hill)
+// imageKey resolves to /assets/buildings/{imageKey}.png
+// ──────────────────────────────────────────
+export const BUILDINGS: Building[] = [
+  // Harbor zone (unlock Lv.1)
+  {
+    key: "harbor_dock",
+    zoneKey: "harbor",
+    nameKey: "building.harbor_dock",
+    descriptionKey: "building.harbor_dock_desc",
+    maxLevel: 3,
+    imageKey: "harbor_dock",
+    levelCosts: [
+      { level: 1, coins: 50, wood: 5, fabric: 0, fish: 2, requiredUserLevel: 1 },
+      { level: 2, coins: 150, wood: 12, fabric: 0, fish: 5, requiredUserLevel: 3 },
+      { level: 3, coins: 400, wood: 25, fabric: 4, fish: 10, requiredUserLevel: 6 },
+    ],
+  },
+  {
+    key: "harbor_lighthouse",
+    zoneKey: "harbor",
+    nameKey: "building.harbor_lighthouse",
+    descriptionKey: "building.harbor_lighthouse_desc",
+    maxLevel: 3,
+    imageKey: "harbor_lighthouse",
+    levelCosts: [
+      { level: 1, coins: 80, wood: 8, fabric: 2, fish: 0, requiredUserLevel: 2 },
+      { level: 2, coins: 200, wood: 16, fabric: 5, fish: 0, requiredUserLevel: 4 },
+      { level: 3, coins: 500, wood: 30, fabric: 10, fish: 0, requiredUserLevel: 7 },
+    ],
+  },
+  {
+    key: "harbor_warehouse",
+    zoneKey: "harbor",
+    nameKey: "building.harbor_warehouse",
+    descriptionKey: "building.harbor_warehouse_desc",
+    maxLevel: 3,
+    imageKey: "harbor_warehouse",
+    levelCosts: [
+      { level: 1, coins: 60, wood: 10, fabric: 0, fish: 0, requiredUserLevel: 2 },
+      { level: 2, coins: 180, wood: 22, fabric: 0, fish: 0, requiredUserLevel: 4 },
+      { level: 3, coins: 450, wood: 40, fabric: 6, fish: 0, requiredUserLevel: 7 },
+    ],
+  },
+  // Market zone (unlock Lv.5)
+  {
+    key: "market_stall",
+    zoneKey: "market",
+    nameKey: "building.market_stall",
+    descriptionKey: "building.market_stall_desc",
+    maxLevel: 3,
+    imageKey: "market_stall",
+    levelCosts: [
+      { level: 1, coins: 120, wood: 8, fabric: 4, fish: 0, requiredUserLevel: 5 },
+      { level: 2, coins: 300, wood: 18, fabric: 10, fish: 0, requiredUserLevel: 7 },
+      { level: 3, coins: 700, wood: 32, fabric: 20, fish: 0, requiredUserLevel: 10 },
+    ],
+  },
+  {
+    key: "market_bakery",
+    zoneKey: "market",
+    nameKey: "building.market_bakery",
+    descriptionKey: "building.market_bakery_desc",
+    maxLevel: 3,
+    imageKey: "market_bakery",
+    levelCosts: [
+      { level: 1, coins: 140, wood: 6, fabric: 4, fish: 4, requiredUserLevel: 5 },
+      { level: 2, coins: 320, wood: 14, fabric: 10, fish: 8, requiredUserLevel: 8 },
+      { level: 3, coins: 750, wood: 28, fabric: 18, fish: 16, requiredUserLevel: 11 },
+    ],
+  },
+  {
+    key: "market_tailor",
+    zoneKey: "market",
+    nameKey: "building.market_tailor",
+    descriptionKey: "building.market_tailor_desc",
+    maxLevel: 3,
+    imageKey: "market_tailor",
+    levelCosts: [
+      { level: 1, coins: 150, wood: 4, fabric: 8, fish: 0, requiredUserLevel: 6 },
+      { level: 2, coins: 340, wood: 10, fabric: 18, fish: 0, requiredUserLevel: 8 },
+      { level: 3, coins: 800, wood: 20, fabric: 35, fish: 0, requiredUserLevel: 11 },
+    ],
+  },
+  {
+    key: "market_blacksmith",
+    zoneKey: "market",
+    nameKey: "building.market_blacksmith",
+    descriptionKey: "building.market_blacksmith_desc",
+    maxLevel: 3,
+    imageKey: "market_blacksmith",
+    levelCosts: [
+      { level: 1, coins: 160, wood: 12, fabric: 0, fish: 0, requiredUserLevel: 6 },
+      { level: 2, coins: 360, wood: 26, fabric: 4, fish: 0, requiredUserLevel: 9 },
+      { level: 3, coins: 850, wood: 48, fabric: 8, fish: 0, requiredUserLevel: 12 },
+    ],
+  },
+  // Hill zone (unlock Lv.10)
+  {
+    key: "hill_windmill",
+    zoneKey: "hill",
+    nameKey: "building.hill_windmill",
+    descriptionKey: "building.hill_windmill_desc",
+    maxLevel: 3,
+    imageKey: "hill_windmill",
+    levelCosts: [
+      { level: 1, coins: 300, wood: 20, fabric: 8, fish: 0, requiredUserLevel: 10 },
+      { level: 2, coins: 650, wood: 40, fabric: 18, fish: 0, requiredUserLevel: 13 },
+      { level: 3, coins: 1400, wood: 70, fabric: 35, fish: 0, requiredUserLevel: 16 },
+    ],
+  },
+  {
+    key: "hill_observatory",
+    zoneKey: "hill",
+    nameKey: "building.hill_observatory",
+    descriptionKey: "building.hill_observatory_desc",
+    maxLevel: 3,
+    imageKey: "hill_observatory",
+    levelCosts: [
+      { level: 1, coins: 350, wood: 18, fabric: 10, fish: 0, requiredUserLevel: 11 },
+      { level: 2, coins: 700, wood: 36, fabric: 22, fish: 0, requiredUserLevel: 14 },
+      { level: 3, coins: 1500, wood: 64, fabric: 44, fish: 0, requiredUserLevel: 17 },
+    ],
+  },
+  {
+    key: "hill_temple",
+    zoneKey: "hill",
+    nameKey: "building.hill_temple",
+    descriptionKey: "building.hill_temple_desc",
+    maxLevel: 3,
+    imageKey: "hill_temple",
+    levelCosts: [
+      { level: 1, coins: 400, wood: 22, fabric: 12, fish: 4, requiredUserLevel: 12 },
+      { level: 2, coins: 800, wood: 44, fabric: 26, fish: 8, requiredUserLevel: 15 },
+      { level: 3, coins: 1700, wood: 78, fabric: 50, fish: 16, requiredUserLevel: 18 },
     ],
   },
 ];
