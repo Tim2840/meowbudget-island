@@ -17,7 +17,7 @@ import ZoneBuildingsSheet from "./ZoneBuildingsSheet";
 import LevelBar from "./LevelBar";
 import Cat from "@/components/cats/Cat";
 import GameIcon from "@/components/ui/GameIcon";
-import { ZONE_ICON_MAP, BUILDING_ICON_MAP } from "@/lib/iconMap";
+import { BUILDING_ICON_MAP } from "@/lib/iconMap";
 
 // ── Day/night ───────────────────────────────────────────────
 type TimePeriod = "day" | "dusk" | "evening" | "night";
@@ -329,10 +329,10 @@ export default function IslandPage() {
             transform: `translateX(${parallax * 0}px)`,
           }}
         />
-        {/* Sandy beach — thin strip at island base, no oval shape */}
+        {/* Sandy beach */}
         <div
-          className="absolute bg-amber-200 opacity-50 z-50"
-          style={{ left: "12%", right: "12%", bottom: 10, height: 16, borderRadius: "0 0 50% 50% / 0 0 100% 100%" }}
+          className="absolute bg-amber-200 rounded-[50%] opacity-60 z-50"
+          style={{ left: "10%", right: "10%", bottom: 10, height: 30 }}
         />
 
         {/* Decorative trees */}
@@ -341,40 +341,7 @@ export default function IslandPage() {
         <div className="absolute text-lg z-50"  style={{ left: "30%",  bottom: 82 }}>🌿</div>
         <div className="absolute text-lg z-50"  style={{ right: "28%", bottom: 78 }}>🌿</div>
 
-        {/* Layer 7: Zone icons — always visible */}
-        {ISLAND_ZONES.map((zone) => {
-          const unlocked = level >= zone.unlockLevel;
-          const isActive = activeZoneKey === zone.key;
-          return (
-            <div
-              key={zone.key}
-              className="absolute z-[59] pointer-events-none"
-              style={{
-                left: `${zone.position.x}%`,
-                top: `${zone.position.y}%`,
-                transform: `translate(-50%, -50%) translateX(${parallax * 3}px)`,
-                transition: "transform 0.5s ease-out",
-              }}
-            >
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow border transition-all duration-200 ${
-                !unlocked
-                  ? "bg-gray-100/80 border-gray-300/60 opacity-40"
-                  : isActive
-                    ? "bg-white border-white shadow-md scale-110"
-                    : "bg-white/80 border-white/60"
-              }`}>
-                <GameIcon icon={ZONE_ICON_MAP[zone.key]} size={20} />
-              </div>
-              {!unlocked && (
-                <div className="absolute -top-1 -right-1 bg-gray-600 rounded-full px-1 py-0.5">
-                  <span className="text-[8px] text-white font-bold leading-none">Lv{zone.unlockLevel}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-
-        {/* Layer 7b: Active zone highlight overlay */}
+        {/* Layer 7: Active zone highlight overlay */}
         <AnimatePresence>
           {activeZoneKey && ZONE_HIGHLIGHT[activeZoneKey] && (() => {
             const h = ZONE_HIGHLIGHT[activeZoneKey];
