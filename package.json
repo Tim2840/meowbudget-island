@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@iconify-json/game-icons": "^1.2.4",
+    "@iconify-json/noto": "^1.2.7",
     "@iconify/react": "^6.0.2",
     "@radix-ui/react-dialog": "^1.1.17",
     "@radix-ui/react-dropdown-menu": "^2.1.18",

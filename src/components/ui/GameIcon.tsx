@@ -1,6 +1,8 @@
 "use client";
 
 import { Icon } from "@iconify/react";
+// Register all app icons offline (no CDN fetch needed). Side-effect import.
+import "@/lib/iconBundle";
 
 interface GameIconProps {
   icon: string;
