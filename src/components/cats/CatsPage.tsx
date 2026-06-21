@@ -41,13 +41,6 @@ export default function CatsPage() {
                 <>
                   <p className="font-semibold text-gray-800 text-center">{t(cat.key as Parameters<typeof t>[0])}</p>
                   <p className="text-xs text-gray-400 text-center">{t(`${cat.key}_desc` as Parameters<typeof t>[0])}</p>
-                  <div className="flex flex-wrap gap-1 mt-1 justify-center">
-                    {cat.animations.map((anim) => (
-                      <span key={anim.type} className="text-xs bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">
-                        {anim.type}
-                      </span>
-                    ))}
-                  </div>
                 </>
               ) : (
                 <>
