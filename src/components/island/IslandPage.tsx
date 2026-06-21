@@ -42,7 +42,7 @@ export default function IslandPage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center scale-[1.35]"
+          className="object-cover object-center"
         />
 
         {/* Zone markers on island */}

@@ -38,7 +38,7 @@ export const ISLAND_ZONES: IslandZone[] = [
     nameKey: "zone.harbor",
     descriptionKey: "zone.harbor_desc",
     unlockLevel: 1,
-    position: { x: 37, y: 70 },
+    position: { x: 40, y: 66 },
     slots: [
       { slotId: "harbor-1", position: { x: 10, y: 70 }, buildingKey: null },
       { slotId: "harbor-2", position: { x: 35, y: 55 }, buildingKey: null },
@@ -50,7 +50,7 @@ export const ISLAND_ZONES: IslandZone[] = [
     nameKey: "zone.market",
     descriptionKey: "zone.market_desc",
     unlockLevel: 5,
-    position: { x: 63, y: 53 },
+    position: { x: 60, y: 52 },
     slots: [
       { slotId: "market-1", position: { x: 50, y: 35 }, buildingKey: null },
       { slotId: "market-2", position: { x: 70, y: 45 }, buildingKey: null },
@@ -63,7 +63,7 @@ export const ISLAND_ZONES: IslandZone[] = [
     nameKey: "zone.hill",
     descriptionKey: "zone.hill_desc",
     unlockLevel: 10,
-    position: { x: 43, y: 37 },
+    position: { x: 45, y: 40 },
     slots: [
       { slotId: "hill-1", position: { x: 30, y: 15 }, buildingKey: null },
       { slotId: "hill-2", position: { x: 50, y: 10 }, buildingKey: null },
