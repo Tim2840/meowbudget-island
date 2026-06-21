@@ -49,6 +49,28 @@
     "hill": "山丘公園",
     "hill_desc": "寧靜的山丘，適合打造休憩空間"
   },
+  "building": {
+    "harbor_dock": "貓咪碼頭",
+    "harbor_dock_desc": "貓咪們搬運漁獲的熱鬧碼頭",
+    "harbor_lighthouse": "燈塔",
+    "harbor_lighthouse_desc": "為夜歸的貓咪船員指引方向",
+    "harbor_warehouse": "倉庫",
+    "harbor_warehouse_desc": "存放木材與漁獲的儲藏空間",
+    "market_stall": "市集攤位",
+    "market_stall_desc": "販售各種新鮮商品的小攤",
+    "market_bakery": "貓咪烘焙坊",
+    "market_bakery_desc": "飄著魚乾餅乾香氣的麵包店",
+    "market_tailor": "裁縫舖",
+    "market_tailor_desc": "為貓咪量身打造可愛服裝",
+    "market_blacksmith": "鐵匠舖",
+    "market_blacksmith_desc": "打造工具與裝備的工坊",
+    "hill_windmill": "風車磨坊",
+    "hill_windmill_desc": "緩緩轉動的山丘風車",
+    "hill_observatory": "天文台",
+    "hill_observatory_desc": "夜裡觀星的圓頂天文台",
+    "hill_temple": "貓咪神社",
+    "hill_temple_desc": "紅色鳥居守護的寧靜神社"
+  },
   "island": {
     "title": "喵帳島",
     "level": "Lv.{level}",
