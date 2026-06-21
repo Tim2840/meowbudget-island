@@ -7,15 +7,11 @@ import { ISLAND_ZONES } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
 import LevelBar from "./LevelBar";
 
-const ZONE_ICONS: Record<string, string> = {
-  harbor: "⚓",
-  market: "🏪",
-  hill: "🌄",
-};
-
-// Representative building image shown on the island for each unlocked zone.
-// Only assets that actually exist under /public/assets/buildings are referenced
-// here so the scene never renders a broken image.
+// Representative building image shown on the island for each zone. The same
+// cut-out (background-removed) art is used for both the unlocked and locked
+// states — locked zones simply render it greyed-out — so the scene never falls
+// back to emoji or a broken image. Only assets that actually exist under
+// /public/assets/buildings are referenced here.
 const ZONE_BUILDING: Record<string, string> = {
   harbor: "harbor_lighthouse",
   market: "market_stall",
@@ -59,7 +55,7 @@ export default function IslandPage() {
               className="absolute"
               style={{ left: `${zone.position.x}%`, top: `${zone.position.y}%`, transform: "translate(-50%, -50%)" }}
             >
-              {unlocked && buildingImg ? (
+              {unlocked ? (
                 <div className="relative flex flex-col items-center animate-bounce-in">
                   <Image
                     src={`/assets/buildings/${buildingImg}.png`}
@@ -71,10 +67,17 @@ export default function IslandPage() {
                   <div className="-mt-1 bg-amber-500 rounded-full w-2 h-2 shadow" />
                 </div>
               ) : (
-                <div className="relative w-14 h-14 rounded-2xl flex items-center justify-center shadow-md border-2 bg-gray-100/80 border-gray-300 opacity-70 backdrop-blur-sm animate-bounce-in">
-                  <span className="text-2xl grayscale">{ZONE_ICONS[zone.key]}</span>
-                  <div className="absolute -top-1.5 -right-1.5 bg-gray-700 rounded-full px-1.5 py-0.5 shadow">
-                    <span className="text-[9px] text-white font-bold">Lv{zone.unlockLevel}</span>
+                <div className="relative flex flex-col items-center animate-bounce-in">
+                  {/* Locked zones reuse the cut-out building art, greyed out */}
+                  <Image
+                    src={`/assets/buildings/${buildingImg}.png`}
+                    alt={zone.key}
+                    width={48}
+                    height={48}
+                    className="grayscale opacity-50 drop-shadow-[0_3px_4px_rgba(0,0,0,0.2)]"
+                  />
+                  <div className="absolute -top-1.5 -right-1.5 flex items-center gap-0.5 bg-gray-700/90 rounded-full px-1.5 py-0.5 shadow">
+                    <span className="text-[9px] text-white font-bold leading-none">🔒Lv{zone.unlockLevel}</span>
                   </div>
                 </div>
               )}
