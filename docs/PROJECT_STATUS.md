@@ -1,6 +1,9 @@
 # 喵帳島 / MeowBudget Island — 專案現況
 
-> **每個新 session 開頭必讀此檔。** 記錄目前做到哪、架構決策、待辦事項。
+> **活的 roadmap**：記錄 Sprint 進度、下一步待辦、已知問題。
+> **何時讀**：規劃 / 開新功能 / 決定下一步時讀它對齊進度（定點型小修不必）。
+> **何時寫**：完成有意義的功能後順手更新進度/待辦/已知問題，別讓它過時。
+> 穩定的架構鐵則與慣例請看 `AGENTS.md`。
 
 ---
 
@@ -10,7 +13,7 @@
 |--------|------|------|
 | Sprint 0 | ✅ 完成 | 基礎架構、Auth、i18n、Layout、所有 Store |
 | Sprint 1 | ✅ 完成 | 類別名稱修正、新手教學自動觸發、島嶼視覺升級、貓貓頁修正 |
-| Sprint 2 | ⏳ 待開始 | 報表真實資料（圖表）、預算設定 |
+| Sprint 2 | 🚧 進行中 | 報表已接真實資料＋圖表 ✅；新手教學逐頁導覽 ✅；**兩層分類系統＋自訂分類＋主題化獎勵＋收入分析** ✅（額外）；**預算設定**仍未做 ⬜ |
 | Sprint 3 | 🔜 未開始 | 視覺升級：場景 + 貓咪元件抽象化 + 島上漫步 |
 | Sprint 4 | 🔜 未開始 | Sprite sheet 資產導入 + 貓咪服裝 + 任務 + Badge |
 | Sprint 5 | 🔜 未開始 | 教學完善 + 設定頁串 Store |
@@ -21,10 +24,10 @@
 ## 專案位置
 
 - **本地路徑**：`/home/user/meowbudget-island/`
-- **GitHub**：`https://github.com/Tim2840/meowbudget-island`（main 分支）
-- **部署**：尚未部署（目標 Vercel）
+- **GitHub**：`https://github.com/Tim2840/meowbudget-island`（分支流程見 AGENTS.md：`main` ← `dev` ← `claude/*`）
+- **部署**：✅ 已部署 Vercel（team `tim2840s-projects`）。連結與部署保護細節見 AGENTS.md「Vercel 部署連結」。
 - **開發指令**：`npm run dev`（在 `/home/user/meowbudget-island/` 下執行）
-- **型別檢查**：`npx tsc --noEmit --project /home/user/meowbudget-island/tsconfig.json`
+- **型別檢查**：`npx tsc --noEmit`
 
 ---
 
@@ -47,28 +50,7 @@
 
 ## 重要架構規則（勿違反）
 
-### 1. next-intl 的 key 絕不能含有「.」
-next-intl 把 `.` 視為 namespace 分隔符。messages JSON 中所有複合 key 用 `_` 而非 `.`：
-- ✅ `"harbor_desc": "..."` → `t("harbor_desc")`
-- ❌ `"harbor.desc": "..."` → 會解析為 `harbor` namespace 下的 `desc`，造成 INVALID_KEY 錯誤
-
-### 2. Supabase 懶初始化（勿改回 eager）
-`src/lib/supabase.ts` 使用 Proxy 延遲建立 client，避免無 `.env.local` 時模組載入就爆炸。
-Supabase 尚未設定 env，目前全走本地 Zustand persist 模式。
-
-### 3. Store 雙寫模式
-所有 store：先寫 LocalStorage（Zustand persist），再嘗試 Supabase。
-用 `isSupabaseConfigured()` 判斷；Supabase 失敗不 rollback 本地資料。
-
-### 4. Recharts Tooltip formatter
-`formatter` 的 value 型別是 `ValueType | undefined`，不能直接當 `number` 用：
-```ts
-formatter={(value) => (typeof value === 'number' ? value.toLocaleString() : value)}
-```
-
-### 5. Week 定義
-周報綁固定週一～週日（不是 rolling 7 天）。
-計算在 `src/lib/streakUtils.ts` 的 `getWeekRange()`：`(d.getDay() + 6) % 7`。
+> **穩定的架構鐵則（next-intl key 不含「.」、Supabase 懶初始化、Store 雙寫、Recharts formatter、週定義…）已上移到 `AGENTS.md`**（每個 session 必讀）。這裡只保留與未來 Sprint 綁定的前瞻設計決策。
 
 ### 6. 貓咪動畫技術選型：Sprite sheet + CSS steps()（Sprint 3/4 決策）
 **選型理由**：
@@ -100,7 +82,9 @@ IslandPage 場景分為 5 個獨立 CSS 層（由後到前）：
 - `src/types/index.ts` — 所有 TypeScript 型別
 - `src/lib/utils.ts` — `cn()`
 - `src/lib/supabase.ts` — 懶初始化 Proxy
-- `src/lib/constants.ts` — DEFAULT_CATEGORIES(12), LEVEL_THRESHOLDS, ISLAND_ZONES(3), ACHIEVEMENTS(16), QUESTS(5), TUTORIAL_STEPS(5), CAT_DEFINITIONS(5)
+- `src/lib/constants.ts` — **兩層分類** `DEFAULT_GROUPS`(15) + `DEFAULT_SUBCATEGORIES`(~60) + `LEGACY_NAMEKEY_TO_GROUP`、LEVEL_THRESHOLDS、EXP_PER_RECORD、ISLAND_ZONES、BUILDINGS、ACHIEVEMENTS、QUESTS、TUTORIAL_STEPS、CAT_DEFINITIONS（**以程式碼為準**）
+- `src/stores/useCategoryStore.ts` — 兩層分類 store（合併預設+自訂、CRUD、persist）
+- `src/components/settings/CategoryManager.tsx` — 分類管理 UI（新增/編輯/隱藏/刪除）
 - `src/lib/rewardEngine.ts` — `calculateReward()`, `getLevelForExp()`, `getExpProgress()`
 - `src/lib/streakUtils.ts` — `todayString()`, `yesterdayString()`, `updateStreak()`, `getWeekRange()`, `getMonthRange()`, `formatYearMonth()`
 
@@ -250,8 +234,8 @@ IslandPage 場景分為 5 個獨立 CSS 層（由後到前）：
 
 ## 計畫文件位置
 
-完整 PRD 與 sprint 計畫在 plan mode 生成的計畫檔：
-`/root/.claude/plans/meowbudget-island-mighty-frost.md`（本機，不在 git）
+⚠️ 早期 plan-mode 計畫檔（`/root/.claude/plans/…`）在容器本機、**不在 git**，新 session 讀不到，勿依賴。
+已 commit 進 repo 的交接/設計文件在 `docs/`（例：`docs/HANDOFF-two-tier-categories.md`）。
 
 Sprint 計畫摘要：
 - Sprint 0：基礎架構 ✅
@@ -264,4 +248,4 @@ Sprint 計畫摘要：
 
 ---
 
-*最後更新：2026-06-19，Sprint 3/4 視覺升級計畫整合後*
+*最後更新：2026-06-22，兩層分類系統合併 + 架構鐵則上移 AGENTS.md 後*
