@@ -68,3 +68,21 @@ body {
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* ── Charts ── */
+/* Some mobile browsers (e.g. Samsung Internet) draw a thick accent-coloured
+   focus outline around the whole chart rectangle when a recharts SVG receives
+   focus on tap — it frames the area well beyond the chart itself. Suppress it
+   for every chart in the app. */
+.recharts-responsive-container,
+.recharts-wrapper,
+.recharts-surface,
+.recharts-wrapper:focus,
+.recharts-wrapper:focus-visible,
+.recharts-wrapper *:focus,
+.recharts-wrapper *:focus-visible,
+.recharts-surface:focus,
+.recharts-surface:focus-visible {
+  outline: none !important;
+}
+
