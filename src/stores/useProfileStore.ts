@@ -29,7 +29,12 @@ export const useProfileStore = create<ProfileState>()(
 
       loadProfile: async (userId: string) => {
         if (!isSupabaseConfigured()) {
-          set({ profile: { id: userId, ...DEFAULT_PROFILE, createdAt: new Date().toISOString() } });
+          // Local mode: keep the persisted profile (progress, onboarding flag);
+          // only seed a default when there's nothing for this user yet.
+          const existing = get().profile;
+          if (!existing || existing.id !== userId) {
+            set({ profile: { id: userId, ...DEFAULT_PROFILE, createdAt: new Date().toISOString() } });
+          }
           return;
         }
         const { data } = await supabase
