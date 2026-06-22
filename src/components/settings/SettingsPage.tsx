@@ -86,8 +86,8 @@ export default function SettingsPage() {
 
       {/* Logout confirm */}
       {showLogoutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
-          <div className="bg-white rounded-3xl p-6 w-full max-w-xs">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-6">
+          <div className="bg-white rounded-3xl p-6 w-full max-w-xs max-h-[90vh] overflow-y-auto">
             <p className="text-base font-semibold text-gray-800 mb-4 text-center">{t("logout_confirm")}</p>
             <div className="flex gap-3">
               <button onClick={() => setShowLogoutConfirm(false)} className="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 font-medium">取消</button>

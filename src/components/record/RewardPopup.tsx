@@ -27,10 +27,10 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 pointer-events-none"
       onClick={onClose}
     >
-      <div className="pointer-events-auto bg-white rounded-3xl shadow-2xl p-6 mx-4 flex flex-col items-center gap-3 animate-bounce-in">
+      <div className="pointer-events-auto bg-white rounded-3xl shadow-2xl p-6 max-w-xs w-full max-h-[90vh] overflow-y-auto flex flex-col items-center gap-3 animate-bounce-in">
         <p className="text-2xl">✨</p>
         <h3 className="text-xl font-bold text-amber-700">{t("reward_title")}</h3>
 
