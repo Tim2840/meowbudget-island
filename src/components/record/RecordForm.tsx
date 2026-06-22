@@ -89,10 +89,18 @@ export default function RecordForm({ onSave, onCancel }: RecordFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end">
+    // z-[60] keeps this sheet ABOVE the bottom nav (BottomNav is z-50); at the
+    // same z-index the nav paints over the pinned save button and hides it.
+    <div className="fixed inset-0 z-[60] flex items-end">
       <div className="absolute inset-0 bg-black/40" onClick={onCancel} />
-      <div className="relative w-full max-w-md mx-auto bg-white rounded-t-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
-        <div className="p-5 space-y-4">
+      <div className="relative w-full max-w-md mx-auto bg-white rounded-t-3xl shadow-2xl max-h-[90vh] flex flex-col">
+        {/* Scrollable body — holds EVERYTHING except the save button. The
+            save button lives in the pinned footer below, so it can never be
+            pushed off-screen no matter how tall this form grows (more
+            categories / fields). Keep it that way: do NOT move the save
+            button back inside this scroll box. min-h-0 lets the flex child
+            actually shrink so overflow-y works. */}
+        <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-800">{t("add")}</h2>
@@ -247,7 +255,12 @@ export default function RecordForm({ onSave, onCancel }: RecordFormProps) {
             </div>
           </div>
 
-          {/* Save button */}
+        </div>
+
+        {/* Pinned footer — keeps the primary action reachable regardless of
+            body height; pb includes the mobile safe-area inset so the button
+            clears the home indicator / browser bottom bar. */}
+        <div className="border-t border-gray-100 p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
           <button
             onClick={handleSave}
             disabled={!amount || !selectedSubcategory || isSaving}
