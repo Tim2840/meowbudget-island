@@ -13,7 +13,7 @@
 |--------|------|------|
 | Sprint 0 | ✅ 完成 | 基礎架構、Auth、i18n、Layout、所有 Store |
 | Sprint 1 | ✅ 完成 | 類別名稱修正、新手教學自動觸發、島嶼視覺升級、貓貓頁修正 |
-| Sprint 2 | 🚧 進行中 | 報表已接真實資料＋圖表 ✅；新手教學逐頁導覽 ✅；**兩層分類系統＋自訂分類＋主題化獎勵＋收入分析** ✅（額外）；**預算設定**仍未做 ⬜ |
+| Sprint 2 | ✅ 完成 | 報表已接真實資料＋圖表 ✅；新手教學逐頁導覽 ✅；兩層分類系統＋自訂分類＋主題化獎勵＋收入分析 ✅；**預算設定（useBudgetStore + BudgetManager + MonthlyReport 進度條）** ✅ |
 | Sprint 3 | 🔜 未開始 | 視覺升級：場景 + 貓咪元件抽象化 + 島上漫步 |
 | Sprint 4 | 🔜 未開始 | Sprite sheet 資產導入 + 貓咪服裝 + 任務 + Badge |
 | Sprint 5 | 🔜 未開始 | 教學完善 + 設定頁串 Store |
@@ -131,26 +131,9 @@ IslandPage 場景分為 5 個獨立 CSS 層（由後到前）：
 
 ---
 
-## Sprint 2 待辦（下個 session 應從這裡開始）
+## Sprint 2 完成（已全部實作）
 
-### 優先項目
-1. **報表接真實資料** — `ReportsPage`/`DailyReport`/`WeeklyReport`/`MonthlyReport` 目前顯示空資料或 mock。
-   - 從 `useTransactionStore.getByDateRange()` 拿交易資料
-   - DailyReport：今天的交易 → PieChart 分類占比 + 明細列表
-   - WeeklyReport：本週（週一到今天）→ BarChart 每日金額
-   - MonthlyReport：本月 → Donut 分類占比 + 排行榜
-
-2. **預算設定頁** — `BudgetPage` or modal：
-   - 月總預算 + 各分類預算
-   - Store：`useBudgetStore`（Zustand persist + Supabase）
-   - MonthlyReport 的預算達成率顯示
-
-3. **點擊報表圖表跳轉** — 點某分類 → 回到記帳頁並自動篩選該分類
-
-### 次要項目
-4. **Supabase schema migration** — 建立 `supabase/migrations/001_initial.sql`
-5. **記帳後 streak 動畫強化**
-6. **設定頁的 sound/animation/notifications toggle 接 store**（目前只是 UI，無實際 store）
+全部完成 ✅
 
 ---
 
