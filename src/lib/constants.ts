@@ -1,22 +1,180 @@
-import type { Category, ResourceType, IslandZone, Building, Achievement, Quest, CatDefinition, TutorialStep } from "@/types";
+import type { Category, CategoryGroup, ResourceType, IslandZone, Building, Achievement, Quest, CatDefinition, TutorialStep } from "@/types";
 
 // ──────────────────────────────────────────
-// Default Categories (system-defined, userId = null)
+// 預設大類 (groups)
 // ──────────────────────────────────────────
-export const DEFAULT_CATEGORIES: Omit<Category, "id" | "userId" | "isCustom">[] = [
-  { nameKey: "category.food", emoji: "🍔", color: "#FF6B6B", resourceType: "fish", resourceAmount: 2, bonusCoins: 5, sortOrder: 1, isIncome: false },
-  { nameKey: "category.transport", emoji: "🚌", color: "#4ECDC4", resourceType: "wood", resourceAmount: 1, bonusCoins: 5, sortOrder: 2, isIncome: false },
-  { nameKey: "category.shopping", emoji: "🛒", color: "#45B7D1", resourceType: "fabric", resourceAmount: 1, bonusCoins: 5, sortOrder: 3, isIncome: false },
-  { nameKey: "category.entertainment", emoji: "🎮", color: "#96CEB4", resourceType: "coins", resourceAmount: 0, bonusCoins: 3, sortOrder: 4, isIncome: false },
-  { nameKey: "category.home", emoji: "🏠", color: "#FFEAA7", resourceType: "wood", resourceAmount: 1, bonusCoins: 5, sortOrder: 5, isIncome: false },
-  { nameKey: "category.clothing", emoji: "👕", color: "#DDA0DD", resourceType: "fabric", resourceAmount: 2, bonusCoins: 5, sortOrder: 6, isIncome: false },
-  { nameKey: "category.health", emoji: "💊", color: "#98FB98", resourceType: "coins", resourceAmount: 0, bonusCoins: 8, sortOrder: 7, isIncome: false },
-  { nameKey: "category.education", emoji: "📚", color: "#87CEEB", resourceType: "coins", resourceAmount: 0, bonusCoins: 8, sortOrder: 8, isIncome: false },
-  { nameKey: "category.work", emoji: "💼", color: "#F0E68C", resourceType: "coins", resourceAmount: 0, bonusCoins: 5, sortOrder: 9, isIncome: false },
-  { nameKey: "category.travel", emoji: "✈️", color: "#FFB6C1", resourceType: "wood", resourceAmount: 2, bonusCoins: 5, sortOrder: 10, isIncome: false },
-  { nameKey: "category.income", emoji: "💰", color: "#FFD700", resourceType: "coins", resourceAmount: 20, bonusCoins: 0, sortOrder: 11, isIncome: true },
-  { nameKey: "category.other", emoji: "📦", color: "#D3D3D3", resourceType: "coins", resourceAmount: 0, bonusCoins: 5, sortOrder: 12, isIncome: false },
+export const DEFAULT_GROUPS: CategoryGroup[] = [
+  // ── 支出大類 ──
+  { key: "food",             nameKey: "category.food",             emoji: "🍔", color: "#FF6B6B", isIncome: false, sortOrder: 1,  isCustom: false, userId: null },
+  { key: "transport",        nameKey: "category.transport",        emoji: "🚌", color: "#4ECDC4", isIncome: false, sortOrder: 2,  isCustom: false, userId: null },
+  { key: "shopping",         nameKey: "category.shopping",         emoji: "🛒", color: "#45B7D1", isIncome: false, sortOrder: 3,  isCustom: false, userId: null },
+  { key: "entertainment",    nameKey: "category.entertainment",    emoji: "🎮", color: "#96CEB4", isIncome: false, sortOrder: 4,  isCustom: false, userId: null },
+  { key: "home",             nameKey: "category.home",             emoji: "🏠", color: "#FFEAA7", isIncome: false, sortOrder: 5,  isCustom: false, userId: null },
+  { key: "clothing",         nameKey: "category.clothing",         emoji: "👕", color: "#DDA0DD", isIncome: false, sortOrder: 6,  isCustom: false, userId: null },
+  { key: "health",           nameKey: "category.health",           emoji: "💊", color: "#98FB98", isIncome: false, sortOrder: 7,  isCustom: false, userId: null },
+  { key: "education",        nameKey: "category.education",        emoji: "📚", color: "#87CEEB", isIncome: false, sortOrder: 8,  isCustom: false, userId: null },
+  { key: "social",           nameKey: "category.social",           emoji: "🤝", color: "#F4A460", isIncome: false, sortOrder: 9,  isCustom: false, userId: null },
+  { key: "pet",              nameKey: "category.pet",              emoji: "🐱", color: "#FFB6C1", isIncome: false, sortOrder: 10, isCustom: false, userId: null },
+  { key: "travel",           nameKey: "category.travel",           emoji: "✈️", color: "#C8A0E8", isIncome: false, sortOrder: 11, isCustom: false, userId: null },
+  { key: "other",            nameKey: "category.other",            emoji: "📦", color: "#D3D3D3", isIncome: false, sortOrder: 12, isCustom: false, userId: null },
+  // ── 收入大類 ──
+  { key: "work_income",      nameKey: "category.work_income",      emoji: "💰", color: "#FFD700", isIncome: true,  sortOrder: 1,  isCustom: false, userId: null },
+  { key: "invest_income",    nameKey: "category.invest_income",    emoji: "📈", color: "#90EE90", isIncome: true,  sortOrder: 2,  isCustom: false, userId: null },
+  { key: "other_income",     nameKey: "category.other_income",     emoji: "🎁", color: "#FFA07A", isIncome: true,  sortOrder: 3,  isCustom: false, userId: null },
 ];
+
+// ──────────────────────────────────────────
+// Builder helper: 子類繼承大類預設值
+// ──────────────────────────────────────────
+type GroupBase = { color: string; isIncome: boolean; resourceType: ResourceType; resourceAmount: number; bonusCoins: number };
+type SubDef = { key: string; nameKey: string; emoji: string; sortOrder: number; resourceType?: ResourceType; resourceAmount?: number; bonusCoins?: number };
+
+function buildSubs(groupKey: string, base: GroupBase, subs: SubDef[]): Category[] {
+  return subs.map((s) => ({
+    key: s.key,
+    groupKey,
+    nameKey: s.nameKey,
+    emoji: s.emoji,
+    color: base.color,
+    resourceType: s.resourceType ?? base.resourceType,
+    resourceAmount: s.resourceAmount ?? base.resourceAmount,
+    bonusCoins: s.bonusCoins ?? base.bonusCoins,
+    isIncome: base.isIncome,
+    sortOrder: s.sortOrder,
+    isCustom: false as const,
+    userId: null,
+  }));
+}
+
+// ──────────────────────────────────────────
+// 預設子類 (subcategories)
+// ──────────────────────────────────────────
+export const DEFAULT_SUBCATEGORIES: Category[] = [
+  // 🍔 飲食
+  ...buildSubs("food", { color: "#FF6B6B", isIncome: false, resourceType: "fish", resourceAmount: 2, bonusCoins: 5 }, [
+    { key: "food_breakfast",  nameKey: "category.food_breakfast",  emoji: "🥐", sortOrder: 1 },
+    { key: "food_lunch",      nameKey: "category.food_lunch",      emoji: "🍱", sortOrder: 2 },
+    { key: "food_dinner",     nameKey: "category.food_dinner",     emoji: "🍜", sortOrder: 3 },
+    { key: "food_drinks",     nameKey: "category.food_drinks",     emoji: "🧋", sortOrder: 4 },
+    { key: "food_snack",      nameKey: "category.food_snack",      emoji: "🍿", sortOrder: 5 },
+    { key: "food_grocery",    nameKey: "category.food_grocery",    emoji: "🛒", sortOrder: 6 },
+  ]),
+  // 🚌 交通
+  ...buildSubs("transport", { color: "#4ECDC4", isIncome: false, resourceType: "wood", resourceAmount: 1, bonusCoins: 5 }, [
+    { key: "transport_public",  nameKey: "category.transport_public",  emoji: "🚇", sortOrder: 1 },
+    { key: "transport_taxi",    nameKey: "category.transport_taxi",    emoji: "🚕", sortOrder: 2 },
+    { key: "transport_gas",     nameKey: "category.transport_gas",     emoji: "⛽", sortOrder: 3 },
+    { key: "transport_parking", nameKey: "category.transport_parking", emoji: "🅿️", sortOrder: 4 },
+    { key: "transport_etc",     nameKey: "category.transport_etc",     emoji: "🛣️", sortOrder: 5 },
+    { key: "transport_repair",  nameKey: "category.transport_repair",  emoji: "🔧", sortOrder: 6 },
+  ]),
+  // 🛒 購物
+  ...buildSubs("shopping", { color: "#45B7D1", isIncome: false, resourceType: "fabric", resourceAmount: 1, bonusCoins: 5 }, [
+    { key: "shopping_daily",       nameKey: "category.shopping_daily",       emoji: "🧴", sortOrder: 1 },
+    { key: "shopping_electronics", nameKey: "category.shopping_electronics", emoji: "📱", sortOrder: 2 },
+    { key: "shopping_appliance",   nameKey: "category.shopping_appliance",   emoji: "🏠", sortOrder: 3 },
+    { key: "shopping_beauty",      nameKey: "category.shopping_beauty",      emoji: "💄", sortOrder: 4 },
+    { key: "shopping_books",       nameKey: "category.shopping_books",       emoji: "📖", sortOrder: 5 },
+  ]),
+  // 🎮 娛樂
+  ...buildSubs("entertainment", { color: "#96CEB4", isIncome: false, resourceType: "coins", resourceAmount: 0, bonusCoins: 4 }, [
+    { key: "entertainment_movie",        nameKey: "category.entertainment_movie",        emoji: "🎬", sortOrder: 1 },
+    { key: "entertainment_game",         nameKey: "category.entertainment_game",         emoji: "🎮", sortOrder: 2 },
+    { key: "entertainment_subscription", nameKey: "category.entertainment_subscription", emoji: "📺", sortOrder: 3 },
+    { key: "entertainment_ktv",          nameKey: "category.entertainment_ktv",          emoji: "🎤", sortOrder: 4 },
+    { key: "entertainment_sports",       nameKey: "category.entertainment_sports",       emoji: "🏃", sortOrder: 5 },
+  ]),
+  // 🏠 居家
+  ...buildSubs("home", { color: "#FFEAA7", isIncome: false, resourceType: "wood", resourceAmount: 1, bonusCoins: 5 }, [
+    { key: "home_rent",        nameKey: "category.home_rent",        emoji: "🏠", sortOrder: 1 },
+    { key: "home_utilities",   nameKey: "category.home_utilities",   emoji: "💡", sortOrder: 2 },
+    { key: "home_internet",    nameKey: "category.home_internet",    emoji: "📡", sortOrder: 3 },
+    { key: "home_furniture",   nameKey: "category.home_furniture",   emoji: "🛋️", sortOrder: 4 },
+    { key: "home_maintenance", nameKey: "category.home_maintenance", emoji: "🏢", sortOrder: 5 },
+  ]),
+  // 👕 服飾
+  ...buildSubs("clothing", { color: "#DDA0DD", isIncome: false, resourceType: "fabric", resourceAmount: 2, bonusCoins: 5 }, [
+    { key: "clothing_clothes",     nameKey: "category.clothing_clothes",     emoji: "👔", sortOrder: 1 },
+    { key: "clothing_shoes",       nameKey: "category.clothing_shoes",       emoji: "👟", sortOrder: 2 },
+    { key: "clothing_accessories", nameKey: "category.clothing_accessories", emoji: "👜", sortOrder: 3 },
+  ]),
+  // 💊 醫療健康
+  ...buildSubs("health", { color: "#98FB98", isIncome: false, resourceType: "coins", resourceAmount: 0, bonusCoins: 8 }, [
+    { key: "health_medical",    nameKey: "category.health_medical",    emoji: "🏥", sortOrder: 1 },
+    { key: "health_medicine",   nameKey: "category.health_medicine",   emoji: "💊", sortOrder: 2 },
+    { key: "health_supplement", nameKey: "category.health_supplement", emoji: "💪", sortOrder: 3 },
+    { key: "health_insurance",  nameKey: "category.health_insurance",  emoji: "🛡️", sortOrder: 4 },
+  ]),
+  // 📚 教育
+  ...buildSubs("education", { color: "#87CEEB", isIncome: false, resourceType: "coins", resourceAmount: 0, bonusCoins: 8 }, [
+    { key: "education_tuition", nameKey: "category.education_tuition", emoji: "🎓", sortOrder: 1 },
+    { key: "education_books",   nameKey: "category.education_books",   emoji: "📚", sortOrder: 2 },
+    { key: "education_courses", nameKey: "category.education_courses", emoji: "💻", sortOrder: 3 },
+  ]),
+  // 🤝 人際社交
+  ...buildSubs("social", { color: "#F4A460", isIncome: false, resourceType: "fabric", resourceAmount: 1, bonusCoins: 5 }, [
+    { key: "social_gift",     nameKey: "category.social_gift",     emoji: "🎁", sortOrder: 1 },
+    { key: "social_dining",   nameKey: "category.social_dining",   emoji: "🥂", sortOrder: 2 },
+    { key: "social_donation", nameKey: "category.social_donation", emoji: "❤️", sortOrder: 3 },
+  ]),
+  // 🐱 寵物
+  ...buildSubs("pet", { color: "#FFB6C1", isIncome: false, resourceType: "fish", resourceAmount: 2, bonusCoins: 5 }, [
+    { key: "pet_food",     nameKey: "category.pet_food",     emoji: "🐾", sortOrder: 1 },
+    { key: "pet_medical",  nameKey: "category.pet_medical",  emoji: "🏥", sortOrder: 2 },
+    { key: "pet_supplies", nameKey: "category.pet_supplies", emoji: "🧸", sortOrder: 3 },
+  ]),
+  // ✈️ 旅遊
+  ...buildSubs("travel", { color: "#C8A0E8", isIncome: false, resourceType: "wood", resourceAmount: 2, bonusCoins: 5 }, [
+    { key: "travel_transport",     nameKey: "category.travel_transport",     emoji: "✈️", sortOrder: 1 },
+    { key: "travel_accommodation", nameKey: "category.travel_accommodation", emoji: "🏨", sortOrder: 2 },
+    { key: "travel_tickets",       nameKey: "category.travel_tickets",       emoji: "🎫", sortOrder: 3 },
+    { key: "travel_souvenir",      nameKey: "category.travel_souvenir",      emoji: "🎁", sortOrder: 4 },
+  ]),
+  // 📦 其他支出
+  ...buildSubs("other", { color: "#D3D3D3", isIncome: false, resourceType: "coins", resourceAmount: 0, bonusCoins: 3 }, [
+    { key: "other_misc", nameKey: "category.other_misc", emoji: "📦", sortOrder: 1 },
+    { key: "other_fee",  nameKey: "category.other_fee",  emoji: "💳", sortOrder: 2 },
+    { key: "other_tax",  nameKey: "category.other_tax",  emoji: "📋", sortOrder: 3 },
+  ]),
+  // 💰 工作收入
+  ...buildSubs("work_income", { color: "#FFD700", isIncome: true, resourceType: "coins", resourceAmount: 12, bonusCoins: 0 }, [
+    { key: "work_income_salary",    nameKey: "category.work_income_salary",    emoji: "💼", sortOrder: 1 },
+    { key: "work_income_bonus",     nameKey: "category.work_income_bonus",     emoji: "🎉", sortOrder: 2 },
+    { key: "work_income_overtime",  nameKey: "category.work_income_overtime",  emoji: "⏰", sortOrder: 3 },
+    { key: "work_income_freelance", nameKey: "category.work_income_freelance", emoji: "💻", sortOrder: 4 },
+  ]),
+  // 📈 理財收入
+  ...buildSubs("invest_income", { color: "#90EE90", isIncome: true, resourceType: "coins", resourceAmount: 15, bonusCoins: 0 }, [
+    { key: "invest_income_dividend", nameKey: "category.invest_income_dividend", emoji: "📈", sortOrder: 1 },
+    { key: "invest_income_interest", nameKey: "category.invest_income_interest", emoji: "🏦", sortOrder: 2 },
+    { key: "invest_income_profit",   nameKey: "category.invest_income_profit",   emoji: "💹", sortOrder: 3 },
+    { key: "invest_income_rent",     nameKey: "category.invest_income_rent",     emoji: "🏘️", sortOrder: 4 },
+  ]),
+  // 🎁 其他收入
+  ...buildSubs("other_income", { color: "#FFA07A", isIncome: true, resourceType: "coins", resourceAmount: 12, bonusCoins: 0 }, [
+    { key: "other_income_gift",    nameKey: "category.other_income_gift",    emoji: "🧧", sortOrder: 1 },
+    { key: "other_income_refund",  nameKey: "category.other_income_refund",  emoji: "🔄", sortOrder: 2 },
+    { key: "other_income_subsidy", nameKey: "category.other_income_subsidy", emoji: "📋", sortOrder: 3 },
+    { key: "other_income_resale",  nameKey: "category.other_income_resale",  emoji: "🏷️", sortOrder: 4 },
+    { key: "other_income_prize",   nameKey: "category.other_income_prize",   emoji: "🎰", sortOrder: 5 },
+  ]),
+];
+
+// 舊交易 (categorySnapshot.nameKey 只有大類層級) 的回退對照表
+export const LEGACY_NAMEKEY_TO_GROUP: Record<string, string> = {
+  "category.food":          "food",
+  "category.transport":     "transport",
+  "category.shopping":      "shopping",
+  "category.entertainment": "entertainment",
+  "category.home":          "home",
+  "category.clothing":      "clothing",
+  "category.health":        "health",
+  "category.education":     "education",
+  "category.work":          "work_income",
+  "category.travel":        "travel",
+  "category.income":        "work_income",
+  "category.other":         "other",
+};
 
 // ──────────────────────────────────────────
 // EXP & Level thresholds

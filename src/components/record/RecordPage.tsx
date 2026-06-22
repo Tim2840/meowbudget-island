@@ -9,12 +9,11 @@ import { useWalletStore } from "@/stores/useWalletStore";
 import { useTransactionStore } from "@/stores/useTransactionStore";
 import { calculateReward } from "@/lib/rewardEngine";
 import { updateStreak, todayString } from "@/lib/streakUtils";
-import { DEFAULT_CATEGORIES } from "@/lib/constants";
 import WalletBar from "./WalletBar";
 import RecordForm from "./RecordForm";
 import RewardPopup from "./RewardPopup";
 import TransactionList from "./TransactionList";
-import type { Category, RewardResult } from "@/types";
+import type { Category, CategoryGroup, RewardResult } from "@/types";
 
 export default function RecordPage() {
   const t = useTranslations("record");
@@ -28,13 +27,14 @@ export default function RecordPage() {
 
   const handleRecord = async (
     amount: number,
-    category: Category,
+    subcategory: Category,
+    group: CategoryGroup,
     date: string,
     note?: string
   ) => {
     if (!user || !profile) return;
 
-    const rewardResult = calculateReward(category, profile.currentStreak, profile.level, profile.exp);
+    const rewardResult = calculateReward(subcategory, profile.currentStreak, profile.level, profile.exp);
 
     const streakUpdate = updateStreak(
       profile.lastRecordDate,
@@ -43,14 +43,17 @@ export default function RecordPage() {
     );
 
     await addTransaction(user.id, {
-      type: category.isIncome ? "income" : "expense",
+      type: subcategory.isIncome ? "income" : "expense",
       amount,
-      categoryId: category.id,
+      categoryId: subcategory.key,
       categorySnapshot: {
-        nameKey: category.nameKey,
-        emoji: category.emoji,
-        color: category.color,
-        isCustom: category.isCustom,
+        key: subcategory.key,
+        groupKey: group.key,
+        nameKey: subcategory.nameKey,
+        groupNameKey: group.nameKey,
+        emoji: subcategory.emoji,
+        color: subcategory.color,
+        isCustom: subcategory.isCustom,
       },
       date,
       note,
@@ -96,11 +99,7 @@ export default function RecordPage() {
 
       {/* Record form modal */}
       {showForm && (
-        <RecordForm
-          categories={DEFAULT_CATEGORIES.map((c, i) => ({ ...c, id: `default-${i}`, userId: null, isCustom: false }))}
-          onSave={handleRecord}
-          onCancel={() => setShowForm(false)}
-        />
+        <RecordForm onSave={handleRecord} onCancel={() => setShowForm(false)} />
       )}
 
       {/* Reward popup */}
