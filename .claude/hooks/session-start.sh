@@ -1,6 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+# Surface the canonical Vercel deployment links every session so neither the
+# user nor the agent has to re-derive them (no curl-probing / PR-comment digging).
+# Printed in all sessions (local + remote). Details/caveats live in AGENTS.md.
+cat <<'VERCEL_LINKS'
+[Vercel] meowbudget-island deployment links (team: tim2840s-projects):
+  • Deployments 後台（收藏這個）: https://vercel.com/tim2840s-projects/meowbudget-island/deployments
+  • Production (main):           https://meowbudget-island.vercel.app
+  • dev 分支預覽:                https://meowbudget-island-git-dev-tim2840s-projects.vercel.app
+  注意: 部署開了 Deployment Protection，未登入請求一律 403（擁有者登入後可看）。
+VERCEL_LINKS
+
 # Only run in Claude Code on the web (remote) environments.
 # Local sessions already have node_modules and skip this.
 if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
