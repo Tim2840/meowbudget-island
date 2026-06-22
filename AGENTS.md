@@ -39,3 +39,30 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 這樣使用者每次都能拿到可點的 Vercel 預覽連結，不需要重查。
 不要直接 push 進 `dev`/`main`，也不要讓使用者自己去找連結。
+
+# 專案架構與慣例（所有 session 必讀）
+
+## 本地優先（local-first）
+- 狀態用 zustand + `persist` 存 localStorage；Supabase 為**選用**（`isSupabaseConfigured()`）。
+- 無後端時用穩定本地使用者 `id: "local-user"`（見 `useAuthStore`），app 全程可離線運作。記帳/錢包/分類都讀寫 localStorage。
+- 新增 store 沿用現有寫法（參考 `useProfileStore.ts` / `useCategoryStore.ts`）。
+
+## 浮層 / 彈窗規則（防被截、防被導覽列蓋住）— 這個坑犯過兩次
+- 底部彈窗 / modal 一律 `z-[60]`，要**蓋過 `BottomNav`（`z-50`）**，否則導覽列會蓋住底部按鈕。
+- 浮層結構：外層 `max-h-[90vh] flex flex-col`；中段內容 `flex-1 min-h-0 overflow-y-auto`；主要操作鈕放**釘底的 footer**，footer 加 `pb-[calc(env(safe-area-inset-bottom)+1rem)]`。
+- **不要**把主要按鈕（如儲存）放進會捲動的內容區 → 表單一變高就會被推出畫面。
+
+## 路由 / i18n
+- 記帳頁就是首頁 `src/app/[locale]/page.tsx`，**沒有**獨立 `/record`；全站路由有 locale 前綴（`/zh-TW`、`/en`）。
+- 任何新文案都要**同時**加 `messages/zh-TW.json` 與 `messages/en.json`（缺一邊會顯示原始 key）。
+
+## 分類 ↔ 島嶼經濟耦合
+- 分類驅動島嶼資源產出（`src/lib/rewardEngine.ts` 的 `calculateReward`）。新增/修改分類時，要一併設計獎勵（`resourceType` / `resourceAmount` / `bonusCoins`）。
+- 分類為兩層（大類 `CategoryGroup` → 子類 `Category`，含 `groupKey`）；資料模型細節見 `docs/HANDOFF-two-tier-categories.md`，但**以程式碼為準**。
+
+## 本機驗證（截圖）
+- 跑 `npm run dev`（port 3000）+ `node scripts/screenshot.mjs <url-path> <out.png>` 截圖。
+- ⚠️ 首次進入有新手教學浮層會擋住自動操作。繞過：載入前注入 localStorage —
+  `meow_profile` = `{"state":{"profile":{"id":"local-user","onboardingCompleted":true,"language":"zh-TW","level":1,"exp":0,"currentStreak":0,"longestStreak":0,"lastRecordDate":null,"createdAt":"2026-01-01T00:00:00.000Z"}},"version":0}`
+  （`id` 必須是 `local-user`，否則 `loadProfile` 會重置掉這份 profile）。
+- Vercel 部署有 Auth 保護（403），容器內**無法** curl / 截 live 畫面，只能本機跑來驗。
