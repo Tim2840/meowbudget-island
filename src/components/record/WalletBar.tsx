@@ -21,11 +21,11 @@ export default function WalletBar({ wallet, streak }: WalletBarProps) {
   return (
     <div
       data-tutorial="wallet-bar"
-      className="bg-white border-b border-amber-100 px-4 py-2.5 flex items-center gap-3 overflow-x-auto scrollbar-none"
+      className="bg-white border-b border-amber-100 px-4 py-2 flex items-center gap-3 overflow-x-auto scrollbar-none"
     >
       {resources.map(({ key, emoji }) => (
         <div key={key} className="flex items-center gap-1 shrink-0">
-          <span className="text-base">{emoji}</span>
+          <span className="text-sm">{emoji}</span>
           <span className="text-sm font-semibold text-gray-700">{wallet[key].toLocaleString()}</span>
         </div>
       ))}

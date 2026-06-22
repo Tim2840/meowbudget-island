@@ -87,9 +87,9 @@ export default function RecordPage() {
         <button
           data-tutorial="add-record-btn"
           onClick={() => setShowForm(true)}
-          className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-bold text-lg rounded-2xl py-4 shadow-lg transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-bold text-base rounded-2xl py-3.5 shadow-lg transition-colors"
         >
-          <Plus size={24} strokeWidth={2.5} />
+          <Plus size={20} strokeWidth={2.5} />
           {t("add")}
         </button>
       </div>

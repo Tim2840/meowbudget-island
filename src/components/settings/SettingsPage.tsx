@@ -31,7 +31,7 @@ export default function SettingsPage() {
 
   return (
     <div className="flex flex-col min-h-full px-4 pt-5 pb-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">{t("title")}</h1>
+      <h1 className="text-xl font-bold text-gray-800 mb-5">{t("title")}</h1>
 
       {/* Account section */}
       <section className="mb-6">
@@ -120,10 +120,10 @@ function SettingRow({
   return (
     <button
       onClick={toggle ? () => setToggled((v) => !v) : onClick}
-      className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors text-left"
+      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors text-left"
     >
       <span className="text-gray-500">{icon}</span>
-      <span className="flex-1 text-base text-gray-700">{label}</span>
+      <span className="flex-1 text-sm text-gray-700">{label}</span>
       {value && <span className="text-sm text-gray-400">{value}</span>}
       {toggle && (
         <div className={`w-11 h-6 rounded-full transition-colors ${toggled ? "bg-amber-500" : "bg-gray-200"}`}>
