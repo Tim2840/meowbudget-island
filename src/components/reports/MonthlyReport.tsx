@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { Transaction } from "@/types";
+import { useCategoryName } from "../record/CategoryName";
 
 interface MonthlyReportProps {
   transactions: Transaction[];
@@ -13,6 +14,7 @@ const COLORS = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"
 
 export default function MonthlyReport({ transactions, yearMonth }: MonthlyReportProps) {
   const t = useTranslations("reports");
+  const getCategoryName = useCategoryName();
 
   const expenses = transactions.filter((tx) => tx.type === "expense");
   const totalExpense = expenses.reduce((sum, tx) => sum + tx.amount, 0);
@@ -25,13 +27,13 @@ export default function MonthlyReport({ transactions, yearMonth }: MonthlyReport
     const key = tx.categoryId;
     const e = catMap.get(key);
     if (e) { e.total += tx.amount; }
-    else { catMap.set(key, { emoji: tx.categorySnapshot.emoji, name: tx.categorySnapshot.nameKey, total: tx.amount }); }
+    else { catMap.set(key, { emoji: tx.categorySnapshot.emoji, name: getCategoryName(tx.categorySnapshot.nameKey, tx.categorySnapshot.isCustom), total: tx.amount }); }
   });
   const topCategories = Array.from(catMap.values()).sort((a, b) => b.total - a.total);
   const pieData = topCategories.slice(0, 7).map((c) => ({ name: c.name, value: c.total, emoji: c.emoji }));
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 select-none">
       <p className="text-sm font-medium text-gray-400">{yearMonth}</p>
 
       {/* Summary */}

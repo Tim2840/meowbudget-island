@@ -36,7 +36,7 @@ export default function WeeklyReport({ transactions, weekStart }: WeeklyReportPr
   const totalIncome = transactions.filter((t) => t.type === "income").reduce((s, tx) => s + tx.amount, 0);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 select-none">
       {/* Streak status */}
       <div className="bg-orange-50 rounded-2xl p-4 flex items-center gap-3">
         <Flame size={28} className="text-orange-500" />
@@ -70,7 +70,7 @@ export default function WeeklyReport({ transactions, weekStart }: WeeklyReportPr
             <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
             <YAxis hide />
             <Tooltip formatter={(v) => (typeof v === "number" ? v.toLocaleString() : v)} />
-            <Bar dataKey="expense" fill="#FF6B6B" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="expense" name={t("expense")} fill="#FF6B6B" radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

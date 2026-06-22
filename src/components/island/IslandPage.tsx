@@ -26,15 +26,15 @@ export default function IslandPage() {
   return (
     <div className="flex flex-col min-h-full">
       {/* Header */}
-      <div className="px-4 pt-5 pb-3 bg-gradient-to-b from-sky-300 to-sky-100">
-        <h1 className="text-2xl font-bold text-gray-800">{t("title")}</h1>
+      <div className="px-4 pt-4 pb-3 bg-gradient-to-b from-sky-300 to-sky-100">
+        <h1 className="text-xl font-bold text-gray-800">{t("title")}</h1>
         <div className="mt-2">
           <LevelBar level={level} exp={profile?.exp ?? 0} />
         </div>
       </div>
 
       {/* Island scene */}
-      <div className="relative overflow-hidden" style={{ height: 288 }}>
+      <div data-tutorial="island-scene" className="relative overflow-hidden" style={{ height: 288 }}>
         {/* Background art */}
         <Image
           src="/assets/island_bg.png"

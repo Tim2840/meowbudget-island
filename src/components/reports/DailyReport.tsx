@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { Transaction } from "@/types";
+import { useCategoryName } from "../record/CategoryName";
 
 interface DailyReportProps {
   transactions: Transaction[];
@@ -13,6 +14,7 @@ const COLORS = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"
 
 export default function DailyReport({ transactions, date }: DailyReportProps) {
   const t = useTranslations("reports");
+  const getCategoryName = useCategoryName();
 
   const expenses = transactions.filter((tx) => tx.type === "expense");
   const income = transactions.filter((tx) => tx.type === "income");
@@ -29,7 +31,7 @@ export default function DailyReport({ transactions, date }: DailyReportProps) {
       existing.total += tx.amount;
     } else {
       categoryMap.set(key, {
-        name: tx.categorySnapshot.nameKey,
+        name: getCategoryName(tx.categorySnapshot.nameKey, tx.categorySnapshot.isCustom),
         emoji: tx.categorySnapshot.emoji,
         total: tx.amount,
       });
@@ -48,7 +50,7 @@ export default function DailyReport({ transactions, date }: DailyReportProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 select-none">
       {/* Summary cards */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-red-50 rounded-2xl p-4">

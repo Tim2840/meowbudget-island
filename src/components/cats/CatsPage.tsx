@@ -23,35 +23,28 @@ export default function CatsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-full px-4 pt-5 pb-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">貓貓收藏</h1>
-      <div className="grid grid-cols-2 gap-3">
+    <div className="flex flex-col min-h-full px-4 pt-4 pb-4">
+      <h1 className="text-xl font-bold text-gray-800 mb-3">貓貓收藏</h1>
+      <div data-tutorial="cats-grid" className="grid grid-cols-2 gap-2.5">
         {CAT_DEFINITIONS.map((cat) => {
           const unlocked =
             cat.unlockType === "level" && level >= parseInt(cat.unlockValue);
           return (
             <div
               key={cat.key}
-              className={`bg-white rounded-2xl p-4 shadow-sm flex flex-col items-center gap-2 ${!unlocked ? "opacity-50" : ""}`}
+              className={`bg-white rounded-2xl p-3 shadow-sm flex flex-col items-center gap-1.5 ${!unlocked ? "opacity-50" : ""}`}
             >
-              <div className={`w-20 h-20 rounded-full bg-amber-100 flex items-center justify-center text-4xl ${unlocked ? "animate-cat-idle" : ""}`}>
+              <div className={`w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-2xl ${unlocked ? "animate-cat-idle" : ""}`}>
                 🐱
               </div>
               {unlocked ? (
                 <>
-                  <p className="font-semibold text-gray-800 text-center">{t(cat.key as Parameters<typeof t>[0])}</p>
-                  <p className="text-xs text-gray-400 text-center">{t(`${cat.key}_desc` as Parameters<typeof t>[0])}</p>
-                  <div className="flex flex-wrap gap-1 mt-1 justify-center">
-                    {cat.animations.map((anim) => (
-                      <span key={anim.type} className="text-xs bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">
-                        {anim.type}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="text-sm font-semibold text-gray-800 text-center">{t(cat.key as Parameters<typeof t>[0])}</p>
+                  <p className="text-xs text-gray-400 text-center leading-snug">{t(`${cat.key}_desc` as Parameters<typeof t>[0])}</p>
                 </>
               ) : (
                 <>
-                  <p className="font-semibold text-gray-400 text-center">???</p>
+                  <p className="text-sm font-semibold text-gray-400 text-center">???</p>
                   <div className="flex items-center gap-1 text-gray-400">
                     <Lock size={12} />
                     <span className="text-xs text-center">{getUnlockLabel(cat)}</span>

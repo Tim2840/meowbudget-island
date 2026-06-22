@@ -2,6 +2,17 @@ import { create } from "zustand";
 import type { User } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
+// When Supabase isn't configured (e.g. preview/demo with no backend), the app
+// runs in fully local mode: a stable local user lets the rest of the app load
+// its persisted (localStorage) profile / wallet / transactions and work offline.
+const LOCAL_USER = {
+  id: "local-user",
+  aud: "authenticated",
+  app_metadata: {},
+  user_metadata: {},
+  created_at: new Date(0).toISOString(),
+} as unknown as User;
+
 interface AuthState {
   user: User | null;
   isLoading: boolean;
@@ -19,7 +30,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   initialize: async () => {
     if (!isSupabaseConfigured()) {
-      set({ isLoading: false });
+      // Local/offline mode — provide a stable local user so the app works.
+      set({ user: LOCAL_USER, isAnonymous: true, isLoading: false });
       return;
     }
 

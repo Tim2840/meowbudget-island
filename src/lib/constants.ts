@@ -255,17 +255,22 @@ export const QUESTS: Quest[] = [
 // ──────────────────────────────────────────
 // Onboarding Tutorial Steps
 // ──────────────────────────────────────────
+// Each step declares the `route` (page, without locale prefix) it belongs to.
+// The tutorial overlay navigates to that page first, waits for it to render,
+// then spotlights the element matching `targetSelector` on that page.
 export const TUTORIAL_STEPS: TutorialStep[] = [
   {
     id: "welcome",
     titleKey: "tutorial.welcome.title",
     contentKey: "tutorial.welcome.content",
+    route: "/",
     targetSelector: null, // pure text card
   },
   {
     id: "record_button",
     titleKey: "tutorial.record_button.title",
     contentKey: "tutorial.record_button.content",
+    route: "/",
     targetSelector: "[data-tutorial='add-record-btn']",
     position: "top",
   },
@@ -273,20 +278,39 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     id: "resources",
     titleKey: "tutorial.resources.title",
     contentKey: "tutorial.resources.content",
+    route: "/",
     targetSelector: "[data-tutorial='wallet-bar']",
+    position: "bottom",
+  },
+  {
+    id: "reports",
+    titleKey: "tutorial.reports.title",
+    contentKey: "tutorial.reports.content",
+    route: "/reports",
+    targetSelector: "[data-tutorial='reports-tabs']",
     position: "bottom",
   },
   {
     id: "island",
     titleKey: "tutorial.island.title",
     contentKey: "tutorial.island.content",
-    targetSelector: "[data-tutorial='nav-island']",
-    position: "top",
+    route: "/island",
+    targetSelector: "[data-tutorial='island-scene']",
+    position: "bottom",
+  },
+  {
+    id: "cats",
+    titleKey: "tutorial.cats.title",
+    contentKey: "tutorial.cats.content",
+    route: "/cats",
+    targetSelector: "[data-tutorial='cats-grid']",
+    position: "bottom",
   },
   {
     id: "game_loop",
     titleKey: "tutorial.game_loop.title",
     contentKey: "tutorial.game_loop.content",
+    route: "/",
     targetSelector: null, // pure text card explaining full loop
   },
 ];

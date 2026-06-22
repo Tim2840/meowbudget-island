@@ -229,6 +229,7 @@ export interface TutorialStep {
   id: string;
   titleKey: string;
   contentKey: string;
+  route: string; // page path (without locale prefix) this step lives on, e.g. "/", "/reports"
   targetSelector: string | null; // CSS selector, null = text-only card
   position?: "top" | "bottom" | "left" | "right";
 }

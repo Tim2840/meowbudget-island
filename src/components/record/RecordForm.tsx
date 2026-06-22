@@ -34,14 +34,14 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end">
+    <div className="fixed inset-0 z-[60] flex items-end">
       <div className="absolute inset-0 bg-black/40" onClick={onCancel} />
-      <div className="relative w-full max-w-md mx-auto bg-white rounded-t-3xl shadow-2xl p-6 space-y-5">
+      <div className="relative w-full max-w-md mx-auto bg-white rounded-t-3xl shadow-2xl p-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] space-y-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-800">{t("add")}</h2>
-          <button onClick={onCancel} className="p-2 hover:bg-gray-100 rounded-full">
-            <X size={20} />
+          <h2 className="text-lg font-bold text-gray-800">{t("add")}</h2>
+          <button onClick={onCancel} className="p-1.5 hover:bg-gray-100 rounded-full">
+            <X size={18} />
           </button>
         </div>
 
@@ -52,7 +52,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
               key={tp}
               onClick={() => { setType(tp); setSelectedCategory(null); }}
               className={cn(
-                "flex-1 py-2.5 rounded-lg text-base font-semibold transition-all",
+                "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
                 type === tp ? "bg-white shadow text-amber-600" : "text-gray-500"
               )}
             >
@@ -70,7 +70,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="0"
-            className="w-full text-3xl font-bold text-gray-800 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 border-none"
+            className="w-full text-2xl font-bold text-gray-800 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-1 focus:ring-amber-400 border-none"
           />
         </div>
 
@@ -89,7 +89,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
                     : "border-transparent bg-gray-50 hover:bg-gray-100"
                 )}
               >
-                <span className="text-2xl">{cat.emoji}</span>
+                <span className="text-xl">{cat.emoji}</span>
                 <CategoryName
                   nameKey={cat.nameKey}
                   isCustom={cat.isCustom}
@@ -108,7 +108,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-amber-400"
             />
           </div>
           <div className="flex-1">
@@ -117,7 +117,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-amber-400"
             />
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
         <button
           onClick={handleSave}
           disabled={!amount || !selectedCategory || isSaving}
-          className="w-full bg-amber-500 disabled:bg-gray-200 disabled:text-gray-400 text-white font-bold text-lg rounded-2xl py-4 transition-colors"
+          className="w-full bg-amber-500 disabled:bg-gray-200 disabled:text-gray-400 text-white font-bold text-base rounded-2xl py-3.5 transition-colors"
         >
           {isSaving ? "..." : t("save")}
         </button>
