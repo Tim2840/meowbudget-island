@@ -4,17 +4,44 @@ export type TransactionType = "income" | "expense";
 
 export type ResourceType = "coins" | "wood" | "fabric" | "fish";
 
-export interface Category {
-  id: string;
-  userId: string | null; // null = system default
-  nameKey: string; // i18n key or custom name
+// ── 大類 (group) ──────────────────────────────────────
+export interface CategoryGroup {
+  key: string;           // stable key, e.g. "food"
+  nameKey: string;       // i18n key, e.g. "category.food"
   emoji: string;
   color: string;
+  isIncome: boolean;
+  sortOrder: number;
+  isCustom: boolean;
+  userId: string | null;
+  hidden?: boolean;
+}
+
+// ── 子類 (subcategory) ────────────────────────────────
+export interface Category {
+  key: string;           // stable key, e.g. "food_breakfast"
+  groupKey: string;      // parent group key
+  nameKey: string;       // i18n key or custom name
+  emoji: string;
+  color: string;         // inherits from group
   resourceType: ResourceType;
   resourceAmount: number;
   bonusCoins: number;
-  sortOrder: number;
   isIncome: boolean;
+  sortOrder: number;
+  isCustom: boolean;
+  userId: string | null;
+  hidden?: boolean;
+}
+
+// ── 交易快照（保存記帳當下的分類資訊）──────────────────
+export interface CategorySnapshot {
+  key?: string;          // absent in legacy transactions
+  groupKey?: string;     // absent in legacy transactions
+  nameKey: string;
+  groupNameKey?: string; // absent in legacy transactions
+  emoji: string;
+  color: string;
   isCustom: boolean;
 }
 
@@ -23,9 +50,9 @@ export interface Transaction {
   userId: string;
   type: TransactionType;
   amount: number;
-  categoryId: string;
-  categorySnapshot: Pick<Category, "nameKey" | "emoji" | "color" | "isCustom">;
-  date: string; // YYYY-MM-DD
+  categoryId: string;    // stable category key (or legacy "default-{i}")
+  categorySnapshot: CategorySnapshot;
+  date: string;          // YYYY-MM-DD
   note?: string;
   rewardCoins: number;
   rewardResourceType: ResourceType | null;

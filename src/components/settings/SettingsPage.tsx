@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
-import { Globe, Volume2, Zap, Bell, BookOpen, LogOut, LogIn } from "lucide-react";
+import { Globe, Volume2, Zap, Bell, BookOpen, LogOut, LogIn, LayoutList } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTutorialStore } from "@/stores/useTutorialStore";
+import CategoryManager from "./CategoryManager";
 
 export default function SettingsPage() {
   const t = useTranslations("settings");
@@ -14,6 +15,7 @@ export default function SettingsPage() {
   const { user, isAnonymous, signInWithGoogle, signOut } = useAuthStore();
   const openTutorial = useTutorialStore((s) => s.open);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showCategoryManager, setShowCategoryManager] = useState(false);
 
   const currentLocale = pathname.startsWith("/en") ? "en" : "zh-TW";
 
@@ -66,6 +68,11 @@ export default function SettingsPage() {
             value={currentLocale === "zh-TW" ? t("language_zh") : t("language_en")}
             onClick={switchLanguage}
           />
+          <SettingRow
+            icon={<LayoutList size={18} />}
+            label={t("manage_categories")}
+            onClick={() => setShowCategoryManager(true)}
+          />
           <SettingRow icon={<Volume2 size={18} />} label={t("sound")} toggle />
           <SettingRow icon={<Zap size={18} />} label={t("animations")} toggle defaultToggled />
           <SettingRow icon={<Bell size={18} />} label={t("notifications")} toggle />
@@ -83,6 +90,9 @@ export default function SettingsPage() {
           />
         </div>
       </section>
+
+      {/* Category Manager */}
+      {showCategoryManager && <CategoryManager onClose={() => setShowCategoryManager(false)} />}
 
       {/* Logout confirm */}
       {showLogoutConfirm && (

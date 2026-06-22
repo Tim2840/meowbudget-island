@@ -24,7 +24,10 @@ export default function TransactionList({ transactions, date }: TransactionListP
   }
 
   const total = transactions.reduce(
-    (acc, t) => ({ income: acc.income + (t.type === "income" ? t.amount : 0), expense: acc.expense + (t.type === "expense" ? t.amount : 0) }),
+    (acc, tx) => ({
+      income: acc.income + (tx.type === "income" ? tx.amount : 0),
+      expense: acc.expense + (tx.type === "expense" ? tx.amount : 0),
+    }),
     { income: 0, expense: 0 }
   );
 
@@ -40,23 +43,30 @@ export default function TransactionList({ transactions, date }: TransactionListP
       </div>
 
       {/* Transactions */}
-      {transactions.map((tx) => (
-        <div key={tx.id} className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-sm">
-          <span className="text-2xl">{tx.categorySnapshot.emoji}</span>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-700 truncate">
-              {getCategoryName(tx.categorySnapshot.nameKey, tx.categorySnapshot.isCustom)}
-            </p>
-            {tx.note && <p className="text-xs text-gray-400 truncate">{tx.note}</p>}
+      {transactions.map((tx) => {
+        const subName = getCategoryName(tx.categorySnapshot.nameKey, tx.categorySnapshot.isCustom);
+        const groupName = tx.categorySnapshot.groupNameKey
+          ? getCategoryName(tx.categorySnapshot.groupNameKey, false)
+          : null;
+        return (
+          <div key={tx.id} className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-sm">
+            <span className="text-2xl">{tx.categorySnapshot.emoji}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-700 truncate">{subName}</p>
+              {groupName && groupName !== subName && (
+                <p className="text-xs text-gray-400 truncate">{groupName}</p>
+              )}
+              {tx.note && <p className="text-xs text-gray-400 truncate">{tx.note}</p>}
+            </div>
+            <span className={cn(
+              "text-base font-bold",
+              tx.type === "income" ? "text-green-600" : "text-red-500"
+            )}>
+              {tx.type === "income" ? "+" : "-"}{tx.amount.toLocaleString()}
+            </span>
           </div>
-          <span className={cn(
-            "text-base font-bold",
-            tx.type === "income" ? "text-green-600" : "text-red-500"
-          )}>
-            {tx.type === "income" ? "+" : "-"}{tx.amount.toLocaleString()}
-          </span>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
