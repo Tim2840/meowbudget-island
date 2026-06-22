@@ -256,6 +256,7 @@
     "notifications": "Notifications",
     "replay_tutorial": "Replay Tutorial",
     "manage_categories": "Manage Categories",
+    "manage_budget": "Budget Settings",
     "category_add_group": "Add Group",
     "category_add_sub": "Add Subcategory",
     "account": "Account",
@@ -278,5 +279,14 @@
     "budget_progress": "Budget Progress",
     "streak_status": "Streak",
     "no_data": "No records for this period"
+  },
+  "budget": {
+    "title": "Budget Settings",
+    "monthly_total": "Monthly Total",
+    "by_category": "By Category",
+    "not_set": "No limit",
+    "save": "Save",
+    "progress": "Budget Progress",
+    "over_budget": "Over"
   }
 }

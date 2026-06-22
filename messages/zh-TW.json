@@ -256,6 +256,7 @@
     "notifications": "通知提醒",
     "replay_tutorial": "重看新手教學",
     "manage_categories": "管理分類",
+    "manage_budget": "預算設定",
     "category_add_group": "新增大類",
     "category_add_sub": "新增子類",
     "account": "帳號",
@@ -278,5 +279,14 @@
     "budget_progress": "預算進度",
     "streak_status": "連續記帳",
     "no_data": "這段時間還沒有記帳資料"
+  },
+  "budget": {
+    "title": "預算設定",
+    "monthly_total": "月總預算",
+    "by_category": "分類預算",
+    "not_set": "不設定",
+    "save": "儲存",
+    "progress": "預算進度",
+    "over_budget": "超支"
   }
 }
