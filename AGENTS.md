@@ -33,9 +33,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 **功能完成後（合回 dev）**：
 1. 在 `claude/*` 分支 commit & push
 2. **對 `dev` 開 PR**（base = `dev`，絕不直接對 `main`）
-3. Vercel 機器人自動在 PR 留言貼出該 feature 分支的確切預覽連結
-4. 把那個連結回報給使用者，讓他登入後點開驗
-5. 使用者確認後合進 `dev`（`dev → main` 的時機由使用者決定）
+3. **等待** Vercel 機器人在 PR 留言（用 `mcp__github__pull_request_read` method=`get_comments` 輪詢，每次間隔 15s，最多等 3 分鐘）
+4. 拿到留言中的 `previewUrl` 後，**一次性**把「功能說明 + 預覽連結」回報給使用者
+5. **不要**在拿到連結前就先回覆使用者，避免使用者還要再追問連結
+6. 使用者確認後合進 `dev`（`dev → main` 的時機由使用者決定）
 
 這樣使用者每次都能拿到可點的 Vercel 預覽連結，不需要重查。
 不要直接 push 進 `dev`/`main`，也不要讓使用者自己去找連結。
