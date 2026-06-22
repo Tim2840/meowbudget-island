@@ -36,7 +36,7 @@ export default function WeeklyReport({ transactions, weekStart }: WeeklyReportPr
   const totalIncome = transactions.filter((t) => t.type === "income").reduce((s, tx) => s + tx.amount, 0);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 select-none">
       {/* Streak status */}
       <div className="bg-orange-50 rounded-2xl p-4 flex items-center gap-3">
         <Flame size={28} className="text-orange-500" />

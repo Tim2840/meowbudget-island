@@ -70,7 +70,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="0"
-            className="w-full text-2xl font-bold text-gray-800 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-amber-400 border-none"
+            className="w-full text-2xl font-bold text-gray-800 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-1 focus:ring-amber-400 border-none"
           />
         </div>
 
@@ -108,7 +108,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-amber-400"
             />
           </div>
           <div className="flex-1">
@@ -117,7 +117,7 @@ export default function RecordForm({ categories, onSave, onCancel }: RecordFormP
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full bg-gray-50 rounded-xl px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-amber-400"
             />
           </div>
         </div>
