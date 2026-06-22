@@ -23,11 +23,19 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **Branch 策略**：`main`（穩定 production）← `dev`（整合）← `claude/*`（feature，在此開發）
 
-**功能完成後的標準流程**：
+**開工前（先對齊最新 dev）**：
+- 一律從**最新的 `dev`** 切 feature 分支：
+  `git fetch origin dev` → `git checkout -B claude/<功能名> origin/dev`
+- 若 session 已被系統指派某條 `claude/*` 分支，先把它對齊最新 dev：
+  `git fetch origin dev && git rebase origin/dev`
+- **不要**從 `main` 或別人已合併的舊 feature 分支切。
+
+**功能完成後（合回 dev）**：
 1. 在 `claude/*` 分支 commit & push
 2. **對 `dev` 開 PR**（base = `dev`，絕不直接對 `main`）
 3. Vercel 機器人自動在 PR 留言貼出該 feature 分支的確切預覽連結
 4. 把那個連結回報給使用者，讓他登入後點開驗
+5. 使用者確認後合進 `dev`（`dev → main` 的時機由使用者決定）
 
 這樣使用者每次都能拿到可點的 Vercel 預覽連結，不需要重查。
 不要直接 push 進 `dev`/`main`，也不要讓使用者自己去找連結。
