@@ -18,3 +18,16 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - 部署開了 **Deployment Protection（Vercel Authentication）**，所有部署網址對**未登入**請求回 **403**。擁有者登入後可正常瀏覽；容器內 / 無痕視窗 / 他人無法直接存取，所以 agent 無法從外部 curl 或截圖 live 畫面（要驗畫面就 `npm run dev` 本機跑 + `scripts/screenshot.mjs`）。
 - **feature 分支**的預覽網址含雜湊、無法從分支名推導 → 從上面的 Deployments 後台點，或開 PR 讓 Vercel 機器人自動貼預覽連結。
 - 若希望連結對未登入者也能開（可分享），需到 Vercel 專案 Settings → Deployment Protection 關閉 Vercel Authentication（這是擁有者的安全決定，agent 不要擅自更動）。
+
+# 分支與部署流程（所有 session 必讀）
+
+**Branch 策略**：`main`（穩定 production）← `dev`（整合）← `claude/*`（feature，在此開發）
+
+**功能完成後的標準流程**：
+1. 在 `claude/*` 分支 commit & push
+2. **對 `dev` 開 PR**（base = `dev`，絕不直接對 `main`）
+3. Vercel 機器人自動在 PR 留言貼出該 feature 分支的確切預覽連結
+4. 把那個連結回報給使用者，讓他登入後點開驗
+
+這樣使用者每次都能拿到可點的 Vercel 預覽連結，不需要重查。
+不要直接 push 進 `dev`/`main`，也不要讓使用者自己去找連結。
