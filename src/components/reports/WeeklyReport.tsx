@@ -70,7 +70,7 @@ export default function WeeklyReport({ transactions, weekStart }: WeeklyReportPr
             <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
             <YAxis hide />
             <Tooltip formatter={(v) => (typeof v === "number" ? v.toLocaleString() : v)} />
-            <Bar dataKey="expense" fill="#FF6B6B" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="expense" name={t("expense")} fill="#FF6B6B" radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
