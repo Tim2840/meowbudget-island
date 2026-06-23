@@ -1,19 +1,24 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Flame } from "lucide-react";
+import { Flame, Coins, Fish, TreePine, Scissors } from "lucide-react";
+import type { LucideProps } from "lucide-react";
 
 interface WalletBarProps {
   wallet: { coins: number; wood: number; fabric: number; fish: number };
   streak: number;
 }
 
-const resources = [
-  { key: "coins", emoji: "💰" },
-  { key: "wood", emoji: "🪵" },
-  { key: "fabric", emoji: "🧵" },
-  { key: "fish", emoji: "🐟" },
-] as const;
+const resources: {
+  key: "coins" | "wood" | "fabric" | "fish";
+  Icon: React.ComponentType<LucideProps>;
+  color: string;
+}[] = [
+  { key: "coins", Icon: Coins, color: "#F59E0B" },
+  { key: "wood", Icon: TreePine, color: "#78350F" },
+  { key: "fabric", Icon: Scissors, color: "#7C3AED" },
+  { key: "fish", Icon: Fish, color: "#0891B2" },
+];
 
 export default function WalletBar({ wallet, streak }: WalletBarProps) {
   const t = useTranslations("resource");
@@ -23,9 +28,9 @@ export default function WalletBar({ wallet, streak }: WalletBarProps) {
       data-tutorial="wallet-bar"
       className="bg-white border-b border-amber-100 px-4 py-2 flex items-center gap-3 overflow-x-auto scrollbar-none"
     >
-      {resources.map(({ key, emoji }) => (
+      {resources.map(({ key, Icon, color }) => (
         <div key={key} className="flex items-center gap-1 shrink-0">
-          <span className="text-sm">{emoji}</span>
+          <Icon size={14} color={color} strokeWidth={2} />
           <span className="text-sm font-semibold text-gray-700">{wallet[key].toLocaleString()}</span>
         </div>
       ))}

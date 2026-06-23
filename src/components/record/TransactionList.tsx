@@ -1,9 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { ClipboardList } from "lucide-react";
 import type { Transaction } from "@/types";
 import { cn } from "@/lib/utils";
 import { useCategoryName } from "./CategoryName";
+import { EmojiIcon } from "@/components/ui/EmojiIcon";
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -17,7 +19,7 @@ export default function TransactionList({ transactions, date }: TransactionListP
   if (transactions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-        <span className="text-4xl mb-3">📝</span>
+        <ClipboardList size={44} className="mb-3 text-gray-300" />
         <p className="text-base">{t("no_data")}</p>
       </div>
     );
@@ -50,7 +52,7 @@ export default function TransactionList({ transactions, date }: TransactionListP
           : null;
         return (
           <div key={tx.id} className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-sm">
-            <span className="text-2xl">{tx.categorySnapshot.emoji}</span>
+            <EmojiIcon emoji={tx.categorySnapshot.emoji} size={28} />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-700 truncate">{subName}</p>
               {groupName && groupName !== subName && (

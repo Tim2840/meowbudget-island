@@ -2,15 +2,16 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Flame, TrendingUp } from "lucide-react";
+import { Flame, TrendingUp, Coins, Fish, TreePine, Scissors, Trophy, Sparkles } from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import { ACHIEVEMENTS } from "@/lib/constants";
 import type { RewardResult } from "@/types";
 
-const RESOURCE_EMOJI: Record<string, string> = {
-  coins: "💰",
-  wood: "🪵",
-  fabric: "🧵",
-  fish: "🐟",
+const RESOURCE_ICONS: Record<string, { Icon: React.ComponentType<LucideProps>; color: string }> = {
+  coins:  { Icon: Coins,    color: "#F59E0B" },
+  wood:   { Icon: TreePine, color: "#78350F" },
+  fabric: { Icon: Scissors, color: "#7C3AED" },
+  fish:   { Icon: Fish,     color: "#0891B2" },
 };
 
 interface RewardPopupProps {
@@ -33,20 +34,23 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
       onClick={onClose}
     >
       <div className="pointer-events-auto bg-white rounded-3xl shadow-2xl p-6 max-w-xs w-full max-h-[90vh] overflow-y-auto flex flex-col items-center gap-3 animate-bounce-in">
-        <p className="text-2xl">✨</p>
+        <Sparkles size={28} className="text-amber-400" />
         <h3 className="text-xl font-bold text-amber-700">{t("reward_title")}</h3>
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="text-2xl">💰</span>
+            <Coins size={26} color="#F59E0B" />
             <span className="text-lg font-bold text-amber-600">+{reward.coins}</span>
           </div>
-          {reward.resourceType && reward.resourceAmount > 0 && (
-            <div className="flex items-center gap-1.5">
-              <span className="text-2xl">{RESOURCE_EMOJI[reward.resourceType]}</span>
-              <span className="text-lg font-bold text-green-600">+{reward.resourceAmount}</span>
-            </div>
-          )}
+          {reward.resourceType && reward.resourceAmount > 0 && (() => {
+            const res = RESOURCE_ICONS[reward.resourceType];
+            return res ? (
+              <div className="flex items-center gap-1.5">
+                <res.Icon size={26} color={res.color} />
+                <span className="text-lg font-bold text-green-600">+{reward.resourceAmount}</span>
+              </div>
+            ) : null;
+          })()}
           <div className="flex items-center gap-1.5">
             <TrendingUp size={18} className="text-blue-500" />
             <span className="text-lg font-bold text-blue-500">+{reward.expGained} EXP</span>
@@ -61,8 +65,9 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
         )}
 
         {reward.levelUp && (
-          <div className="bg-amber-100 text-amber-700 rounded-xl px-4 py-2 text-base font-bold">
-            🎉 Level Up! → Lv.{reward.newLevel}
+          <div className="bg-amber-100 text-amber-700 rounded-xl px-4 py-2 text-base font-bold flex items-center gap-2">
+            <Sparkles size={18} className="text-amber-500" />
+            Level Up! → Lv.{reward.newLevel}
           </div>
         )}
 
@@ -74,13 +79,13 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
               if (!ach) return null;
               return (
                 <div key={key} className="flex items-center gap-2 bg-yellow-50 rounded-xl px-3 py-2">
-                  <span className="text-xl">🏆</span>
+                  <Trophy size={20} className="text-amber-500 shrink-0" />
                   <div>
                     <p className="text-xs font-bold text-amber-700">
                       {ta(ach.nameKey.replace("achievement.", "") as Parameters<typeof ta>[0])}
                     </p>
-                    <p className="text-[10px] text-gray-500">
-                      +{ach.rewardCoins}💰 +{ach.rewardExp}EXP
+                    <p className="text-[10px] text-gray-500 flex items-center gap-0.5">
+                      +{ach.rewardCoins}<Coins size={9} className="text-amber-500" /> +{ach.rewardExp}EXP
                     </p>
                   </div>
                 </div>

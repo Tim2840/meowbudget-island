@@ -1,6 +1,7 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, PenLine, Flame, Compass, Cat, Coins, Lock, Trophy, Clock } from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ACHIEVEMENTS } from "@/lib/constants";
 import { computeProgress } from "@/lib/achievementEngine";
@@ -10,12 +11,12 @@ import { useTransactionStore } from "@/stores/useTransactionStore";
 import { useBudgetStore } from "@/stores/useBudgetStore";
 import type { Achievement } from "@/types";
 
-const CATEGORY_LABELS: Record<string, string> = {
-  recording: "📝",
-  streak: "🔥",
-  island: "🏝️",
-  cats: "🐱",
-  finance: "💰",
+const CATEGORY_ICONS: Record<string, { Icon: React.ComponentType<LucideProps>; color: string }> = {
+  recording: { Icon: PenLine, color: "#3B82F6" },
+  streak:    { Icon: Flame,   color: "#F97316" },
+  island:    { Icon: Compass, color: "#0891B2" },
+  cats:      { Icon: Cat,     color: "#A855F7" },
+  finance:   { Icon: Coins,   color: "#F59E0B" },
 };
 
 interface Props {
@@ -47,10 +48,15 @@ export default function AchievementSheet({ onClose }: Props) {
     return (
       <div className={`flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0 ${!earned ? "opacity-60" : ""}`}>
         <div
-          className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 text-lg"
+          className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
           style={{ backgroundColor: earned ? "#FEF3C7" : "#F3F4F6" }}
         >
-          {hidden ? "🔒" : earned ? "🏆" : "⏳"}
+          {hidden
+            ? <Lock size={18} className="text-gray-400" />
+            : earned
+            ? <Trophy size={18} className="text-amber-500" />
+            : <Clock size={18} className="text-gray-400" />
+          }
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-gray-800 leading-snug">
@@ -80,7 +86,7 @@ export default function AchievementSheet({ onClose }: Props) {
         )}
         {!earned && !hidden && (
           <div className="text-[10px] text-gray-400 shrink-0 text-right">
-            <div>+{ach.rewardCoins}💰</div>
+            <div className="flex items-center gap-0.5">+{ach.rewardCoins}<Coins size={9} className="text-amber-500" /></div>
             <div>+{ach.rewardExp}EXP</div>
           </div>
         )}
@@ -101,7 +107,10 @@ export default function AchievementSheet({ onClose }: Props) {
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-2 shrink-0">
-          <h2 className="text-base font-bold text-gray-800">🏆 {t("title")}</h2>
+          <h2 className="text-base font-bold text-gray-800 flex items-center gap-1.5">
+            <Trophy size={16} className="text-amber-500 shrink-0" />
+            {t("title")}
+          </h2>
           <button
             onClick={onClose}
             className="p-1.5 rounded-full text-gray-400 hover:text-gray-600"
@@ -118,7 +127,11 @@ export default function AchievementSheet({ onClose }: Props) {
             return (
               <div key={cat}>
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-1">
-                  {CATEGORY_LABELS[cat]} {t(`cat_${cat}` as Parameters<typeof t>[0])}
+                  {(() => {
+                    const cfg = CATEGORY_ICONS[cat];
+                    return cfg ? <cfg.Icon size={12} color={cfg.color} /> : null;
+                  })()}
+                  {t(`cat_${cat}` as Parameters<typeof t>[0])}
                 </p>
                 <div className="bg-gray-50 rounded-2xl px-3">
                   {items.map((ach) => (

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useProfileStore } from "@/stores/useProfileStore";
 import { ISLAND_ZONES } from "@/lib/constants";
@@ -121,7 +122,8 @@ export default function IslandPage() {
                       className="relative grayscale opacity-65 drop-shadow-[0_4px_6px_rgba(0,0,0,0.45)]"
                     />
                     <div className="absolute -top-1 -right-2 flex items-center gap-0.5 bg-gray-800/90 rounded-full px-1.5 py-0.5 shadow ring-1 ring-white/40">
-                      <span className="text-[9px] text-white font-bold leading-none">🔒Lv{zone.unlockLevel}</span>
+                      <Lock size={8} className="text-white shrink-0" strokeWidth={2.5} />
+                      <span className="text-[9px] text-white font-bold leading-none">Lv{zone.unlockLevel}</span>
                     </div>
                   </div>
                 )}

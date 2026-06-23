@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, Scroll, Coins } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQuestStore } from "@/stores/useQuestStore";
 import { useWalletStore } from "@/stores/useWalletStore";
@@ -157,8 +157,9 @@ export default function QuestSheet({ onClose }: Props) {
             </div>
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
-            <div className="text-[10px] text-amber-600 font-semibold leading-none">
-              +{quest.rewardCoins}💰 +{quest.rewardExp}EXP
+            <div className="flex items-center gap-0.5 text-[10px] text-amber-600 font-semibold leading-none">
+              +{quest.rewardCoins}<Coins size={9} className="text-amber-500" />
+              <span className="ml-0.5">+{quest.rewardExp}EXP</span>
             </div>
             {claimed ? (
               <span className="text-[11px] text-gray-400 font-semibold bg-gray-100 rounded-full px-2.5 py-1">
@@ -195,7 +196,10 @@ export default function QuestSheet({ onClose }: Props) {
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-2 shrink-0">
-          <h2 className="text-base font-bold text-gray-800">📜 {t("title")}</h2>
+          <h2 className="text-base font-bold text-gray-800 flex items-center gap-1.5">
+            <Scroll size={16} className="text-amber-600 shrink-0" />
+            {t("title")}
+          </h2>
           <button
             onClick={onClose}
             className="p-1.5 rounded-full text-gray-400 hover:text-gray-600"
