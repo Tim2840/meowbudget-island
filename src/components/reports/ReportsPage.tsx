@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useTransactionStore } from "@/stores/useTransactionStore";
+import { useQuestStore } from "@/stores/useQuestStore";
 import { getWeekRange, getMonthRange, todayString, formatYearMonth } from "@/lib/streakUtils";
 import DailyReport from "./DailyReport";
 import WeeklyReport from "./WeeklyReport";
@@ -14,6 +15,12 @@ export default function ReportsPage() {
   const t = useTranslations("reports");
   const [activeTab, setActiveTab] = useState<ReportTab>("daily");
   const { getByDateRange } = useTransactionStore();
+  const { markReportViewed } = useQuestStore();
+
+  // Opening the reports page (any tab) counts toward "view report" quests.
+  useEffect(() => {
+    markReportViewed();
+  }, [markReportViewed]);
 
   const today = todayString();
   const weekRange = getWeekRange();

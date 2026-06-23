@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { Transaction } from "@/types";
 import { LEGACY_NAMEKEY_TO_GROUP, DEFAULT_GROUPS } from "@/lib/constants";
 import { useCategoryName } from "../record/CategoryName";
+import { useBudgetStore } from "@/stores/useBudgetStore";
 
 interface MonthlyReportProps {
   transactions: Transaction[];
@@ -24,7 +25,11 @@ function resolveGroupNameKey(tx: Transaction): string {
 
 export default function MonthlyReport({ transactions, yearMonth }: MonthlyReportProps) {
   const t = useTranslations("reports");
+  const tb = useTranslations("budget");
   const getCategoryName = useCategoryName();
+  const monthBudgets = useBudgetStore((s) => s.budgets).filter(
+    (b) => b.yearMonth === yearMonth
+  );
 
   const expenses = transactions.filter((tx) => tx.type === "expense");
   const totalExpense = expenses.reduce((sum, tx) => sum + tx.amount, 0);
@@ -103,12 +108,105 @@ export default function MonthlyReport({ transactions, yearMonth }: MonthlyReport
         <DonutCard title={t("income_categories")} data={topIncome} total={totalIncome} />
       )}
 
+      {/* Budget progress */}
+      {monthBudgets.length > 0 && (
+        <BudgetProgressCard
+          budgets={monthBudgets}
+          totalExpense={totalExpense}
+          expenseGroupMap={expenseGroupMap}
+          title={tb("progress")}
+          overLabel={tb("over_budget")}
+        />
+      )}
+
       {transactions.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-gray-400">
           <span className="text-4xl mb-3">📊</span>
           <p>{t("no_data")}</p>
         </div>
       )}
+    </div>
+  );
+}
+
+import type { Budget } from "@/types";
+
+interface BudgetProgressCardProps {
+  budgets: Budget[];
+  totalExpense: number;
+  expenseGroupMap: Map<string, { emoji: string; name: string; color: string; total: number }>;
+  title: string;
+  overLabel: string;
+}
+
+function BudgetProgressCard({
+  budgets,
+  totalExpense,
+  expenseGroupMap,
+  title,
+  overLabel,
+}: BudgetProgressCardProps) {
+  const totalBudget = budgets.find((b) => b.categoryId === null);
+  const groupBudgets = budgets.filter((b) => b.categoryId !== null);
+
+  const rows: { emoji: string; name: string; color: string; spent: number; budget: number }[] = [];
+
+  if (totalBudget) {
+    rows.push({
+      emoji: "💰",
+      name: title,
+      color: "#F59E0B",
+      spent: totalExpense,
+      budget: totalBudget.amount,
+    });
+  }
+
+  groupBudgets.forEach((b) => {
+    const group = expenseGroupMap.get(b.categoryId!);
+    const groupDef = DEFAULT_GROUPS.find((g) => g.key === b.categoryId);
+    rows.push({
+      emoji: groupDef?.emoji ?? "📦",
+      name: group?.name ?? b.categoryId!,
+      color: groupDef?.color ?? "#A0AEC0",
+      spent: group?.total ?? 0,
+      budget: b.amount,
+    });
+  });
+
+  return (
+    <div className="bg-white rounded-2xl p-4 shadow-sm">
+      <p className="text-sm font-semibold text-gray-600 mb-3">{title}</p>
+      <div className="space-y-3">
+        {rows.map((row, idx) => {
+          const pct = row.budget > 0 ? Math.min((row.spent / row.budget) * 100, 100) : 0;
+          const isOver = row.spent > row.budget;
+          const barColor = isOver
+            ? "bg-red-400"
+            : pct >= 80
+            ? "bg-yellow-400"
+            : "bg-green-400";
+          return (
+            <div key={idx}>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-base">{row.emoji}</span>
+                <span className="text-sm text-gray-600 flex-1 truncate">{row.name}</span>
+                <span className={`text-xs font-semibold ${isOver ? "text-red-500" : "text-gray-500"}`}>
+                  {row.spent.toLocaleString()} / {row.budget.toLocaleString()}
+                </span>
+                {isOver && (
+                  <span className="text-xs font-bold text-red-500">{overLabel}</span>
+                )}
+              </div>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${barColor}`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

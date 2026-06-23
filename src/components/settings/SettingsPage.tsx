@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
-import { Globe, Volume2, Zap, Bell, BookOpen, LogOut, LogIn, LayoutList } from "lucide-react";
+import { Globe, Volume2, Zap, Bell, BookOpen, LogOut, LogIn, LayoutList, Wallet } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTutorialStore } from "@/stores/useTutorialStore";
+import { formatYearMonth } from "@/lib/streakUtils";
 import CategoryManager from "./CategoryManager";
+import BudgetManager from "./BudgetManager";
 
 export default function SettingsPage() {
   const t = useTranslations("settings");
@@ -16,6 +18,7 @@ export default function SettingsPage() {
   const openTutorial = useTutorialStore((s) => s.open);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showCategoryManager, setShowCategoryManager] = useState(false);
+  const [showBudgetManager, setShowBudgetManager] = useState(false);
 
   const currentLocale = pathname.startsWith("/en") ? "en" : "zh-TW";
 
@@ -73,6 +76,11 @@ export default function SettingsPage() {
             label={t("manage_categories")}
             onClick={() => setShowCategoryManager(true)}
           />
+          <SettingRow
+            icon={<Wallet size={18} />}
+            label={t("manage_budget")}
+            onClick={() => setShowBudgetManager(true)}
+          />
           <SettingRow icon={<Volume2 size={18} />} label={t("sound")} toggle />
           <SettingRow icon={<Zap size={18} />} label={t("animations")} toggle defaultToggled />
           <SettingRow icon={<Bell size={18} />} label={t("notifications")} toggle />
@@ -93,6 +101,14 @@ export default function SettingsPage() {
 
       {/* Category Manager */}
       {showCategoryManager && <CategoryManager onClose={() => setShowCategoryManager(false)} />}
+
+      {/* Budget Manager */}
+      {showBudgetManager && (
+        <BudgetManager
+          yearMonth={formatYearMonth()}
+          onClose={() => setShowBudgetManager(false)}
+        />
+      )}
 
       {/* Logout confirm */}
       {showLogoutConfirm && (

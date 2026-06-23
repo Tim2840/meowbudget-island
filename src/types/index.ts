@@ -179,17 +179,23 @@ export interface CatOutfit {
 
 // Quest types
 export type QuestType = "daily" | "weekly" | "one_time";
+export type QuestRarity = "common" | "rare" | "epic";
 export type QuestConditionType =
   | "record_count"
   | "view_report"
   | "category_budget_kept"
   | "streak_days"
   | "zone_unlocked"
-  | "building_built";
+  | "building_built"
+  | "record_income"
+  | "record_note"
+  | "record_groups"
+  | "record_days";
 
 export interface Quest {
   key: string;
   type: QuestType;
+  rarity: QuestRarity;
   titleKey: string;
   descriptionKey: string;
   conditionType: QuestConditionType;

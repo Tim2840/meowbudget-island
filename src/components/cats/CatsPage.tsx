@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Lock } from "lucide-react";
 import { CAT_DEFINITIONS, ACHIEVEMENTS } from "@/lib/constants";
 import { useProfileStore } from "@/stores/useProfileStore";
+import Cat from "./Cat";
 
 const ACHIEVEMENT_LABEL: Record<string, string> = Object.fromEntries(
   ACHIEVEMENTS.map((a) => [a.key, a.nameKey])
@@ -34,8 +35,12 @@ export default function CatsPage() {
               key={cat.key}
               className={`bg-white rounded-2xl p-3 shadow-sm flex flex-col items-center gap-1.5 ${!unlocked ? "opacity-50" : ""}`}
             >
-              <div className={`w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-2xl ${unlocked ? "animate-cat-idle" : ""}`}>
-                🐱
+              <div className="w-16 h-16 flex items-center justify-center">
+                <Cat
+                  catId={cat.key}
+                  animationState={unlocked ? "idle" : "sleep"}
+                  size={52}
+                />
               </div>
               {unlocked ? (
                 <>

@@ -35,26 +35,64 @@ body {
   50% { transform: rotate(-12deg); }
 }
 
+/* Island cat: pure vertical bob so it doesn't fight the CSS transition on left/top */
+@keyframes cat-island-walk {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
 @keyframes bounce-in {
   0% { transform: scale(0.7); opacity: 0; }
   60% { transform: scale(1.05); opacity: 1; }
   100% { transform: scale(1); }
 }
 
+/* ── Cloud animations ── */
+@keyframes cloud-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(16px); }
+}
+@keyframes cloud-drift-r {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-12px); }
+}
+
 .animate-cat-walk {
   animation: cat-walk 4s ease-in-out infinite;
 }
-
 .animate-cat-idle {
   animation: cat-idle-float 2s ease-in-out infinite;
 }
-
 .animate-cat-lick {
   animation: cat-lick 3s ease-in-out infinite;
 }
-
+.animate-cat-island-walk {
+  animation: cat-island-walk 0.45s ease-in-out infinite;
+}
 .animate-bounce-in {
   animation: bounce-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.animate-cloud {
+  animation: cloud-drift 18s ease-in-out infinite;
+}
+.animate-cloud-r {
+  animation: cloud-drift-r 25s ease-in-out infinite;
+}
+
+/* ── Particle effects ── */
+@keyframes leaf-fall {
+  0%   { transform: translate(0px,    -16px) rotate(0deg);   opacity: 0.85; }
+  25%  { transform: translate(18px,   72px)  rotate(90deg); }
+  50%  { transform: translate(-12px, 152px)  rotate(210deg); }
+  75%  { transform: translate(16px,  232px)  rotate(330deg); }
+  100% { transform: translate(0px,   308px)  rotate(480deg); opacity: 0; }
+}
+
+@keyframes bird-fly {
+  0%         { transform: translateX(-100px); opacity: 0; }
+  4%         { opacity: 1; }
+  38%        { transform: translateX(550px);  opacity: 1; }
+  40%, 100%  { transform: translateX(-100px); opacity: 0; }
 }
 
 .scrollbar-none {
