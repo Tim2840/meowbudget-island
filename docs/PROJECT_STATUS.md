@@ -14,8 +14,8 @@
 | Sprint 0 | ✅ 完成 | 基礎架構、Auth、i18n、Layout、所有 Store |
 | Sprint 1 | ✅ 完成 | 類別名稱修正、新手教學自動觸發、島嶼視覺升級、貓貓頁修正 |
 | Sprint 2 | ✅ 完成 | 報表已接真實資料＋圖表 ✅；新手教學逐頁導覽 ✅；兩層分類系統＋自訂分類＋主題化獎勵＋收入分析 ✅；**預算設定（useBudgetStore + BudgetManager + MonthlyReport 進度條）** ✅ |
-| Sprint 3 | 🔜 未開始 | 視覺升級：場景 + 貓咪元件抽象化 + 島上漫步 |
-| Sprint 4 | 🔜 未開始 | Sprite sheet 資產導入 + 貓咪服裝 + 任務 + Badge |
+| Sprint 3 | ✅ 完成 | 視覺升級：`<Cat>` SVG 元件 + `CatLayer` 島上漫步 + 雲朵動畫 + 日夜色調 + `ParticleLayer`（葉子/飛鳥）✅ |
+| Sprint 4 | 🔄 進行中 | Sprite sheet 資產導入 + 貓咪服裝；**任務系統 ✅**；**成就系統 ✅** |
 | Sprint 5 | 🔜 未開始 | 教學完善 + 設定頁串 Store |
 | Sprint 6 | 🔜 未開始 | Polish + PWA |
 
@@ -87,6 +87,8 @@ IslandPage 場景分為 5 個獨立 CSS 層（由後到前）：
 - `src/components/settings/CategoryManager.tsx` — 分類管理 UI（新增/編輯/隱藏/刪除）
 - `src/lib/rewardEngine.ts` — `calculateReward()`, `getLevelForExp()`, `getExpProgress()`
 - `src/lib/streakUtils.ts` — `todayString()`, `yesterdayString()`, `updateStreak()`, `getWeekRange()`, `getMonthRange()`, `formatYearMonth()`
+- `src/lib/questSelection.ts` — 確定性任務抽籤（FNV-1a + mulberry32，稀有度加權）
+- `src/lib/achievementEngine.ts` — `computeProgress()` + `checkAchievements()`（可追蹤條件）
 
 ### i18n
 - `src/i18n/routing.ts`
@@ -100,6 +102,9 @@ IslandPage 場景分為 5 個獨立 CSS 層（由後到前）：
 - `src/stores/useProfileStore.ts` — level, exp, streak, onboarding
 - `src/stores/useWalletStore.ts` — coins, wood, fabric, fish
 - `src/stores/useTransactionStore.ts` — 交易紀錄 CRUD
+- `src/stores/useBudgetStore.ts` — 月總預算 + 分項預算（persist + Supabase 雙寫）
+- `src/stores/useQuestStore.ts` — 任務領取狀態（每日/每週重置 + reportViewed 追蹤）
+- `src/stores/useAchievementStore.ts` — 已獲得/未讀成就（persist）
 
 ### App Router
 - `src/app/layout.tsx` — PWA metadata, Geist font
@@ -128,82 +133,49 @@ IslandPage 場景分為 5 個獨立 CSS 層（由後到前）：
 - `src/components/settings/SettingsPage.tsx` — 設定頁（語言/音效/登出/重看教學）
 - `src/components/onboarding/TutorialOverlay.tsx` — Spotlight 教學 overlay（SVG mask）
 - `src/components/onboarding/TutorialController.tsx` — ✅ Sprint 1 新增：首次進入自動觸發教學
+- `src/components/cats/Cat.tsx` — ✅ Sprint 3：5 隻貓 SVG 元件（idle/walk/lick/sleep 動畫）
+- `src/components/island/CatLayer.tsx` — ✅ Sprint 3：解鎖貓咪自動島上漫步
+- `src/components/island/ParticleLayer.tsx` — ✅ Sprint 3：葉子飄落 + 飛鳥飛過
+- `src/components/island/QuestSheet.tsx` — ✅ Sprint 4：任務底部 sheet（進度條 + 領取）
+- `src/components/record/AchievementSheet.tsx` — ✅ Sprint 4：成就底部 sheet（分類 + 進度）
+- `src/components/settings/BudgetManager.tsx` — ✅ Sprint 2：預算設定底部 sheet
 
 ---
 
-## Sprint 2 完成（已全部實作）
+## Sprint 3 完成（已全部實作）
 
 全部完成 ✅
 
----
-
-## Sprint 3 待辦：視覺升級（場景 + 貓咪元件基礎）
-
-### 場景升級（IslandPage 重構）
-1. **分層場景架構**（見架構規則 §7）
-   - 將現有 IslandPage 拆為 5 個 CSS 層元件：`<SkyLayer>` `<CloudLayer>` `<OceanLayer>` `<IslandLayer>` `<CatLayer>`
-   - 統一層級用 `z-index: 10/20/30/40/50`
-
-2. **視差分層**
-   - 監聽 scroll（iOS: `window.addEventListener('scroll')`）或 `deviceorientation`
-   - 各層 `transform: translateX(offset * speed)` ，speed 係數：sky=0.05, clouds=0.1, ocean=0.15, island=0, cats=0.2
-
-3. **日夜色調**
-   - 讀取 `new Date().getHours()`，分 4 個時段：
-     - 06–17：白天（天空 sky-300）
-     - 17–19：黃昏（sky→orange, 雲→粉橘）
-     - 19–22：暮色（indigo-900, 雲→灰紫）
-     - 22–06：深夜（slate-900, 星星出現）
-   - 用 CSS transition（3s ease）讓切換滑順
-
-4. **環境粒子動態**
-   - 飄落葉子：每 3–5 秒隨機 x 位置生成，CSS animation 往下漂
-   - 水面波光：SVG 多條半透明波線，opacity 0→0.4→0 循環
-   - 飛鳥：每 15s 從左飄到右的小 SVG 鳥（2–3 隻群飛）
-   - 升級粒子：`useProfileStore` 監聽 level 變化，觸發一次性星星迸發
-
-5. **貓在島上漫步**
-   - 新增 `<CatLayer>` 元件，把 `ISLAND_ZONES.position`（x%, y%）當成貓的目標座標
-   - 每 4–8 秒隨機選一個 unlocked zone 或島上隨機點
-   - CSS transition `left`/`bottom` 移動（duration 依距離計算），到達後播 idle 動畫
-   - 途中播 walk 動畫（`scaleX(-1)` 判斷朝向）
-
-### 貓咪元件抽象化
-6. **`<Cat>` 元件** — `src/components/cats/Cat.tsx`
-   ```
-   Props: { catId: string; animationState: 'idle'|'walk'|'lick'|'wave'|'sleep'|'roll'; size?: number }
-   ```
-   - Sprint 3：內部先用分層 SVG placeholder（每隻不同底色/花紋/耳型）
-   - Sprint 4：換成 sprite sheet 圖片，Props 介面不變
-
-7. **CatsPage 改用 `<Cat>`** — 從 emoji 升級為 SVG 角色
+### 已完成
+- `<Cat>` SVG 元件：5 隻貓各有獨特配色/徽記，支援 idle/walk/lick/sleep 動畫
+- `CatLayer`：解鎖貓咪自動在島上漫步（CSS transition + 方向翻轉）
+- 分層雲朵動畫（animate-cloud/cloud-r）+ 日夜色調覆蓋（傍晚橙/暮色靛/深夜深藍+星點）
+- `ParticleLayer`：7 片帶風力飄動的彩葉 + 兩組飛鳥每 9 秒交替飛過
 
 ---
 
-## Sprint 4 待辦：Sprite Sheet 資產 + 貓咪服裝 + 任務
+## Sprint 4 進行中：Sprite Sheet + 貓咪服裝（任務/成就已完成）
 
-### Sprite sheet 資產
-1. **素材規範**：
-   - 每隻貓 × 每個動畫型別 = 一張 PNG
-   - 路徑：`/public/cats/{catId}/{animationType}.png`（e.g. `captain/idle.png`）
-   - 每張水平排列 8 幀，建議每幀 64×64px，整張 512×64px
-   - 可用 Canva MCP 或 AI 生成，再切割
+### 已完成 ✅
+- **任務系統（隨機 + 稀有度）**
+  - 10 日任務 + 10 週任務，各有 common/rare/epic 稀有度
+  - `questSelection.ts`：FNV-1a hash + mulberry32 PRNG 確定性抽籤（第一槽保底 common）
+  - `useQuestStore`：每日/每週自動重置；追蹤 reportViewedDay/Week
+  - `QuestSheet`：底部 sheet，實時進度條 + 一鍵領取獎勵（金幣/EXP）
+  - 首頁快捷入口（📜 任務 pill）
 
-2. **動畫型別對照**（依 CAT_DEFINITIONS）：
-   - captain：idle / walk / lick
-   - merchant：idle / walk / wave
-   - scholar：idle / sleep / lick
-   - explorer：idle / walk / roll
-   - streak_master：idle / walk / lick / bounce
+- **成就系統**
+  - `achievementEngine.ts`：計算可追蹤成就（total_records, streak_days, zones_unlocked, cats_owned, budgets_set）
+  - `useAchievementStore`：持久化已獲得/未讀取成就
+  - `AchievementSheet`：按分類（記帳/連打/島嶼/貓咪/財務）展示 + 進度條
+  - 記帳後自動檢查並授予；`RewardPopup` 顯示新解鎖成就
+  - 首頁快捷入口（🏆 成就 pill）
 
-3. **`<Cat>` 換用 sprite sheet**：
-   - CSS `background-image: url(...)` + `background-position` steps
-   - `@keyframes sprite-{catId}-{animType}` 搭配 `steps(8)`
-
-### 其他 Sprint 4 項目
-4. **貓咪服裝系統** — 從 wallet 資源消耗解鎖服裝，疊加 layer 顯示
-5. **任務系統** — QUESTS(5) 已在 constants.ts，需 UI 頁面 + 進度追蹤
-6. **Achievement Badge** — ACHIEVEMENTS(16) 完成條件判斷 + 通知
+### 待辦 🔜
+1. **Sprite sheet 資產**（等美術素材）
+   - 路徑：`/public/cats/{catId}/{animationType}.png`，水平排列 8 幀，建議 64×64px/幀
+   - `<Cat>` 換 sprite sheet 後 Props 介面不變
+2. **貓咪服裝系統** — 從 wallet 資源消耗解鎖服裝，疊加 layer 顯示
 
 ---
 
@@ -231,4 +203,4 @@ Sprint 計畫摘要：
 
 ---
 
-*最後更新：2026-06-22，兩層分類系統合併 + 架構鐵則上移 AGENTS.md 後*
+*最後更新：2026-06-23，Sprint 3 完成（視覺升級）+ Sprint 4 任務/成就系統完成，PR #6 合併進 dev*
