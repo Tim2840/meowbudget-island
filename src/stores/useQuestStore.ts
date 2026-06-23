@@ -14,12 +14,15 @@ function weekStartKey(date = new Date()): string {
 interface QuestState {
   // questKey -> YYYY-MM-DD when it was last claimed
   claimedMap: Record<string, string>;
-  // Monday YYYY-MM-DD of the week when user last viewed weekly report
+  // YYYY-MM-DD of the day the user last opened a report
+  reportViewedDay: string | null;
+  // Monday YYYY-MM-DD of the week the user last opened a report
   reportViewedWeek: string | null;
 
   isClaimed: (questKey: string, type: "daily" | "weekly" | "one_time") => boolean;
   markClaimed: (questKey: string) => void;
   markReportViewed: () => void;
+  isReportViewedToday: () => boolean;
   isReportViewedThisWeek: () => boolean;
 }
 
@@ -27,6 +30,7 @@ export const useQuestStore = create<QuestState>()(
   persist(
     (set, get) => ({
       claimedMap: {},
+      reportViewedDay: null,
       reportViewedWeek: null,
 
       isClaimed: (questKey, type) => {
@@ -48,9 +52,10 @@ export const useQuestStore = create<QuestState>()(
       },
 
       markReportViewed: () => {
-        set({ reportViewedWeek: weekStartKey() });
+        set({ reportViewedDay: todayKey(), reportViewedWeek: weekStartKey() });
       },
 
+      isReportViewedToday: () => get().reportViewedDay === todayKey(),
       isReportViewedThisWeek: () => get().reportViewedWeek === weekStartKey(),
     }),
     { name: "meow_quests" }

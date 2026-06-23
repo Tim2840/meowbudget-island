@@ -402,12 +402,32 @@ export const ACHIEVEMENTS: Achievement[] = [
 // ──────────────────────────────────────────
 // Daily / Weekly Quests
 // ──────────────────────────────────────────
+// 每日 / 每週各 10 題的「題庫」，每天 / 每週由 questSelection 依日期種子抽 2 題。
+// rarity 影響抽中機率（common 60 / rare 30 / epic 10）與獎勵高低。
 export const QUESTS: Quest[] = [
-  { key: "daily_record_3", type: "daily", titleKey: "quest.daily_record_3", descriptionKey: "quest.daily_record_3.desc", conditionType: "record_count", conditionValue: 3, rewardCoins: 30, rewardExp: 15 },
-  { key: "daily_record_5", type: "daily", titleKey: "quest.daily_record_5", descriptionKey: "quest.daily_record_5.desc", conditionType: "record_count", conditionValue: 5, rewardCoins: 60, rewardExp: 25 },
-  { key: "weekly_view_report", type: "weekly", titleKey: "quest.weekly_view_report", descriptionKey: "quest.weekly_view_report.desc", conditionType: "view_report", conditionValue: 1, rewardCoins: 100, rewardExp: 40 },
-  { key: "weekly_record_20", type: "weekly", titleKey: "quest.weekly_record_20", descriptionKey: "quest.weekly_record_20.desc", conditionType: "record_count", conditionValue: 20, rewardCoins: 200, rewardExp: 80 },
-  { key: "weekly_budget_kept", type: "weekly", titleKey: "quest.weekly_budget_kept", descriptionKey: "quest.weekly_budget_kept.desc", conditionType: "category_budget_kept", conditionValue: 1, rewardCoins: 150, rewardExp: 60 },
+  // ── 每日題庫 (10) ──
+  { key: "daily_record_1",  type: "daily", rarity: "common", titleKey: "quest.daily_record_1",  descriptionKey: "quest.daily_record_1_desc",  conditionType: "record_count",  conditionValue: 1, rewardCoins: 30,  rewardExp: 15 },
+  { key: "daily_record_3",  type: "daily", rarity: "common", titleKey: "quest.daily_record_3",  descriptionKey: "quest.daily_record_3_desc",  conditionType: "record_count",  conditionValue: 3, rewardCoins: 30,  rewardExp: 15 },
+  { key: "daily_record_5",  type: "daily", rarity: "rare",   titleKey: "quest.daily_record_5",  descriptionKey: "quest.daily_record_5_desc",  conditionType: "record_count",  conditionValue: 5, rewardCoins: 70,  rewardExp: 30 },
+  { key: "daily_record_8",  type: "daily", rarity: "epic",   titleKey: "quest.daily_record_8",  descriptionKey: "quest.daily_record_8_desc",  conditionType: "record_count",  conditionValue: 8, rewardCoins: 150, rewardExp: 60 },
+  { key: "daily_income_1",  type: "daily", rarity: "common", titleKey: "quest.daily_income_1",  descriptionKey: "quest.daily_income_1_desc",  conditionType: "record_income", conditionValue: 1, rewardCoins: 30,  rewardExp: 15 },
+  { key: "daily_note_1",    type: "daily", rarity: "common", titleKey: "quest.daily_note_1",    descriptionKey: "quest.daily_note_1_desc",    conditionType: "record_note",   conditionValue: 1, rewardCoins: 30,  rewardExp: 15 },
+  { key: "daily_groups_2",  type: "daily", rarity: "common", titleKey: "quest.daily_groups_2",  descriptionKey: "quest.daily_groups_2_desc",  conditionType: "record_groups", conditionValue: 2, rewardCoins: 40,  rewardExp: 18 },
+  { key: "daily_groups_3",  type: "daily", rarity: "rare",   titleKey: "quest.daily_groups_3",  descriptionKey: "quest.daily_groups_3_desc",  conditionType: "record_groups", conditionValue: 3, rewardCoins: 70,  rewardExp: 30 },
+  { key: "daily_groups_4",  type: "daily", rarity: "epic",   titleKey: "quest.daily_groups_4",  descriptionKey: "quest.daily_groups_4_desc",  conditionType: "record_groups", conditionValue: 4, rewardCoins: 150, rewardExp: 60 },
+  { key: "daily_view_report", type: "daily", rarity: "common", titleKey: "quest.daily_view_report", descriptionKey: "quest.daily_view_report_desc", conditionType: "view_report", conditionValue: 1, rewardCoins: 30, rewardExp: 15 },
+
+  // ── 每週題庫 (10) ──
+  { key: "weekly_record_10",  type: "weekly", rarity: "common", titleKey: "quest.weekly_record_10",  descriptionKey: "quest.weekly_record_10_desc",  conditionType: "record_count",         conditionValue: 10, rewardCoins: 80,  rewardExp: 35 },
+  { key: "weekly_record_20",  type: "weekly", rarity: "rare",   titleKey: "quest.weekly_record_20",  descriptionKey: "quest.weekly_record_20_desc",  conditionType: "record_count",         conditionValue: 20, rewardCoins: 180, rewardExp: 70 },
+  { key: "weekly_record_30",  type: "weekly", rarity: "epic",   titleKey: "quest.weekly_record_30",  descriptionKey: "quest.weekly_record_30_desc",  conditionType: "record_count",         conditionValue: 30, rewardCoins: 350, rewardExp: 140 },
+  { key: "weekly_view_report",type: "weekly", rarity: "common", titleKey: "quest.weekly_view_report",descriptionKey: "quest.weekly_view_report_desc",conditionType: "view_report",          conditionValue: 1,  rewardCoins: 80,  rewardExp: 35 },
+  { key: "weekly_budget_kept",type: "weekly", rarity: "rare",   titleKey: "quest.weekly_budget_kept",descriptionKey: "quest.weekly_budget_kept_desc",conditionType: "category_budget_kept", conditionValue: 1,  rewardCoins: 180, rewardExp: 70 },
+  { key: "weekly_streak_3",   type: "weekly", rarity: "common", titleKey: "quest.weekly_streak_3",   descriptionKey: "quest.weekly_streak_3_desc",   conditionType: "streak_days",          conditionValue: 3,  rewardCoins: 80,  rewardExp: 35 },
+  { key: "weekly_streak_7",   type: "weekly", rarity: "epic",   titleKey: "quest.weekly_streak_7",   descriptionKey: "quest.weekly_streak_7_desc",   conditionType: "streak_days",          conditionValue: 7,  rewardCoins: 350, rewardExp: 140 },
+  { key: "weekly_days_5",     type: "weekly", rarity: "rare",   titleKey: "quest.weekly_days_5",     descriptionKey: "quest.weekly_days_5_desc",     conditionType: "record_days",          conditionValue: 5,  rewardCoins: 180, rewardExp: 70 },
+  { key: "weekly_income_3",   type: "weekly", rarity: "common", titleKey: "quest.weekly_income_3",   descriptionKey: "quest.weekly_income_3_desc",   conditionType: "record_income",        conditionValue: 3,  rewardCoins: 80,  rewardExp: 35 },
+  { key: "weekly_days_3",     type: "weekly", rarity: "common", titleKey: "quest.weekly_days_3",     descriptionKey: "quest.weekly_days_3_desc",     conditionType: "record_days",          conditionValue: 3,  rewardCoins: 80,  rewardExp: 35 },
 ];
 
 // ──────────────────────────────────────────

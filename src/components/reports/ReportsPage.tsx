@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useTransactionStore } from "@/stores/useTransactionStore";
 import { useQuestStore } from "@/stores/useQuestStore";
@@ -17,10 +17,10 @@ export default function ReportsPage() {
   const { getByDateRange } = useTransactionStore();
   const { markReportViewed } = useQuestStore();
 
-  const handleTabChange = (tab: ReportTab) => {
-    setActiveTab(tab);
-    if (tab === "weekly") markReportViewed();
-  };
+  // Opening the reports page (any tab) counts toward "view report" quests.
+  useEffect(() => {
+    markReportViewed();
+  }, [markReportViewed]);
 
   const today = todayString();
   const weekRange = getWeekRange();
@@ -44,7 +44,7 @@ export default function ReportsPage() {
           {tabs.map((tab) => (
             <button
               key={tab}
-              onClick={() => handleTabChange(tab)}
+              onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2.5 text-sm font-semibold border-b-2 transition-colors ${
                 activeTab === tab
                   ? "border-amber-500 text-amber-600"
