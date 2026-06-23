@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useTransactionStore } from "@/stores/useTransactionStore";
+import { useQuestStore } from "@/stores/useQuestStore";
 import { getWeekRange, getMonthRange, todayString, formatYearMonth } from "@/lib/streakUtils";
 import DailyReport from "./DailyReport";
 import WeeklyReport from "./WeeklyReport";
@@ -14,6 +15,12 @@ export default function ReportsPage() {
   const t = useTranslations("reports");
   const [activeTab, setActiveTab] = useState<ReportTab>("daily");
   const { getByDateRange } = useTransactionStore();
+  const { markReportViewed } = useQuestStore();
+
+  const handleTabChange = (tab: ReportTab) => {
+    setActiveTab(tab);
+    if (tab === "weekly") markReportViewed();
+  };
 
   const today = todayString();
   const weekRange = getWeekRange();
@@ -37,7 +44,7 @@ export default function ReportsPage() {
           {tabs.map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabChange(tab)}
               className={`flex-1 py-2.5 text-sm font-semibold border-b-2 transition-colors ${
                 activeTab === tab
                   ? "border-amber-500 text-amber-600"
