@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BookOpen, BarChart2, MapPin, Cat, Settings } from "lucide-react";
+import { Receipt, LineChart, Compass, Cat, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { key: "record", icon: BookOpen, href: "/" },
-  { key: "reports", icon: BarChart2, href: "/reports" },
-  { key: "island", icon: MapPin, href: "/island" },
+  { key: "record", icon: Receipt, href: "/" },
+  { key: "reports", icon: LineChart, href: "/reports" },
+  { key: "island", icon: Compass, href: "/island" },
   { key: "cats", icon: Cat, href: "/cats" },
-  { key: "settings", icon: Settings, href: "/settings" },
+  { key: "settings", icon: Settings2, href: "/settings" },
 ] as const;
 
 export default function BottomNav() {

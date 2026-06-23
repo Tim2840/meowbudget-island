@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { ClipboardList } from "lucide-react";
 import type { Transaction } from "@/types";
 import { cn } from "@/lib/utils";
 import { useCategoryName } from "./CategoryName";
@@ -17,7 +18,7 @@ export default function TransactionList({ transactions, date }: TransactionListP
   if (transactions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-        <span className="text-4xl mb-3">📝</span>
+        <ClipboardList size={44} className="mb-3 text-gray-300" />
         <p className="text-base">{t("no_data")}</p>
       </div>
     );
