@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Flame, TrendingUp } from "lucide-react";
+import { ACHIEVEMENTS } from "@/lib/constants";
 import type { RewardResult } from "@/types";
 
 const RESOURCE_EMOJI: Record<string, string> = {
@@ -19,6 +20,7 @@ interface RewardPopupProps {
 
 export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
   const t = useTranslations("record");
+  const ta = useTranslations("achievement");
 
   useEffect(() => {
     const timer = setTimeout(onClose, 2800);
@@ -61,6 +63,29 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
         {reward.levelUp && (
           <div className="bg-amber-100 text-amber-700 rounded-xl px-4 py-2 text-base font-bold">
             🎉 Level Up! → Lv.{reward.newLevel}
+          </div>
+        )}
+
+        {reward.newAchievements && reward.newAchievements.length > 0 && (
+          <div className="w-full space-y-1.5">
+            <p className="text-xs font-semibold text-gray-400 text-center">{t("new_achievement")}</p>
+            {reward.newAchievements.map((key) => {
+              const ach = ACHIEVEMENTS.find((a) => a.key === key);
+              if (!ach) return null;
+              return (
+                <div key={key} className="flex items-center gap-2 bg-yellow-50 rounded-xl px-3 py-2">
+                  <span className="text-xl">🏆</span>
+                  <div>
+                    <p className="text-xs font-bold text-amber-700">
+                      {ta(ach.nameKey.replace("achievement.", "") as Parameters<typeof ta>[0])}
+                    </p>
+                    <p className="text-[10px] text-gray-500">
+                      +{ach.rewardCoins}💰 +{ach.rewardExp}EXP
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

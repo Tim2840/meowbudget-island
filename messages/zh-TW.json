@@ -100,7 +100,8 @@
     "save": "儲存",
     "cancel": "取消",
     "reward_title": "獲得獎勵！",
-    "streak_bonus": "連續記帳加成！"
+    "streak_bonus": "連續記帳加成！",
+    "new_achievement": "新成就解鎖"
   },
   "resource": {
     "coins": "金幣",
@@ -152,6 +153,13 @@
     "empty_slot": "空地"
   },
   "achievement": {
+    "title": "成就",
+    "earned_badge": "已獲得",
+    "cat_recording": "記帳",
+    "cat_streak": "連續記帳",
+    "cat_island": "島嶼",
+    "cat_cats": "貓貓",
+    "cat_finance": "財務",
     "first_record": "初心者",
     "first_record_desc": "完成第一筆記帳",
     "records_10": "記帳達人",

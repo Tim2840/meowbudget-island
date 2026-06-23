@@ -100,7 +100,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "reward_title": "Reward Earned!",
-    "streak_bonus": "Streak Bonus!"
+    "streak_bonus": "Streak Bonus!",
+    "new_achievement": "Achievement Unlocked"
   },
   "resource": {
     "coins": "Coins",
@@ -152,6 +153,13 @@
     "empty_slot": "Empty Plot"
   },
   "achievement": {
+    "title": "Achievements",
+    "earned_badge": "Earned",
+    "cat_recording": "Recording",
+    "cat_streak": "Streaks",
+    "cat_island": "Island",
+    "cat_cats": "Cats",
+    "cat_finance": "Finance",
     "first_record": "Beginner",
     "first_record_desc": "Complete your first record",
     "records_10": "Recorder",

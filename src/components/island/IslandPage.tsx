@@ -3,14 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Scroll } from "lucide-react";
 import { useProfileStore } from "@/stores/useProfileStore";
 import { ISLAND_ZONES } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
 import LevelBar from "./LevelBar";
 import CatLayer from "./CatLayer";
 import ParticleLayer from "./ParticleLayer";
-import QuestSheet from "./QuestSheet";
 
 const ZONE_BUILDING: Record<string, string> = {
   harbor: "harbor_lighthouse",
@@ -39,10 +37,8 @@ function Cloud({ className }: { className?: string }) {
 
 export default function IslandPage() {
   const t = useTranslations("island");
-  const tq = useTranslations("quest");
   const { profile } = useProfileStore();
   const level = profile?.level ?? 1;
-  const [showQuests, setShowQuests] = useState(false);
 
   const hour = new Date().getHours();
   const dn = getDayNightStyle(hour);
@@ -166,22 +162,11 @@ export default function IslandPage() {
 
       {/* Zone list */}
       <div className="px-4 pt-4 pb-4 space-y-3 bg-amber-50 flex-1">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t("zones")}</p>
-          <button
-            onClick={() => setShowQuests(true)}
-            className="flex items-center gap-1.5 bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow active:scale-95 transition-transform"
-          >
-            <Scroll size={13} />
-            {tq("title")}
-          </button>
-        </div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t("zones")}</p>
         {ISLAND_ZONES.map((zone) => (
           <IslandZoneCard key={zone.key} zone={zone} currentLevel={level} />
         ))}
       </div>
-
-      {showQuests && <QuestSheet onClose={() => setShowQuests(false)} />}
     </div>
   );
 }
