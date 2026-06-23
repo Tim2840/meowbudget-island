@@ -9,6 +9,7 @@ import { useCategoryStore } from "@/stores/useCategoryStore";
 import { DEFAULT_SUBCATEGORIES } from "@/lib/constants";
 import type { Category, CategoryGroup } from "@/types";
 import { CategoryName } from "./CategoryName";
+import { EmojiIcon } from "@/components/ui/EmojiIcon";
 
 interface RecordFormProps {
   onSave: (
@@ -153,7 +154,7 @@ export default function RecordForm({ onSave, onCancel }: RecordFormProps) {
                       : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
                   )}
                 >
-                  <span>{g.emoji}</span>
+                  <EmojiIcon emoji={g.emoji} size={16} />
                   <span>
                     {g.isCustom
                       ? g.nameKey
@@ -179,7 +180,7 @@ export default function RecordForm({ onSave, onCancel }: RecordFormProps) {
                         : "border-transparent bg-gray-50 hover:bg-gray-100"
                     )}
                   >
-                    <span className="text-2xl">{sub.emoji}</span>
+                    <EmojiIcon emoji={sub.emoji} size={28} />
                     <CategoryName
                       nameKey={sub.nameKey}
                       isCustom={sub.isCustom}

@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { Transaction } from "@/types";
 import { LEGACY_NAMEKEY_TO_GROUP, DEFAULT_GROUPS } from "@/lib/constants";
 import { useCategoryName } from "../record/CategoryName";
+import { EmojiIcon } from "@/components/ui/EmojiIcon";
 
 interface DailyReportProps {
   transactions: Transaction[];
@@ -130,7 +131,10 @@ function PieCard({ title, data, total }: { title: string; data: PieItem[]; total
         {data.map((item, idx) => (
           <div key={idx} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-            <span className="text-sm text-gray-600">{item.emoji} {item.name}</span>
+            <span className="flex items-center gap-1 text-sm text-gray-600">
+              <EmojiIcon emoji={item.emoji} size={14} />
+              {item.name}
+            </span>
             <span className="ml-auto text-sm font-semibold">{item.total.toLocaleString()}</span>
             <span className="text-xs text-gray-400 w-10 text-right">
               {total > 0 ? `${Math.round((item.total / total) * 100)}%` : "0%"}

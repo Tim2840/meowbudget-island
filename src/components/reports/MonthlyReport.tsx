@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { Transaction } from "@/types";
 import { LEGACY_NAMEKEY_TO_GROUP, DEFAULT_GROUPS } from "@/lib/constants";
 import { useCategoryName } from "../record/CategoryName";
+import { EmojiIcon } from "@/components/ui/EmojiIcon";
 import { useBudgetStore } from "@/stores/useBudgetStore";
 
 interface MonthlyReportProps {
@@ -188,7 +189,7 @@ function BudgetProgressCard({
           return (
             <div key={idx}>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-base">{row.emoji}</span>
+                <EmojiIcon emoji={row.emoji} size={18} />
                 <span className="text-sm text-gray-600 flex-1 truncate">{row.name}</span>
                 <span className={`text-xs font-semibold ${isOver ? "text-red-500" : "text-gray-500"}`}>
                   {row.spent.toLocaleString()} / {row.budget.toLocaleString()}
@@ -234,7 +235,7 @@ function DonutCard({ title, data, total }: { title: string; data: GroupItem[]; t
         {data.slice(0, 6).map((cat, idx) => (
           <div key={idx} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
-            <span className="text-sm text-gray-600">{cat.emoji}</span>
+            <EmojiIcon emoji={cat.emoji} size={14} />
             <span className="text-sm text-gray-600 flex-1 truncate">{cat.name}</span>
             <span className="text-sm font-semibold">{cat.total.toLocaleString()}</span>
             <span className="text-xs text-gray-400 w-10 text-right">

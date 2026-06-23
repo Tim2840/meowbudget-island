@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useCategoryStore } from "@/stores/useCategoryStore";
 import { DEFAULT_GROUPS, DEFAULT_SUBCATEGORIES } from "@/lib/constants";
 import type { CategoryGroup, Category } from "@/types";
+import { EmojiIcon } from "@/components/ui/EmojiIcon";
 
 interface CategoryManagerProps {
   onClose: () => void;
@@ -144,7 +145,7 @@ export default function CategoryManager({ onClose }: CategoryManagerProps) {
                   onClick={() => setExpandedGroupKey(expanded ? null : group.key)}
                   className="flex-1 flex items-center gap-3 min-w-0"
                 >
-                  <span className="text-xl">{group.emoji}</span>
+                  <EmojiIcon emoji={group.emoji} size={22} />
                   {editingKey === group.key ? (
                     <div className="flex items-center gap-2 flex-1" onClick={(e) => e.stopPropagation()}>
                       <input value={editEmoji} onChange={(e) => setEditEmoji(e.target.value)} maxLength={4}
@@ -192,7 +193,7 @@ export default function CategoryManager({ onClose }: CategoryManagerProps) {
                     const subHidden = isSubHidden(sub.key);
                     return (
                       <div key={sub.key} className={cn("flex items-center gap-2 py-1.5", subHidden && "opacity-40")}>
-                        <span className="text-lg w-7 text-center">{sub.emoji}</span>
+                        <EmojiIcon emoji={sub.emoji} size={20} className="w-7" />
                         {editingKey === sub.key ? (
                           <div className="flex items-center gap-2 flex-1">
                             <input value={editEmoji} onChange={(e) => setEditEmoji(e.target.value)} maxLength={4}
