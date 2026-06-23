@@ -7,6 +7,7 @@ import { ISLAND_ZONES } from "@/lib/constants";
 import IslandZoneCard from "./IslandZoneCard";
 import LevelBar from "./LevelBar";
 import CatLayer from "./CatLayer";
+import ParticleLayer from "./ParticleLayer";
 
 const ZONE_BUILDING: Record<string, string> = {
   harbor: "harbor_lighthouse",
@@ -81,6 +82,9 @@ export default function IslandPage() {
             <Cloud className="scale-90" />
           </div>
         </div>
+
+        {/* Particles: falling leaves + flying birds */}
+        <ParticleLayer />
 
         {/* Zone markers */}
         <div className="absolute inset-0" style={{ zIndex: 5 }}>

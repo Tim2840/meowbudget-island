@@ -79,6 +79,22 @@ body {
   animation: cloud-drift-r 25s ease-in-out infinite;
 }
 
+/* ── Particle effects ── */
+@keyframes leaf-fall {
+  0%   { transform: translate(0px,    -16px) rotate(0deg);   opacity: 0.85; }
+  25%  { transform: translate(18px,   72px)  rotate(90deg); }
+  50%  { transform: translate(-12px, 152px)  rotate(210deg); }
+  75%  { transform: translate(16px,  232px)  rotate(330deg); }
+  100% { transform: translate(0px,   308px)  rotate(480deg); opacity: 0; }
+}
+
+@keyframes bird-fly {
+  0%         { transform: translateX(-100px); opacity: 0; }
+  4%         { opacity: 1; }
+  38%        { transform: translateX(550px);  opacity: 1; }
+  40%, 100%  { transform: translateX(-100px); opacity: 0; }
+}
+
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
