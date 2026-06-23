@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import BottomNav from "@/components/layout/BottomNav";
@@ -22,6 +22,9 @@ export default async function LocaleLayout({
   if (!routing.locales.includes(locale as "zh-TW" | "en")) {
     notFound();
   }
+
+  // Must be called before any i18n server API — enables static rendering
+  setRequestLocale(locale);
 
   const messages = await getMessages();
 
