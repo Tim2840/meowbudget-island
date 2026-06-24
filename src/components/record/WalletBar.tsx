@@ -1,24 +1,16 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Flame, Coins, Fish, TreePine, Scissors } from "lucide-react";
-import type { LucideProps } from "lucide-react";
+import { Flame } from "lucide-react";
+import { GameResourceIcon } from "@/components/ui/GameResourceIcon";
+import type { ResourceType } from "@/types";
 
 interface WalletBarProps {
   wallet: { coins: number; wood: number; fabric: number; fish: number };
   streak: number;
 }
 
-const resources: {
-  key: "coins" | "wood" | "fabric" | "fish";
-  Icon: React.ComponentType<LucideProps>;
-  color: string;
-}[] = [
-  { key: "coins", Icon: Coins, color: "#F59E0B" },
-  { key: "wood", Icon: TreePine, color: "#78350F" },
-  { key: "fabric", Icon: Scissors, color: "#7C3AED" },
-  { key: "fish", Icon: Fish, color: "#0891B2" },
-];
+const RESOURCE_KEYS: ResourceType[] = ["coins", "wood", "fabric", "fish"];
 
 export default function WalletBar({ wallet, streak }: WalletBarProps) {
   const t = useTranslations("resource");
@@ -28,9 +20,9 @@ export default function WalletBar({ wallet, streak }: WalletBarProps) {
       data-tutorial="wallet-bar"
       className="bg-white border-b border-amber-100 px-4 py-2 flex items-center gap-3 overflow-x-auto scrollbar-none"
     >
-      {resources.map(({ key, Icon, color }) => (
+      {RESOURCE_KEYS.map((key) => (
         <div key={key} className="flex items-center gap-1 shrink-0">
-          <Icon size={14} color={color} strokeWidth={2} />
+          <GameResourceIcon type={key} size={15} />
           <span className="text-sm font-semibold text-gray-700">{wallet[key].toLocaleString()}</span>
         </div>
       ))}

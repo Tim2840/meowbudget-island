@@ -1,7 +1,8 @@
 "use client";
 
-import { X, PenLine, Flame, Compass, Cat, Coins, Lock, Trophy, Clock } from "lucide-react";
+import { X, PenLine, Flame, Compass, Cat, Lock, Trophy, Clock } from "lucide-react";
 import type { LucideProps } from "lucide-react";
+import { GameResourceIcon } from "@/components/ui/GameResourceIcon";
 import { useTranslations } from "next-intl";
 import { ACHIEVEMENTS } from "@/lib/constants";
 import { computeProgress } from "@/lib/achievementEngine";
@@ -11,12 +12,16 @@ import { useTransactionStore } from "@/stores/useTransactionStore";
 import { useBudgetStore } from "@/stores/useBudgetStore";
 import type { Achievement } from "@/types";
 
-const CATEGORY_ICONS: Record<string, { Icon: React.ComponentType<LucideProps>; color: string }> = {
+const FinanceCoinIcon = ({ size, color }: { size?: number; color?: string }) => (
+  <GameResourceIcon type="coins" size={size} color={color} />
+);
+
+const CATEGORY_ICONS: Record<string, { Icon: React.ComponentType<{ size?: number; color?: string }>; color: string }> = {
   recording: { Icon: PenLine, color: "#3B82F6" },
   streak:    { Icon: Flame,   color: "#F97316" },
   island:    { Icon: Compass, color: "#0891B2" },
   cats:      { Icon: Cat,     color: "#A855F7" },
-  finance:   { Icon: Coins,   color: "#F59E0B" },
+  finance:   { Icon: FinanceCoinIcon, color: "#F59E0B" },
 };
 
 interface Props {
@@ -86,7 +91,7 @@ export default function AchievementSheet({ onClose }: Props) {
         )}
         {!earned && !hidden && (
           <div className="text-[10px] text-gray-400 shrink-0 text-right">
-            <div className="flex items-center gap-0.5">+{ach.rewardCoins}<Coins size={9} className="text-amber-500" /></div>
+            <div className="flex items-center gap-0.5">+{ach.rewardCoins}<GameResourceIcon type="coins" size={9} /></div>
             <div>+{ach.rewardExp}EXP</div>
           </div>
         )}

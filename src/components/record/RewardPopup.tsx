@@ -2,17 +2,10 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Flame, TrendingUp, Coins, Fish, TreePine, Scissors, Trophy, Sparkles } from "lucide-react";
-import type { LucideProps } from "lucide-react";
+import { Flame, TrendingUp, Trophy, Sparkles } from "lucide-react";
+import { GameResourceIcon } from "@/components/ui/GameResourceIcon";
 import { ACHIEVEMENTS } from "@/lib/constants";
-import type { RewardResult } from "@/types";
-
-const RESOURCE_ICONS: Record<string, { Icon: React.ComponentType<LucideProps>; color: string }> = {
-  coins:  { Icon: Coins,    color: "#F59E0B" },
-  wood:   { Icon: TreePine, color: "#78350F" },
-  fabric: { Icon: Scissors, color: "#7C3AED" },
-  fish:   { Icon: Fish,     color: "#0891B2" },
-};
+import type { RewardResult, ResourceType } from "@/types";
 
 interface RewardPopupProps {
   reward: RewardResult;
@@ -39,18 +32,15 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <Coins size={26} color="#F59E0B" />
+            <GameResourceIcon type="coins" size={26} />
             <span className="text-lg font-bold text-amber-600">+{reward.coins}</span>
           </div>
-          {reward.resourceType && reward.resourceAmount > 0 && (() => {
-            const res = RESOURCE_ICONS[reward.resourceType];
-            return res ? (
-              <div className="flex items-center gap-1.5">
-                <res.Icon size={26} color={res.color} />
-                <span className="text-lg font-bold text-green-600">+{reward.resourceAmount}</span>
-              </div>
-            ) : null;
-          })()}
+          {reward.resourceType && reward.resourceAmount > 0 && (
+            <div className="flex items-center gap-1.5">
+              <GameResourceIcon type={reward.resourceType as ResourceType} size={26} />
+              <span className="text-lg font-bold text-green-600">+{reward.resourceAmount}</span>
+            </div>
+          )}
           <div className="flex items-center gap-1.5">
             <TrendingUp size={18} className="text-blue-500" />
             <span className="text-lg font-bold text-blue-500">+{reward.expGained} EXP</span>
@@ -85,7 +75,7 @@ export default function RewardPopup({ reward, onClose }: RewardPopupProps) {
                       {ta(ach.nameKey.replace("achievement.", "") as Parameters<typeof ta>[0])}
                     </p>
                     <p className="text-[10px] text-gray-500 flex items-center gap-0.5">
-                      +{ach.rewardCoins}<Coins size={9} className="text-amber-500" /> +{ach.rewardExp}EXP
+                      +{ach.rewardCoins}<GameResourceIcon type="coins" size={9} /> +{ach.rewardExp}EXP
                     </p>
                   </div>
                 </div>
