@@ -1,6 +1,7 @@
 "use client";
 
-import { X, Scroll, Coins } from "lucide-react";
+import { X, Scroll } from "lucide-react";
+import { GameResourceIcon } from "@/components/ui/GameResourceIcon";
 import { useTranslations } from "next-intl";
 import { useQuestStore } from "@/stores/useQuestStore";
 import { useWalletStore } from "@/stores/useWalletStore";
@@ -158,7 +159,7 @@ export default function QuestSheet({ onClose }: Props) {
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
             <div className="flex items-center gap-0.5 text-[10px] text-amber-600 font-semibold leading-none">
-              +{quest.rewardCoins}<Coins size={9} className="text-amber-500" />
+              +{quest.rewardCoins}<GameResourceIcon type="coins" size={9} />
               <span className="ml-0.5">+{quest.rewardExp}EXP</span>
             </div>
             {claimed ? (
